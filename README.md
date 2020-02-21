@@ -1,5 +1,5 @@
 # orcagsoc
-Google Summer of Code (GSoC) projects and products related to [Orcasound](http://orcasound.net/support#hack) and orca sounds!
+## Google Summer of Code (GSoC) projects and products related to [Orcasound](http://orcasound.net/support#hack) and orca sounds!
 
 Orcasound is a mentoring organization for [Google Summer of Code (2020)](https://summerofcode.withgoogle.com/). We are an open-source project building cool tech that makes it easy for humans and machines to listen for whales. With the initial goal of helping the endangered orcas of the Pacific Northwest (near Seattle, WA, USA), we are connecting citizen scientists and conservation activists with the amazing sounds these wild killer whales make as they move past our underwater microphones (aka hydrophones) in pursuit of their favorite food -- Pacific salmon.
 
