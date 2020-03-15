@@ -1,5 +1,5 @@
 # Contributing Guide for Students
-[LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md)
+[LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/STUDENT-proposal-template.md): thank you ESIP!)
 
 ## Getting Started Early
 
