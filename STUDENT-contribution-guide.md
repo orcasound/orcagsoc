@@ -119,7 +119,7 @@ help a lot.
 ### Final Proposal
 
 Your final proposal must be submitted to [GSoC](summerofcode.withgoogle.com) as
-a PDF file, using [this template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md). Your proposal should be named *[IssueNumber\_ProjectName\_YourName]* to make
+a PDF file, using [this template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md). Your proposal should be named *[IssueNumber\_YourName\_ProjectName]* to make
 identification easier for the mentors. To convert a draft that you have written
 before into PDF you can use [Pandoc][Pandoc].
 
