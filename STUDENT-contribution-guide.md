@@ -47,7 +47,9 @@ please check those points. We will be fair, we promise.
 - 3pts Do you add a preliminary project plan (before, during, after GSOC)?
 - 3pts Do you state which project you are applying for and why you think you can do that?
 - 3pts Do you have time for GSOC? This is a paid job! State that you have time in your motivation letter, and list other commitments!
-- 0pts Be honest! Only universal Karma points. 🙂
+- 0pts Be honest! Only universal Karma points. 🙂 We are happy to see you grow in your learning process, but we also need to understand your technical skills and make sure that we have mentors that can support you in the process 
+
+
 - 5pts Did you submit a pull request to the existing code? Or did you do discover issues with the current code?
 - 5pts Communication until accepted students are announced.
 
