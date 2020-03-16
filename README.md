@@ -5,7 +5,9 @@ Orcasound is a mentoring organization for [Google Summer of Code (2020)](https:/
 
 Orcasound aims to recruit talented GSoC students to help us advance the field of bioacoustics with open-source software (and hardware!). All code contributed by GSoC students will be shared under general public under open source licenses and any data products derived from Orcasound data will be shared under Orcasound's Creative Commons license.
 
-In the Issues section of this repository, we list project ideas from mentors, but Orcasound also encourages you -- as a GSoC student -- to propose your own original project ideas. 
+In the [Issues](https://github.com/orcasound/orcagsoc/issues) section of this repository, we list project ideas from mentors, but Orcasound also encourages you -- as a GSoC student -- to propose your own original project ideas. 
+
+Please refer to the [Contribution Guide](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-contribution-guide.md) and the [Proposal Template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md) for preparing your proposal.
 
 
 # Questions?
