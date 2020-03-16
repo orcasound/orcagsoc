@@ -87,7 +87,7 @@ please check those points. We will be fair, we promise.
 
 Projects proposed by mentors are listed at our [issues page](https://github.com/orcasound/orcagsoc/issues).
 
-Please title your proposal *[IssueNumber\_ProjectName\_YourName]*. You are free to use components from several projects ideas: select the number of the project you find closest to yours. Be realistic about the scope. You are also welcome to propose your own idea, but first discuss it on slack to ensure there will be mentors who can support it.
+Please title your proposal *[IssueNumber\_YourName\_ProjectName]*. You are free to use components from several projects ideas: select the number of the project you find closest to yours. Be realistic about the scope. You are also welcome to propose your own idea, but first discuss it on slack to ensure there will be mentors who can support it.
 
 ### How to write a great Proposal
 
