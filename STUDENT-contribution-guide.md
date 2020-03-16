@@ -110,7 +110,7 @@ Get some familiarity with the orcasound repositories and data. Test existing fun
 your algorithms in pseudo code. The better your research is and the better you
 plan ahead the easier it will be to judge how long a given task will take. For
 your time estimates you should also consider that you can do less stuff during
-exams and try to be a bit conservative. Discuss the risks of the proposal and potential challenges. How do you intend to address them? If you have never done anything like
+exams and try to be a bit conservative. Discuss the risks of the proposal and potential challenges. How do you intend to address them? What criteria will you use to evaluate milestones (code tests, functional demo, baseline recording, etc.)? If you have never done anything like
 GSoC before you will tend to underestimate the time to complete a task. We know
 that giving these estimates is not easy and that also professionals have
 problems with it. Having a good plan, knowing its weak and strong points will
