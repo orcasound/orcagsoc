@@ -12,9 +12,7 @@ copy of the project idea text.
 Long description of the project. **Must** include all technical details of the
 project, like libraries involved.
 
-Here it is important to show if you had previous conversations with your
-mentors. You can show relevant pieces of code that you want to change. You can
-link to literature you used during the research.
+Here it is also important to document previous conversations with your prospective mentors. You can show relevant pieces of code that you want to change. You can link to literature you used during the research.
 
 ### Contributions So Far
 Write a subsection which lists your contributions so far to Orcasound or the project. This may include:
