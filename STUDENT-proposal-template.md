@@ -14,7 +14,7 @@ projects like libraries involved.
 
 Here it is important to show if you had previous conversations with your
 mentors. You can show relevant pieces of code that you want to change. You can
-link to literature you used during the research.
+link to the literature you used during the research.
 
 ### Contributions So Far
 Write a subsection which lists your contributions so far to Orcasound or the project. This may include:
@@ -26,7 +26,7 @@ Provide links whenever possible.
 ## Schedule of Deliverables
 
 Here should come a list of your milestones. This list is a start based on the
-difference phases of GSoC. Use it as a start. You can/should add more details
+different phases of GSoC. Use it as a start. You can/should add more details
 for each phase by breaking it down into weeks or set specific targets for each
 phase. Each target should be split into sub task with a time estimate, [work
 breakdown structures][wbs] are helpful here.
@@ -50,7 +50,7 @@ Deliverables
 
 ### **Final Week**
 
-At this stage you should finish up your project. At this stage you should make
+At this stage, you should finish up your project. At this stage, you should make
 sure that you have code submitted to your organization. Our criteria to mark
 your project as a success is to submit code before the end of GSoC.
 
