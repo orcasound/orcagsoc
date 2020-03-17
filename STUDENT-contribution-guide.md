@@ -5,7 +5,7 @@
 
 Experience shows that the best thing to help your application is to engage with the
 organization you want to work with early. For Orcasound you should read about contributing as a “hacker” and then [introduce yourself in the #gsoc channel of our Slack workspace](orcasound.slack.com). [The opensource guide](https://opensource.guide/how-to-contribute/) has a
-good introduction how to start contributing to open source projects.
+good introduction on how to start contributing to open source projects.
 
 ## Am I experienced enough?
 
@@ -87,11 +87,11 @@ please check those points. We will be fair, we promise.
 
 Projects proposed by mentors are listed at our [issues page](https://github.com/orcasound/orcagsoc/issues).
 
-Please title your proposal *[IssueNumber\_YourName\_ProjectName]*. You are free to use components from several projects ideas: select the number of the project you find closest to yours. Be realistic about the scope. You are also welcome to propose your own idea, but first discuss it on slack to ensure there will be mentors who can support it.
+Please title your proposal *[IssueNumber\_YourName\_ProjectName]*. You are free to use components from several project ideas: select the number of the project you find closest to yours. Be realistic about the scope. You are also welcome to propose your own idea, but first discuss it on slack to ensure there will be mentors who can support it.
 
 ### How to write a great Proposal
 
-Firstly, think about your choice of project carefully, you're going to be doing
+Firstly, think about your choice of the project carefully, you're going to be doing
 it for a couple of months, so it's important that you choose something you're
 going to enjoy. Once you've made your mind up:
 
@@ -105,7 +105,7 @@ Overall, your application should make us believe that you are capable of
 completing the project and delivering the functionality to our users. If you
 aren't sure about anything, ask questions on slack, we're happy to advise you.
 
-### How to estimate time needed for development
+### How to estimate the time needed for development
 Get some familiarity with the orcasound repositories and data. Test existing functions, add missing details, fix code style. Do some research on the methods and tools you plan to use. Install the needed packages and build a plan of how they will work together. Write down
 your algorithms in pseudo code. The better your research is and the better you
 plan ahead the easier it will be to judge how long a given task will take. For
