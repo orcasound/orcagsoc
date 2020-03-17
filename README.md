@@ -7,10 +7,10 @@ Orcasound aims to recruit talented GSoC students to help us advance the field of
 
 In the [Issues](https://github.com/orcasound/orcagsoc/issues) section of this repository, we list project ideas from mentors. Orcasound also encourages you -- as a GSoC student -- to propose your own original project ideas (as new issues). 
 
-After you [sign up as a GSoC student](https://summerofcode.withgoogle.com/student-signup/) please refer to the [Orcasound Contribution Guide](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-contribution-guide.md) and the [Orcasound Proposal Template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md) as you draft your proposal.
+After you [sign up as a GSoC student](https://summerofcode.withgoogle.com/get-started/) please refer to the [Orcasound Contribution Guide](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-contribution-guide.md) and the [Orcasound Proposal Template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md) as you draft your proposal.
 
 
 # Questions?
-Ask them in the #GSoC channel of the Orcasound Slack workspace!
+Ask them in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ)!
 
 More questions? Check out the [GSoC mentor & student guides](https://google.github.io/gsocguides/)
