@@ -36,6 +36,7 @@ When we evaluate an application we use the following point system to get a basel
 
 - 5pts Communicate with organization's mentors
 - 5pts Communicate with the community
+- 5pts Follow instructions and format of the [Orcasound GSoC proposal template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md)
 - 5pts Reference projects in application and code, including links to repos or provided code
 - 5pts Provide all requested contact information (i.e. email & slack name, & github if available)
 - 5pts Include a preliminary project plan (before, during, after GSOC)
