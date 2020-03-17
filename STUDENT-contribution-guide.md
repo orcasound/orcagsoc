@@ -107,6 +107,6 @@ $ pandoc -f markdown -t pdf YYYY/proposals/your-project-name.md
 ~~~
 
 ## Handy links:##
-*[Orcasound projects as orcagsoc issues](https://github.com/orcasound/orcagsoc/issues)
-*[GSoC](http://summerofcode.withgoogle.com/)
-*[Pandoc](http://pandoc.org/)
+* [Orcasound projects as orcagsoc issues](https://github.com/orcasound/orcagsoc/issues)
+* [GSoC](http://summerofcode.withgoogle.com/)
+* [Pandoc](http://pandoc.org/)
