@@ -23,17 +23,15 @@ Provide links whenever possible.
 
 ## Schedule of Deliverables
 
-Here should come a list of your milestones. Below are a series of sub-sections a start based on the
-different phases of GSoC. Use it as a template, but you can/should add more details
+Here should provide a list of your milestones. Below are a series of suggested sub-sections based on the
+different phases of GSoC. You can use it as a template, but you can/should add more details
 for each phase, e.g. by breaking it down into weeks or setting specific targets for each
-phase. Each target should be split into sub-task with a time estimate. [Work
+phase. Each target should be split into sub-tasks with time estimates. [Work
 breakdown structures](https://en.wikipedia.org/wiki/Work_breakdown_structure) may be helpful here.
 
 ### **Community Bonding Period**
 
-This phase is to get to know the community better. Check that your build
-environment is setup. This time should also be used to discuss your project in
-more detail with the community, including introducing yourself and beginning to vet your ideas. 
+This phase is to get to know the community better. Check that your build environment is setup. This time should also be used to discuss your project in more detail with the community, including introducing yourself and beginning to vet your ideas. 
 
 *Note:* We require you to write regular blog posts. Now is a good time to become familiar with blogging in Wordpress, or let us know you already know how to use it. If you are accepted, we will provide you with an account on the Orcasound blog.
 
