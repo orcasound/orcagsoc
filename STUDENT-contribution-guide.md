@@ -37,11 +37,14 @@ When we evaluate an application we use the following point system to get a basel
 - 5pts Communicate with organization's mentors
 - 5pts Communicate with the community
 - 5pts Follow instructions and format of the [Orcasound GSoC proposal template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md)
-- 5pts Reference projects in application and code, including links to repos or provided code
+- 5pts Properly cite the work of others in your proposal and code, including links to repos or provided code
 - 5pts Provide all requested contact information (i.e. email & slack name, & github if available)
-- 5pts Include a preliminary project plan (before, during, after GSOC)
-- 5pts State project title or description and and why you think you are a good fit?
-- 5pts Ensure that you have time for GSOC. This is a paid job! State that you have time in your motivation letter, and list other commitments.
+- 5pts Include all requested technical details (see template)
+- 5pts Project title, abstract, and detailed description
+- 5pts Include a preliminary project schedule in your proposal (ideally addressing how you will spend your time before, during, after GSOC)
+- 5pts Evidence that you have time for GSOC. This is a paid job with an expectation of 30-40 hrs/week! State how many hours per week you plan to work in your proposal and list other time commitments.
+- 5pts Document your development and other experience relevant to the project(s)
+- 5pts Explain why you are interested in the project and are a good fit
 - 5pts Submit a pull request to the existing code, or discover and/or discuss issues with the current code.
 - 5pts Continue communication through date upon which accepted students are determined.
 - 0pts Be honest! Only universal Karma points. 🙂 We are happy to see you grow in your learning process, but we also need to understand your technical skills and make sure that we have mentors that can support you in the process. Also, if we discover you were dishonest in your application, we will fail you and move on to collaborating with others.
