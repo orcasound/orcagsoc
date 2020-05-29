@@ -1,4 +1,4 @@
 
 <p align = "center">
-<img src = preprocess.png>
+<img src = preprocess2.png>
 </p>
