@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>AL&L of Orca Sounds</title>
+    </head>
+
+    <body>
+        <canvas id="spectrogram"></canvas><canvas id="legend"></canvas>
+        <svg markup-inline id="back" src="media/back.svg" />
+        <div id="progress-label">2/5</div>
+        <div id="progress-bar"><div id="progress"></div></div>
+
+        <div id="buttons-box">
+            <button class="text">ORCA</button>
+            <button
+                id="play-pause"
+                data-src="https://jd-r-bucket.s3.amazonaws.com/Port-Townsend-2008-midnight.mp3"
+            >
+                <svg markup-inline id="play" src="media/play.svg" />
+                <svg markup-inline id="pause" src="media/pause.svg" />
+            </button>
+            <button class="text">NOT</button>
+        </div>
+    </body>
+</html>
