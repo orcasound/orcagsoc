@@ -1,21 +1,4 @@
-/********************************************************
-Copyright 2016 Google Inc. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*********************************************************/
-
 'use strict'
-import '../sass/screen.scss'
 window.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
 )
@@ -34,7 +17,15 @@ window.requestAnimFrame = (function () {
 })()
 
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
-import spec3D from './UI/spectrogram'
+import '../sass/screen.scss'
+import sp from './UI/spectrogram'
+// -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+const playPauseBtn = document.querySelector('#play-pause')
+const labelBtn = document.querySelectorAll('.label-btn')
+const progressBar = document.querySelector('#progress')
+const progressBarLabel = document.querySelector('#progress-label')
+const labels = []
+const audioIds = ['1', '4', '6', '2', '3', '5']
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
 const ready = (callback) => {
@@ -44,32 +35,63 @@ const ready = (callback) => {
 
 ready(() => {
     window.parent.postMessage('ready', '*')
-
-    const sp = spec3D
     sp.attached()
-    const playpause = document.querySelector('#play-pause')
+    sp.startRender()
+    sp.loopChanged(true)
+
+    // Get audio ids from backend with an Ajax call
+    let currentId = 0
+    progressBarLabel.textContent = '0/5'
+    progressBar.style.width = '0%'
 
     // --------------------------------------------
-    playpause.addEventListener('click', () => {
-        sp.startRender()
+    labelBtn.forEach((item) =>
+        item.addEventListener('click', () => {
+            let isOrca = false
+            if (
+                item.parentElement.parentElement.id === 'orca' ||
+                item.parentElement.id === 'orca'
+            ) {
+                isOrca = true
+            } else {
+                isOrca = false
+            }
+            // Add the current label to the list
+            labels.push({
+                id: parseInt(audioIds[currentId]),
+                orca: isOrca,
+                extra_label: item.id,
+            })
 
+            // Load the next audio
+            sp.stop()
+            currentId += 1
+            progressBarLabel.textContent = `${currentId}/5`
+            progressBar.style.width = `${currentId * 20}%`
+            playPauseBtn.classList.remove('playing')
+            if (currentId === 5) {
+                console.log(labels)
+            }
+        })
+    )
+
+    // --------------------------------------------
+    playPauseBtn.addEventListener('click', () => {
         sp.stop()
-        sp.drawingMode = false
-
-        if (playpause.classList.contains('playing')) {
-            playpause.classList.remove('playing')
+        if (playPauseBtn.classList.contains('playing')) {
+            playPauseBtn.classList.remove('playing')
         } else {
-            playpause.classList.add('playing')
+            playPauseBtn.classList.add('playing')
             // Play audio **************************
-            sp.loopChanged(true)
-            sp.play(playpause.getAttribute('data-src'))
+            sp.play(
+                `https://jd-r-bucket.s3.amazonaws.com/mp3/sound${audioIds[currentId]}.mp3`
+            )
         }
     })
 
     const killSound = function () {
-        sp.startRender()
         sp.stop()
-        playpause.classList.remove('playing')
+        playPauseBtn.classList.remove('playing')
     }
 
     window.addEventListener('blur', function () {
