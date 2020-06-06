@@ -9,7 +9,7 @@
 
     <body>
         <canvas id="spectrogram"></canvas><canvas id="legend"></canvas>
-        <svg markup-inline id="back" src="media/back.svg" />
+        <svg markup-inline id="back-btn" src="media/back.svg" />
         <div id="progress-label"></div>
         <div id="progress-bar"><div id="progress"></div></div>
         <div id="buttons-box">
@@ -18,17 +18,21 @@
                     ORCA
                 </button>
                 <div class="expanded-box expanded-box-left">
-                    <button class="label-btn" id="j">
+                    <button class="label-btn" id="J">
                         <label>J Pod</label>
                         J
                     </button>
-                    <button class="label-btn" id="k">
+                    <button class="label-btn" id="K">
                         <label>K Pod</label>
                         K
                     </button>
-                    <button class="label-btn" id="l">
+                    <button class="label-btn" id="L">
                         <label>L Pod</label>
                         L
+                    </button>
+                    <button class="label-btn" id="Bigg">
+                        <label>Bigg's</label>
+                        B
                     </button>
                 </div>
             </div>
@@ -42,23 +46,60 @@
             <div class="expandable" id="not">
                 <button class="text-btn label-btn">NOT</button>
                 <div class="expanded-box expanded-box-right">
-                    <button class="label-btn" id="bird">
+                    <button class="label-btn" id="Bird">
                         <label>Bird</label>
                         <svg markup-inline src="media/bird.svg"></svg>
                     </button>
-                    <button class="label-btn" id="ship">
+                    <button class="label-btn" id="Ship">
                         <label>Ship</label>
                         <svg markup-inline src="media/ship.svg"></svg>
                     </button>
-                    <button class="label-btn" id="whale">
+                    <button class="label-btn" id="Whale">
                         <label>Whale</label>
                         <svg markup-inline src="media/whale.svg"></svg>
                     </button>
-                    <button class="label-btn" id="waves">
+                    <button class="label-btn" id="Waves">
                         <label>Waves</label>
                         <svg markup-inline src="media/waves.svg"></svg>
                     </button>
                 </div>
+            </div>
+        </div>
+        <div id="blurred-background"></div>
+        <div id="labeled-by-container">
+            <div class="title">Thanks for your help!</div>
+            <div class="subtitle">
+                Could you provide your level of expertise with orca sounds?
+            </div>
+            <div class="radio-form">
+                <label class="pure-material-radio">
+                    <input
+                        type="radio"
+                        name="labeled-by"
+                        value=""
+                        checked="checked"
+                    />
+                    <span>Rather not say</span>
+                </label>
+                <label class="pure-material-radio">
+                    <input type="radio" name="labeled-by" value="Beginner" />
+                    <span>Beginner</span>
+                </label>
+                <label class="pure-material-radio">
+                    <input type="radio" name="labeled-by" value="Competent" />
+                    <span>Competent</span>
+                </label>
+                <label class="pure-material-radio">
+                    <input type="radio" name="labeled-by" value="Proficient" />
+                    <span>Proficient</span>
+                </label>
+                <label class="pure-material-radio">
+                    <input type="radio" name="labeled-by" value="Expert" />
+                    <span>Expert</span>
+                </label>
+            </div>
+            <div class="buttons">
+                <button id="submit-form">Help some more</button>
             </div>
         </div>
     </body>

@@ -24,12 +24,11 @@ const legend = document.querySelector('#legend')
 const A = 19.86218362749959
 const B = 0.0003457334974465534
 
-var spec3D = {
+const spec3D = {
     cxRot: 90,
     prevX: 0,
 
     attached: function () {
-        console.log('spectrogram-3d attached')
         spec3D.onResize_()
         spec3D.init_()
 
@@ -86,7 +85,6 @@ var spec3D = {
     },
 
     onResize_: function () {
-        console.log('onResize_')
         spec3D.canvas = spectrogram
 
         // access sibling or parent elements here
@@ -102,7 +100,6 @@ var spec3D = {
 
     draw_: function () {
         if (!spec3D.isRendering) {
-            console.log('stopped draw_')
             return
         }
 
