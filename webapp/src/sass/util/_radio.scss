@@ -1,0 +1,191 @@
+#blurred-background {
+    display: none;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(6px);
+}
+
+#labeled-by-container {
+    display: none;
+    width: 50rem;
+    height: 35rem;
+    padding: 3rem 2rem;
+
+    background: $backgroundLighter;
+    box-shadow: 0px 11px 15px rgba(0, 0, 0, 0.2),
+        0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+    border-radius: 4px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    .title {
+        color: $textColor;
+        height: 18%;
+        font-size: 2.8rem;
+        line-height: 2.5rem;
+        letter-spacing: 0.025rem;
+    }
+
+    .subtitle {
+        height: 12%;
+        font-size: 1.6rem;
+        line-height: 2rem;
+        letter-spacing: 0.025rem;
+    }
+
+    .radio-form {
+        height: 60%;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .buttons {
+        height: 10%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+
+        button {
+            background: none;
+            margin-left: 3rem;
+            color: $primaryColor;
+            font-family: Roboto;
+            font-weight: 500;
+            font-size: 1.6rem;
+            letter-spacing: 0.125rem;
+        }
+    }
+}
+
+.pure-material-radio {
+    width: 15rem;
+    z-index: 0;
+    position: relative;
+    display: inline-block;
+    color: $textColor;
+    font-family: Roboto;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    letter-spacing: 0.025rem;
+    margin-bottom: 1rem;
+}
+
+/* Input */
+.pure-material-radio > input {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    z-index: -1;
+    position: absolute;
+    left: -1rem;
+    top: -0.8rem;
+    display: block;
+    margin: 0;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    background-color: white;
+    outline: none;
+    opacity: 0;
+    transform: scale(1);
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s;
+}
+
+/* Span */
+.pure-material-radio > span {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Circle */
+.pure-material-radio > span::before {
+    content: '';
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0.2rem 1rem 0.2rem 0;
+    border: solid 0.2rem;
+    /* Safari */
+    border-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: top;
+    transition: border-color 0.2s;
+}
+
+/* Check */
+.pure-material-radio > span::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0.2rem;
+    left: 0;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    background-color: $primaryColor;
+    transform: translate(0.5rem, 0.5rem) scale(0);
+    transition: transform 0.2s;
+}
+
+/* Checked */
+.pure-material-radio > input:checked {
+    background-color: $primaryColor;
+}
+
+.pure-material-radio > input:checked + span::before {
+    border-color: $primaryColor;
+}
+
+.pure-material-radio > input:checked + span::after {
+    transform: translate(0.5rem, 0.5rem) scale(1);
+}
+
+/* Hover, Focus */
+.pure-material-radio:hover > input {
+    opacity: 0.04;
+}
+
+.pure-material-radio > input:focus {
+    opacity: 0.12;
+}
+
+.pure-material-radio:hover > input:focus {
+    opacity: 0.16;
+}
+
+/* Active */
+.pure-material-radio > input:active {
+    opacity: 1;
+    transform: scale(0);
+    transition: transform 0s, opacity 0s;
+}
+
+.pure-material-radio > input:active + span::before {
+    border-color: $primaryColor;
+}
+
+/* Disabled */
+.pure-material-radio > input:disabled {
+    opacity: 0;
+}
+
+.pure-material-radio > input:disabled + span {
+    color: rgba(255, 255, 255, 0.38);
+    cursor: initial;
+}
+
+.pure-material-radio > input:disabled + span::before {
+    border-color: currentColor;
+}
+
+.pure-material-radio > input:disabled + span::after {
+    background-color: currentColor;
+}
