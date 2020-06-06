@@ -25,8 +25,5 @@
         "webpack-cli": "^3.3.11",
         "webpack-dev-server": "^3.11.0"
     },
-    "dependencies": {
-        "@material/form-field": "^6.0.0",
-        "@material/radio": "^6.0.0"
-    }
+    "dependencies": {}
 }
