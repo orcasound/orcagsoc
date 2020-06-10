@@ -80,3 +80,10 @@
         }
     }
 }
+.hovered {
+    background: $backgroundMuchLighter;
+}
+.button-hovered {
+    transform: scale(1.4);
+    transform-origin: bottom;
+}

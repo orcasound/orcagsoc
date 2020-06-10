@@ -38,9 +38,14 @@ ready(() => {
     sp.loopChanged(true)
 
     const startSession = function () {
-        // Get audio ids from backend with an Ajax call
-        // TODO: Implement this!
-        audioIds = ['1', '4', '6', '2', '3', '5']
+        // Get audio ids from backend using Fetch
+        fetch('http://localhost:5000/')
+            .then((response) => response.json())
+            .then((json) => {
+                audioIds = json
+                console.log('audioIds:', audioIds)
+            })
+            .catch((error) => console.error('Fetch Error!', error))
 
         // Initialize evertything to zero
         currentId = 0
@@ -77,48 +82,106 @@ ready(() => {
     })
 
     // --------------------------------------------
-    document.querySelectorAll('.label-btn').forEach((item) =>
-        item.addEventListener('click', () => {
-            let isOrca = false
-            if (
-                item.parentElement.parentElement.id === 'orca' ||
-                item.parentElement.id === 'orca'
-            ) {
-                isOrca = true
-            } else {
-                isOrca = false
-            }
-            // Add the current label to the list
-            labels.push({
-                id: parseInt(audioIds[currentId]),
-                orca: isOrca,
-                extra_label: item.id,
-            })
+    const handleSelectedLabel = function (isOrca, extraLabel) {
+        // Add the current label to the list
+        labels.push({
+            id: parseInt(audioIds[currentId]),
+            orca: isOrca,
+            extra_label: extraLabel ? extraLabel : '',
+        })
 
-            // Load the next audio
-            sp.stop()
-            currentId += 1
-            document.getElementById(
-                'progress-label'
-            ).textContent = `${currentId}/5`
-            document.getElementById('progress').style.width = `${
-                currentId * 20
-            }%`
-            playPauseBtn.classList.remove('playing')
-            if (currentId === 5) {
-                document.getElementById('blurred-background').style.display =
-                    'block'
-                document.getElementById('labeled-by-container').style.display =
-                    'block'
+        // Load the next audio
+        sp.stop()
+        currentId += 1
+        document.getElementById('progress-label').textContent = `${currentId}/5`
+        document.getElementById('progress').style.width = `${currentId * 20}%`
+        playPauseBtn.classList.remove('playing')
+        if (currentId === 5) {
+            document.getElementById('blurred-background').style.display =
+                'block'
+            document.getElementById('labeled-by-container').style.display =
+                'block'
+        }
+    }
+
+    const changeHoverToLabelBtn = function (el, add) {
+        if (!el) return
+        const label = el.querySelector('label')
+        if (label) {
+            add
+                ? el.classList.add('button-hovered')
+                : el.classList.remove('button-hovered')
+            label.style.visibility = add ? 'visible' : 'hidden'
+        }
+    }
+
+    document.querySelectorAll('.expandable').forEach((item) => {
+        let lastTouched = ''
+        item.addEventListener('touchstart', () => {
+            item.classList.add('hovered')
+            item.querySelector('.expanded-box').style.display = 'flex'
+        })
+        item.addEventListener('touchmove', (e) => {
+            let xPos = e.touches[0].pageX
+            let yPos = e.touches[0].pageY
+            const hoveredEl = document.elementFromPoint(xPos, yPos)
+            if (hoveredEl.classList.contains('label-btn')) {
+                if (lastTouched !== hoveredEl) {
+                    changeHoverToLabelBtn(lastTouched, false) // false = remove
+                    changeHoverToLabelBtn(hoveredEl, true) // true = add
+                    lastTouched = hoveredEl
+                }
             }
         })
-    )
+        item.addEventListener('touchend', () => {
+            changeHoverToLabelBtn(lastTouched, false)
+            let isOrca = false
+            if (item.id === 'orca') {
+                isOrca = true
+            }
+            handleSelectedLabel(isOrca, lastTouched.id)
+            item.querySelector('.expanded-box').style.display = 'none'
+            item.classList.remove('hovered')
+            lastTouched = ''
+        })
+    })
+
+    const supportsTouch = 'ontouchstart' in window
+    if (!supportsTouch) {
+        document.querySelectorAll('.label-btn').forEach((item) =>
+            item.addEventListener('click', () => {
+                let isOrca = false
+                if (
+                    item.parentElement.parentElement.id === 'orca' ||
+                    item.parentElement.id === 'orca'
+                ) {
+                    isOrca = true
+                } else {
+                    isOrca = false
+                }
+                handleSelectedLabel(isOrca, item.id)
+            })
+        )
+    }
 
     // --------------------------------------------
+    const sendLabels = async function (data) {
+        await fetch('http://localhost:5000', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    }
+
     document.getElementById('submit-form').addEventListener('click', () => {
         const checked = document.querySelector('input[name=labeled-by]:checked')
-        // Send the array to the server
-        console.log({ labels: labels, expertise_level: checked.value }) // TODO: Implement this with Ajax
+        // Send the labels and the expertise level to the server
+        sendLabels({
+            labels: labels,
+            expertise_level: checked.value,
+        }).catch((error) => console.error('Fetch Error!', error))
 
         // Start labeling again
         document.getElementById('blurred-background').style.display = 'none'
@@ -126,12 +189,14 @@ ready(() => {
         startSession()
     })
 
-    // --------------------------------------------
     document.getElementById('back-btn').addEventListener('click', () => {
         // Send the labels to the server if there are any
         if (labels.length !== 0) {
-            console.log({ labels: labels, expertise_level: '' })
+            sendLabels({ labels: labels, expertise_level: '' })
+                .then(() => (window.location.href = '/')) // Go to the home page
+                .catch((error) => console.error('Fetch Error!', error))
+        } else {
+            window.location.href = '/'
         }
-        window.location.href = '/' // Go to the home page
     })
 })
