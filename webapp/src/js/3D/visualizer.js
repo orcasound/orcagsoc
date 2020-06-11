@@ -247,8 +247,6 @@ class AnalyserView {
                 sonogramFragmentShader
             )
         }
-        console.log('this.sonogramShader', this.sonogramShader)
-        console.log('this.sonogram3DShader', this.sonogram3DShader)
     }
     initByteBuffer() {
         var gl = this.gl
@@ -450,7 +448,6 @@ class AnalyserView {
                     mvp.elements
                 )
                 texCoordOffset = vbo3DTexCoordOffset
-                // console.log('model',mvp.elements);
                 break
         }
         if (frequencyDataLoc) {

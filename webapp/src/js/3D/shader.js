@@ -15,6 +15,17 @@
  * @param {!string} fragmentScriptName The name of the HTML Script node
  *     containing the fragment program.
  */
+
+/**
+ * Helper which convers GLSL names to JavaScript names.
+ * @private
+ */
+const glslNameToJs_ = function (name) {
+    return name.replace(/_(.)/g, function (_, p1) {
+        return p1.toUpperCase()
+    })
+}
+
 /**
  * Creates a new Shader object, loading and linking the given vertex
  * and fragment shaders into a program.
@@ -23,6 +34,7 @@
  * @param {!string} vertex The vertex shader.
  * @param {!string} fragment The fragment shader.
  */
+
 class Shader {
     constructor(gl, vertex, fragment) {
         this.program = gl.createProgram()
@@ -112,16 +124,6 @@ class Shader {
     getUniform(name) {
         return this.gl.getUniformLocation(this.program, name)
     }
-}
-
-/**
- * Helper which convers GLSL names to JavaScript names.
- * @private
- */
-function glslNameToJs_(name) {
-    return name.replace(/_(.)/g, function (_, p1) {
-        return p1.toUpperCase()
-    })
 }
 
 export default Shader

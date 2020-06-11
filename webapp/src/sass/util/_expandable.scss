@@ -1,0 +1,89 @@
+.expandable {
+    background: $backgroundLighter;
+    position: relative;
+    border-radius: 30rem;
+    width: 12rem;
+    height: 7rem;
+    margin: 1rem;
+
+    &::before {
+        content: '.';
+        opacity: 0;
+        display: block;
+        width: 12rem;
+        height: 1rem;
+        position: absolute;
+        top: -1rem;
+        left: 0;
+    }
+
+    .expanded-box {
+        position: absolute;
+        height: 5.5rem;
+        padding: 0 0.3rem 0 0.3rem;
+        background: $backgroundMuchLighter;
+        border-radius: 2.8rem;
+        bottom: 8rem;
+        display: none;
+        justify-content: center;
+
+        button {
+            position: relative;
+            width: 4rem;
+            height: 4rem;
+            background: $primaryColor;
+            border-radius: 2rem;
+            margin: 0.8rem 0.4rem 0 0.4rem;
+            font-size: 1.7rem;
+            color: #000;
+
+            label {
+                padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+                position: absolute;
+                width: 5rem;
+                left: -0.5rem;
+                bottom: 4.5rem;
+                border-radius: 1rem;
+                font-size: 1.1rem;
+                color: $textColor;
+                background: $backgroundMuchLighter;
+                visibility: hidden;
+            }
+
+            svg {
+                fill: #000;
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+    }
+    .expanded-box-left {
+        left: -1.5rem;
+    }
+    .expanded-box-right {
+        right: -1.5rem;
+    }
+
+    &:hover {
+        background: $backgroundMuchLighter;
+        .expanded-box {
+            display: flex;
+
+            button:hover {
+                transform: scale(1.4);
+                transform-origin: bottom;
+
+                label {
+                    visibility: visible;
+                }
+            }
+        }
+    }
+}
+.hovered {
+    background: $backgroundMuchLighter;
+}
+.button-hovered {
+    transform: scale(1.4);
+    transform-origin: bottom;
+}

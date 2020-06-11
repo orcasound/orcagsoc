@@ -14,7 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *********************************************************/
 
-export function loadTrackSrc(context, src, callback, opt_progressCallback) {
+export const loadTrackSrc = function (
+    context,
+    src,
+    callback,
+    opt_progressCallback
+) {
     var request = new XMLHttpRequest()
     request.open('GET', src, true)
     request.responseType = 'arraybuffer'

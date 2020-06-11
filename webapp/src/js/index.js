@@ -1,2 +1,2 @@
 'use strict'
-import '../sass/screen.scss'
+import '../sass/index.scss'
