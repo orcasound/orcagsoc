@@ -23,6 +23,8 @@ Visit each subproject to know more about it, and how to get started with it.
 
 # Questions?
 
-Ask them in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ)!
+Ask GSoC-specific questions in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ). 
 
-More questions? Check out the [GSoC mentor & student guides](https://google.github.io/gsocguides/)
+Discuss more general software and hardware development questions within the [Orcasound dev email distribution list](http://lists.orcasound.net/listinfo.cgi/dev-orcasound.net).
+
+More questions about being a GSoC mentor or student? Check out the [GSoC mentor & student guides](https://google.github.io/gsocguides/).
