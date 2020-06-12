@@ -28,9 +28,9 @@ const ready = (callback) => {
 
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
-    let audioIds = []
+    let filenames = []
     let labels = []
-    let currentId = 0
+    let currentFile = 0
 
     window.parent.postMessage('ready', '*')
     sp.attached()
@@ -38,17 +38,17 @@ ready(() => {
     sp.loopChanged(true)
 
     const startSession = function () {
-        // Get audio ids from backend using Fetch
-        fetch('http://localhost:5000/')
+        // Get audio filenames from the backend using Fetch
+        fetch('http://localhost:5000/filenames')
             .then((response) => response.json())
             .then((json) => {
-                audioIds = json
-                console.log('audioIds:', audioIds)
+                filenames = json
+                console.log('filenames:', filenames)
             })
             .catch((error) => console.error('Fetch Error!', error))
 
         // Initialize evertything to zero
-        currentId = 0
+        currentFile = 0
         document.getElementById('progress-label').textContent = '0/5'
         document.getElementById('progress').style.width = '0%'
         labels = []
@@ -64,7 +64,7 @@ ready(() => {
             playPauseBtn.classList.add('playing')
             // Play audio **************************
             sp.play(
-                `https://jd-r-bucket.s3.amazonaws.com/mp3/sound${audioIds[currentId]}.mp3`
+                `https://jd-r-bucket.s3.amazonaws.com/mp3/${filenames[currentFile]}`
             )
         }
     })
@@ -85,18 +85,20 @@ ready(() => {
     const handleSelectedLabel = function (isOrca, extraLabel) {
         // Add the current label to the list
         labels.push({
-            id: parseInt(audioIds[currentId]),
+            filename: filenames[currentFile],
             orca: isOrca,
             extra_label: extraLabel ? extraLabel : '',
         })
 
         // Load the next audio
         sp.stop()
-        currentId += 1
-        document.getElementById('progress-label').textContent = `${currentId}/5`
-        document.getElementById('progress').style.width = `${currentId * 20}%`
+        currentFile += 1
+        document.getElementById(
+            'progress-label'
+        ).textContent = `${currentFile}/5`
+        document.getElementById('progress').style.width = `${currentFile * 20}%`
         playPauseBtn.classList.remove('playing')
-        if (currentId === 5) {
+        if (currentFile === 5) {
             document.getElementById('blurred-background').style.display =
                 'block'
             document.getElementById('labeled-by-container').style.display =
@@ -166,7 +168,7 @@ ready(() => {
 
     // --------------------------------------------
     const sendLabels = async function (data) {
-        await fetch('http://localhost:5000', {
+        await fetch('http://localhost:5000/labeledfiles', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
