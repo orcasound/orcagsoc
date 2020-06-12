@@ -1,6 +1,6 @@
 # AL&L of Orca Sounds' API
 
-This API serves as an interface between the active learning model(s) and the webapp.
+This API serves as an interface between the machine learning model(s) and the webapp.
 
 ## AL&L of Orca Sounds
 
