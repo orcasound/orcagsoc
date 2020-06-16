@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400|Roboto:200,300,400,500,400italic,500italic');
+
+$backgroundColor: #141414;
+$backgroundLight: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.08)
+    ),
+    $backgroundColor;
+$backgroundLighter: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0.15)
+    ),
+    $backgroundColor;
+
+$backgroundMuchLighter: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.23),
+        rgba(255, 255, 255, 0.23)
+    ),
+    $backgroundColor;
+$primaryColor: rgb(144, 202, 249);
+$primaryColorDark: rgba(144, 202, 249, 0.6);
+$textColor: rgba(255, 255, 255, 0.87);
+$textColorDark: rgba(255, 255, 255, 0.6);
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    box-sizing: border-box;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote {
+    &:before,
+    &:after {
+        content: '';
+        content: none;
+    }
+}
+
+q {
+    &:before,
+    &:after {
+        content: '';
+        content: none;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+html {
+    font-size: 62.5%;
+}
+body,
+html {
+    width: 100%;
+    height: 100%;
+    color: $textColor;
+    font-family: 'Roboto', sans-serif;
+    background: $backgroundColor;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    &:focus {
+        outline: none;
+    }
+}
