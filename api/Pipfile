@@ -12,6 +12,7 @@ flask-cors = "*"
 flake8 = "*"
 yapf = "*"
 python-dotenv = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"

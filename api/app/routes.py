@@ -29,4 +29,4 @@ def post_labeledfiles():
                                      expertise_level)
         db.session.add(newLabeledFile)
     db.session.commit()
-    return ''
+    return {'success': True}
