@@ -6,7 +6,8 @@ class LabeledFile(db.Model):
     All the labeled files then conform the labeled dataset used by the ML model
     '''
     id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(50), unique=True)
+    # filename = db.Column(db.String(50), unique=True)
+    filename = db.Column(db.String(50))
     orca = db.Column(db.Boolean)
     extra_label = db.Column(db.String(10))
     expertise_level = db.Column(db.String(10))

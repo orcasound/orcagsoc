@@ -13,6 +13,9 @@ flake8 = "*"
 yapf = "*"
 python-dotenv = "*"
 pytest = "*"
+flask-migrate = "*"
+gunicorn = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.8"
