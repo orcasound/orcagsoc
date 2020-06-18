@@ -43,9 +43,22 @@ class Player {
         // this.bandpass = bandpass;
         this.filterGain = filterGain
         this.analyser = analyser
-        this.buffers = {}
+        this.buffer = null
+
+        loadTrackSrc(
+            this.context,
+            'empty.mp3',
+            function (buffer) {
+                var source = this.createSource_(buffer, true)
+                source.loop = true
+                source.start(0)
+            }.bind(this)
+        )
+
+        this.startedAt = 0
+        this.pausedAt = 0
     }
-    playSrc(src) {
+    loadSrc(src) {
         // Stop all of the mic stuff.
         this.filterGain.gain.value = 1
         if (this.input) {
@@ -57,34 +70,40 @@ class Player {
             this.context,
             src,
             function (buffer) {
-                this.buffers[src] = buffer
-                this.playHelper_(src)
+                this.buffer = buffer
             }.bind(this)
         )
     }
-    playUserAudio(src) {
-        // Stop all of the mic stuff.
-        this.filterGain.gain.value = 1
-        if (this.input) {
-            this.input.disconnect()
-            this.input = null
-            return
-        }
-        this.buffers['user'] = src.buffer
-        this.playHelper_('user')
-    }
-    playHelper_(src) {
-        var buffer = this.buffers[src]
-        this.source = this.createSource_(buffer, true)
-        this.source.start(0)
+    // playUserAudio(src) {
+    //     // Stop all of the mic stuff.
+    //     this.filterGain.gain.value = 1
+    //     if (this.input) {
+    //         this.input.disconnect()
+    //         this.input = null
+    //         return
+    //     }
+    //     this.buffers['user'] = src.buffer
+    //     this.playHelper_('user')
+    // }
+    play() {
+        const offset = this.pausedAt
+        this.source = this.createSource_(this.buffer, true)
+        this.source.start(0, offset)
+        this.startedAt = this.context.currentTime - offset
+        this.pausedAt = 0
         if (!this.loop) {
             this.playTimer = setTimeout(
                 function () {
                     this.stop()
                 }.bind(this),
-                buffer.duration * 2000
+                this.buffer.duration * 2000
             )
         }
+    }
+    pause() {
+        const elapsed = this.context.currentTime - this.startedAt
+        this.stop()
+        this.pausedAt = elapsed
     }
     live() {
         // The AudioContext may be in a suspended state prior to the page receiving a user
@@ -147,6 +166,8 @@ class Player {
             this.input = null
             return
         }
+        this.pausedAt = 0
+        this.startedAt = 0
     }
     getAnalyserNode() {
         return this.analyser

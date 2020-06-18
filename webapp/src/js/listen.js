@@ -18,6 +18,7 @@ window.requestAnimFrame = (function () {
 
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 import '../sass/listen.scss'
+import '../media/empty.mp3'
 import sp from './UI/spectrogram'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
@@ -28,6 +29,7 @@ const ready = (callback) => {
 
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
+    const API_URL = process.env.API_URL || 'http://localhost:5000'
     let filenames = []
     let labels = []
     let currentFile = 0
@@ -39,11 +41,13 @@ ready(() => {
 
     const startSession = function () {
         // Get audio filenames from the backend using Fetch
-        fetch('http://localhost:5000/filenames')
+        fetch(`${API_URL}/filenames`)
             .then((response) => response.json())
             .then((json) => {
                 filenames = json
                 console.log('filenames:', filenames)
+                // Load first audio
+                sp.load(`https://jd-r-bucket.s3.amazonaws.com/${filenames[0]}`)
             })
             .catch((error) => console.error('Fetch Error!', error))
 
@@ -57,20 +61,19 @@ ready(() => {
 
     // --------------------------------------------
     playPauseBtn.addEventListener('click', () => {
-        sp.stop()
         if (playPauseBtn.classList.contains('playing')) {
             playPauseBtn.classList.remove('playing')
+            sp.pause()
         } else {
             playPauseBtn.classList.add('playing')
             // Play audio **************************
-            sp.play(
-                `https://jd-r-bucket.s3.amazonaws.com/mp3/${filenames[currentFile]}`
-            )
+            sp.play()
         }
     })
 
     const killSound = function () {
-        sp.stop()
+        // sp.stop()
+        sp.pause()
         playPauseBtn.classList.remove('playing')
     }
 
@@ -103,7 +106,11 @@ ready(() => {
                 'block'
             document.getElementById('labeled-by-container').style.display =
                 'block'
+            return
         }
+        sp.load(
+            `https://jd-r-bucket.s3.amazonaws.com/${filenames[currentFile]}`
+        )
     }
 
     const changeHoverToLabelBtn = function (el, add) {
@@ -167,22 +174,20 @@ ready(() => {
     }
 
     // --------------------------------------------
-    const sendLabels = async function (data) {
-        await fetch('http://localhost:5000/labeledfiles', {
+    document.getElementById('submit-form').addEventListener('click', () => {
+        // Send the labels and the expertise level to the server
+        const checked = document.querySelector('input[name=labeled-by]:checked')
+        const data = {
+            labels: labels,
+            expertise_level: checked.value,
+        }
+
+        fetch(`${API_URL}/labeledfiles`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             },
-        })
-    }
-
-    document.getElementById('submit-form').addEventListener('click', () => {
-        const checked = document.querySelector('input[name=labeled-by]:checked')
-        // Send the labels and the expertise level to the server
-        sendLabels({
-            labels: labels,
-            expertise_level: checked.value,
         }).catch((error) => console.error('Fetch Error!', error))
 
         // Start labeling again
@@ -192,13 +197,25 @@ ready(() => {
     })
 
     document.getElementById('back-btn').addEventListener('click', () => {
+        window.location.href = '/' // Go to the home page
+    })
+
+    // --------------------------------------------
+    window.onunload = () => {
+        // Before leaving the window
         // Send the labels to the server if there are any
         if (labels.length !== 0) {
-            sendLabels({ labels: labels, expertise_level: '' })
-                .then(() => (window.location.href = '/')) // Go to the home page
-                .catch((error) => console.error('Fetch Error!', error))
-        } else {
-            window.location.href = '/'
+            const checked = document.querySelector(
+                'input[name=labeled-by]:checked'
+            )
+            const data = {
+                labels: labels,
+                expertise_level: checked.value,
+            }
+            navigator.sendBeacon(
+                `${API_URL}/labeledfiles`,
+                JSON.stringify(data)
+            )
         }
-    })
+    }
 })

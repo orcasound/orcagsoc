@@ -34,8 +34,14 @@ const spec3D = {
 
         window.addEventListener('resize', spec3D.onResize_.bind(spec3D))
     },
+    load: function (src) {
+        spec3D.player.loadSrc(src)
+    },
     stop: function () {
         spec3D.player.stop()
+    },
+    pause: function () {
+        spec3D.player.pause()
     },
 
     isPlaying: function () {
@@ -58,9 +64,10 @@ const spec3D = {
         spec3D.player.setLoop(loop)
     },
 
-    play: function (src) {
-        spec3D.src = src
-        spec3D.player.playSrc(src)
+    play: function () {
+        // spec3D.src = src
+        // spec3D.player.playSrc(src)
+        spec3D.player.play()
     },
 
     live: function () {

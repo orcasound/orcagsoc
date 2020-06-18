@@ -9,9 +9,36 @@
 
     <body>
         <canvas id="spectrogram"></canvas><canvas id="legend"></canvas>
-        <svg markup-inline id="back-btn" src="media/back.svg" />
+        <svg markup-inline id="back-btn" src="media/back.svg"></svg>
         <div id="progress-label"></div>
         <div id="progress-bar"><div id="progress"></div></div>
+        <div class="music-box__modal" id="loadingSound">
+            <div class="music-box__modal__message">
+                <div
+                    class="music-box__modal__message__text"
+                    id="loadingMessage"
+                >
+                    <!-- Loading -->
+                </div>
+                <svg
+                    class="spinner"
+                    width="55px"
+                    height="55px"
+                    viewBox="0 0 66 66"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <circle
+                        class="circle"
+                        fill="none"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        cx="33"
+                        cy="33"
+                        r="30"
+                    ></circle>
+                </svg>
+            </div>
+        </div>
         <div id="buttons-box">
             <div class="expandable" id="orca">
                 <button class="text-btn label-btn">
@@ -40,8 +67,8 @@
                 id="play-pause"
                 data-src="https://jd-r-bucket.s3.amazonaws.com/Port-Townsend-2008-midnight.mp3"
             >
-                <svg markup-inline id="play" src="media/play.svg" />
-                <svg markup-inline id="pause" src="media/pause.svg" />
+                <svg markup-inline id="play" src="media/play.svg"></svg>
+                <svg markup-inline id="pause" src="media/pause.svg"></svg>
             </button>
             <div class="expandable" id="not">
                 <button class="text-btn label-btn">NOT</button>

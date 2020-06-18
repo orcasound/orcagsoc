@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400|Roboto:200,300,400,500,400italic,500italic');
 
-$backgroundColor: #141414;
+$backgroundColor: rgb(20, 20, 20);
 $backgroundLight: linear-gradient(
         0deg,
         rgba(255, 255, 255, 0.08),
@@ -22,6 +22,7 @@ $backgroundMuchLighter: linear-gradient(
     $backgroundColor;
 $primaryColor: rgb(144, 202, 249);
 $primaryColorDark: rgba(144, 202, 249, 0.6);
+$secondaryColor: rgb(206, 147, 216);
 $textColor: rgba(255, 255, 255, 0.87);
 $textColorDark: rgba(255, 255, 255, 0.6);
 

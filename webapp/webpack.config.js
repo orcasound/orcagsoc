@@ -3,11 +3,14 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const Dotenv = require('dotenv-webpack')
+const prod = process.env.NODE_ENV === 'production'
 
 module.exports = {
     entry: { listen: './src/js/listen.js', index: './src/js/index.js' },
     output: {
         path: path.resolve(__dirname, 'dist'),
+        publicPath: prod ? '/orcagsoc' : '/',
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -24,7 +27,8 @@ module.exports = {
             chunks: ['index'],
         }),
         new MiniCssExtractPlugin(),
-    ],
+        prod && new Dotenv(),
+    ].filter(Boolean),
     module: {
         rules: [
             {
@@ -33,12 +37,19 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            hmr: process.env.NODE_ENV === 'development',
+                            hmr: !prod,
                         },
                     },
                     'css-loader',
                     'sass-loader',
                 ],
+            },
+            {
+                test: /\.mp3/i,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                },
             },
             {
                 test: /\.(png|jpe?g|gif)$/i,
@@ -49,7 +60,7 @@ module.exports = {
     },
     devServer: {
         open: true,
-        openPage: 'listen',
+        // openPage: 'listen',
         contentBase: path.join(__dirname, 'dist'),
         historyApiFallback: {
             rewrites: [{ from: /^\/listen/, to: '/listen.html' }],
