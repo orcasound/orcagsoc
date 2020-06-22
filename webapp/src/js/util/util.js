@@ -20,12 +20,14 @@ export const loadTrackSrc = function (
     callback,
     opt_progressCallback
 ) {
+    const loadingEl = document.getElementById('loadingSound')
     var request = new XMLHttpRequest()
     request.open('GET', src, true)
     request.responseType = 'arraybuffer'
 
     // Decode asynchronously.
     request.onload = function () {
+        loadingEl.style.display = 'none'
         context.decodeAudioData(
             request.response,
             function (buffer) {
@@ -44,4 +46,5 @@ export const loadTrackSrc = function (
     }
 
     request.send()
+    loadingEl.style.display = 'block'
 }
