@@ -63,7 +63,7 @@ ready(() => {
     playPauseBtn.addEventListener('click', () => {
         if (playPauseBtn.classList.contains('playing')) {
             playPauseBtn.classList.remove('playing')
-            sp.pause()
+            sp.stop()
         } else {
             playPauseBtn.classList.add('playing')
             // Play audio **************************
@@ -72,9 +72,8 @@ ready(() => {
     })
 
     const killSound = function () {
-        // sp.stop()
-        sp.pause()
         playPauseBtn.classList.remove('playing')
+        sp.stop()
     }
 
     window.addEventListener('blur', function () {
@@ -197,7 +196,7 @@ ready(() => {
     })
 
     document.getElementById('back-btn').addEventListener('click', () => {
-        window.location.href = '/' // Go to the home page
+        window.location.href = '.' // Go to the home page
     })
 
     // --------------------------------------------

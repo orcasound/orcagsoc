@@ -4,7 +4,7 @@
     "description": "",
     "keywords": [],
     "scripts": {
-        "start": "webpack-dev-server --mode production --devtool eval-cheap-source-map",
+        "start": "webpack-dev-server --mode development --devtool eval-cheap-source-map",
         "build": "webpack --mode production",
         "deploy": "gh-pages -d dist"
     },

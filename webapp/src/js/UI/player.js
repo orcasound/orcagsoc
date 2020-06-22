@@ -55,8 +55,8 @@ class Player {
             }.bind(this)
         )
 
-        this.startedAt = 0
-        this.pausedAt = 0
+        // this.startedAt = 0
+        // this.pausedAt = 0
     }
     loadSrc(src) {
         // Stop all of the mic stuff.
@@ -86,11 +86,12 @@ class Player {
     //     this.playHelper_('user')
     // }
     play() {
-        const offset = this.pausedAt
+        // const offset = this.pausedAt
         this.source = this.createSource_(this.buffer, true)
-        this.source.start(0, offset)
-        this.startedAt = this.context.currentTime - offset
-        this.pausedAt = 0
+        this.source.start(0)
+        // this.source.start(0, offset)
+        // this.startedAt = this.context.currentTime - offset
+        // this.pausedAt = 0
         if (!this.loop) {
             this.playTimer = setTimeout(
                 function () {
@@ -100,11 +101,12 @@ class Player {
             )
         }
     }
-    pause() {
-        const elapsed = this.context.currentTime - this.startedAt
-        this.stop()
-        this.pausedAt = elapsed
-    }
+    // pause() {
+    //     const elapsed = this.context.currentTime - this.startedAt
+    //     this.stop()
+    //     this.pausedAt = elapsed
+    //     this.paused = true
+    // }
     live() {
         // The AudioContext may be in a suspended state prior to the page receiving a user
         // gesture. If it is, resume it.
@@ -166,8 +168,8 @@ class Player {
             this.input = null
             return
         }
-        this.pausedAt = 0
-        this.startedAt = 0
+        // this.pausedAt = 0
+        // this.startedAt = 0
     }
     getAnalyserNode() {
         return this.analyser

@@ -64,10 +64,19 @@ module.exports = (env, argv) => {
         },
         devServer: {
             open: true,
-            // openPage: 'listen',
+            openPage: isProduction ? 'orcagsoc/' : '',
             contentBase: path.join(__dirname, 'dist'),
             historyApiFallback: {
-                rewrites: [{ from: /^\/listen/, to: '/listen.html' }],
+                rewrites: [
+                    {
+                        from: /^\/listen/,
+                        to: '/listen.html',
+                    },
+                    {
+                        from: /^\/orcagsoc\/listen/,
+                        to: '/orcagsoc/listen.html',
+                    },
+                ],
             },
         },
     }
