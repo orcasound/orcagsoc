@@ -22,8 +22,6 @@ import '../media/empty.mp3'
 import sp from './UI/spectrogram'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
-const API_URL = process.env.API_URL || 'http://localhost:5000'
-
 const ready = (callback) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
@@ -42,7 +40,7 @@ ready(() => {
 
     const startSession = function () {
         // Get audio filenames from the backend using Fetch
-        fetch(`${API_URL}/filenames`)
+        fetch(`${process.env.API_URL}/filenames`)
             .then((response) => response.json())
             .then((json) => {
                 filenames = json
@@ -182,7 +180,7 @@ ready(() => {
             expertiseLevel: checked.value,
         }
 
-        fetch(`${API_URL}/labeledfiles`, {
+        fetch(`${process.env.API_URL}/labeledfiles`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -213,7 +211,7 @@ ready(() => {
                 expertiseLevel: checked.value,
             }
             navigator.sendBeacon(
-                `${API_URL}/labeledfiles`,
+                `${process.env.API_URL}/labeledfiles`,
                 JSON.stringify(data)
             )
         }

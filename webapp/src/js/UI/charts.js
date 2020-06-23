@@ -1,3 +1,5 @@
+import ApexCharts from 'apexcharts'
+
 window.Apex = {
     chart: {
         zoom: {

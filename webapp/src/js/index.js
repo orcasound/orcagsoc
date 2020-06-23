@@ -4,8 +4,6 @@ import '../sass/index.scss'
 import { accuracyChart, confusionMatrix, validationsChart } from './UI/charts'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
-const API_URL = process.env.API_URL || 'http://localhost:5000'
-
 const ready = (callback) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
@@ -15,7 +13,7 @@ ready(() => {
     // --------------------------------------------
     async function getStatistics() {
         // Get ML statistics and validation history from the backend using Fetch
-        const response = await fetch(`${API_URL}/statistics`)
+        const response = await fetch(`${process.env.API_URL}/statistics`)
         const json = await response.json()
 
         // Update the charts
