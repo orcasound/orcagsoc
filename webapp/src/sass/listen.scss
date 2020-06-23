@@ -55,6 +55,11 @@ canvas {
     }
 }
 
+button {
+    -webkit-touch-callout: none; /* iOS Safari */
+    user-select: none;
+}
+
 /* Bottom Bar */
 #buttons-box {
     position: absolute;

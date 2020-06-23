@@ -125,10 +125,14 @@ ready(() => {
     document.querySelectorAll('.expandable').forEach((item) => {
         let lastTouched = ''
         item.addEventListener('touchstart', () => {
+            window.blockMenuHeaderScroll = true
             item.classList.add('hovered')
             item.querySelector('.expanded-box').style.display = 'flex'
         })
         item.addEventListener('touchmove', (e) => {
+            if (window.blockMenuHeaderScroll) {
+                e.preventDefault()
+            }
             let xPos = e.touches[0].pageX
             let yPos = e.touches[0].pageY
             const hoveredEl = document.elementFromPoint(xPos, yPos)
