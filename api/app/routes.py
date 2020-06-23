@@ -16,6 +16,11 @@ filenames = [
     'mp3/sound3.mp3',
 ]
 
+confusion_matrix = [[80, 46], [43, 100]]
+train_accuracy = [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
+test_accuracy = [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925]
+validation_history = [2, 10, 33, 44, 50, 60, 65]
+
 
 # Get the next 5 files with most uncertainty
 @app.route('/filenames', methods=['GET'])
@@ -35,14 +40,28 @@ def post_labeledfiles():
         return jsonify({'error': 'Unsupported Media Type'}), 415
 
     labels = data['labels']
-    expertise_level = data['expertise_level']
+    expertise_level = data['expertiseLevel']
     for label in labels:
         filename = label['filename']
         orca = label['orca']
-        extra_label = label['extra_label']
+        extra_label = label['extraLabel']
 
         newLabeledFile = LabeledFile(filename, orca, extra_label,
                                      expertise_level)
         db.session.add(newLabeledFile)
     db.session.commit()
     return {'success': True}
+
+
+# Get Confusion Matrix, Model Accuracy and Number of Labeled files over Time
+@app.route('/statistics', methods=['GET'])
+def get_statistics():
+    data = {
+        'confusionMatrix': confusion_matrix,
+        'accuracy': {
+            'train': train_accuracy,
+            'test': test_accuracy
+        },
+        'validationHistory': validation_history
+    }
+    return data

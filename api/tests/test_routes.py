@@ -22,10 +22,19 @@ def test_post_labeledfiles(test_client, init_database):
                                     "labels": [{
                                         "filename": "sound50.mp3",
                                         "orca": True,
-                                        "extra_label": "K"
+                                        "extraLabel": "K"
                                     }],
-                                    "expertise_level":
-                                    "Beginner"
+                                    "expertiseLevel": "Beginner"
                                 })
     assert response.status_code == 200
     assert response.json['success']
+
+
+def test_get_statistics(test_client):
+    """
+    GIVEN a Flask application
+    WHEN the '/statistics' page is requested (GET)
+    THEN check the response is valid
+    """
+    response = test_client.get('/statistics')
+    assert response.status_code == 200

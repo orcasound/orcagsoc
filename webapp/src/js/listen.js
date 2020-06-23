@@ -22,6 +22,8 @@ import '../media/empty.mp3'
 import sp from './UI/spectrogram'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
+const API_URL = process.env.API_URL || 'http://localhost:5000'
+
 const ready = (callback) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
@@ -29,7 +31,6 @@ const ready = (callback) => {
 
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
-    const API_URL = process.env.API_URL || 'http://localhost:5000'
     let filenames = []
     let labels = []
     let currentFile = 0
@@ -89,7 +90,7 @@ ready(() => {
         labels.push({
             filename: filenames[currentFile],
             orca: isOrca,
-            extra_label: extraLabel ? extraLabel : '',
+            extraLabel: extraLabel ? extraLabel : '',
         })
 
         // Load the next audio
@@ -178,7 +179,7 @@ ready(() => {
         const checked = document.querySelector('input[name=labeled-by]:checked')
         const data = {
             labels: labels,
-            expertise_level: checked.value,
+            expertiseLevel: checked.value,
         }
 
         fetch(`${API_URL}/labeledfiles`, {
@@ -209,7 +210,7 @@ ready(() => {
             )
             const data = {
                 labels: labels,
-                expertise_level: checked.value,
+                expertiseLevel: checked.value,
             }
             navigator.sendBeacon(
                 `${API_URL}/labeledfiles`,

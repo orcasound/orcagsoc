@@ -1,136 +1,75 @@
 'use strict'
+// -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 import '../sass/index.scss'
+import { accuracyChart, confusionMatrix, validationsChart } from './UI/charts'
+// -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
-window.Apex = {
-    chart: {
-        zoom: {
-            enabled: false,
-        },
-        toolbar: {
-            show: false,
-        },
-    },
-    title: {
-        align: 'center',
-        style: {
-            fontSize: '16px',
-            fontWeight: 'normal',
-            fontFamily: 'roboto',
-        },
-    },
-    dataLabels: {
-        enabled: false,
-    },
-    theme: {
-        mode: 'dark',
-        palette: 'palette10',
-    },
+const API_URL = process.env.API_URL || 'http://localhost:5000'
+
+const ready = (callback) => {
+    if (document.readyState != 'loading') callback()
+    else document.addEventListener('DOMContentLoaded', callback)
 }
 
-const accuracyOptions = {
-    chart: {
-        type: 'line',
-    },
-    title: {
-        text: 'Accuracy',
-    },
-    colors: ['#5d99c6', '#C3fDFF', '#FF6699', '#CE93D8', '#FF6699', '#99CCFF'],
-    series: [
-        {
-            name: 'train',
-            data: [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93],
-        },
-        {
-            name: 'test',
-            data: [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925],
-        },
-    ],
-    xaxis: {
-        categories: [0, 10, 20, 30, 40, 50, 60, 70, 80],
-    },
-}
+ready(() => {
+    // --------------------------------------------
+    async function getStatistics() {
+        // Get ML statistics and validation history from the backend using Fetch
+        const response = await fetch(`${API_URL}/statistics`)
+        const json = await response.json()
 
-const accuracyChart = new ApexCharts(
-    document.getElementById('accuracyChart'),
-    accuracyOptions
-)
+        // Update the charts
+        const [[TN, FP], [FN, TP]] = json.confusionMatrix
 
-accuracyChart.render()
-
-const confusionOptions = {
-    chart: {
-        type: 'heatmap',
-        events: {
-            click: function (_0, _1, config) {
-                console.log(config.seriesIndex, config.dataPointIndex)
+        accuracyChart.updateSeries([
+            {
+                name: 'train',
+                data: json.accuracy.train,
             },
-        },
-    },
-    colors: ['#B704D6'],
-    title: {
-        text: 'Confusion Matrix',
-    },
-    series: [
-        {
-            name: 'Actual Yes',
-            data: [
-                {
-                    x: 'Predicted No',
-                    y: 43,
-                },
-                {
-                    x: 'Predicted Yes',
-                    y: 100,
-                },
-            ],
-        },
-        {
-            name: 'Actual No',
-            data: [
-                {
-                    x: 'Predicted No',
-                    y: 80,
-                },
-                {
-                    x: 'Predicted Yes',
-                    y: 46,
-                },
-            ],
-        },
-    ],
-    xaxis: {
-        position: 'top',
-    },
-}
+            {
+                name: 'test',
+                data: json.accuracy.test,
+            },
+        ])
 
-var confusionMatrix = new ApexCharts(
-    document.getElementById('confusionMatrix'),
-    confusionOptions
-)
-confusionMatrix.render()
+        confusionMatrix.updateSeries([
+            {
+                name: 'Actual Yes',
+                data: [
+                    {
+                        x: 'Predicted No',
+                        y: FN,
+                    },
+                    {
+                        x: 'Predicted Yes',
+                        y: TP,
+                    },
+                ],
+            },
+            {
+                name: 'Actual No',
+                data: [
+                    {
+                        x: 'Predicted No',
+                        y: TN,
+                    },
+                    {
+                        x: 'Predicted Yes',
+                        y: FP,
+                    },
+                ],
+            },
+        ])
 
-const validationsOptions = {
-    chart: {
-        type: 'line',
-    },
-    title: {
-        text: 'Sounds Validated',
-    },
-    colors: ['#FF6699'], // ['#FF6699'],
-    series: [
-        {
-            name: 'sounds',
-            data: [2, 10, 33, 44, 50, 60, 65],
-        },
-    ],
-    xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    },
-}
+        validationsChart.updateSeries([
+            {
+                name: 'sounds',
+                data: json.validationHistory,
+            },
+        ])
+    }
 
-const validationsChart = new ApexCharts(
-    document.getElementById('validationsChart'),
-    validationsOptions
-)
-
-validationsChart.render()
+    getStatistics()
+        .then(() => console.log('Successs fetching data!'))
+        .catch((error) => console.error('Fetch Error!', error))
+})
