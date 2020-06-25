@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from app import app, db, models
 from app.models import LabeledFile
+from datetime import date
 import itertools
 import json
 
@@ -19,7 +20,7 @@ filenames = [
 confusion_matrix = [[80, 46], [43, 100]]
 train_accuracy = [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
 test_accuracy = [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925]
-validation_history = [2, 10, 33, 44, 50, 60, 65]
+# validation_history = [2, 10, 33, 44, 50, 60, 65]
 
 
 # Get the next 5 files with most uncertainty
@@ -56,12 +57,26 @@ def post_labeledfiles():
 # Get Confusion Matrix, Model Accuracy and Number of Labeled files over Time
 @app.route('/statistics', methods=['GET'])
 def get_statistics():
+    samples_by_day = db.session.query(
+        LabeledFile.date,
+        db.func.count(LabeledFile.date)).group_by(LabeledFile.date).all()
+    days = []
+    accumulated_samples = [0]
+    i = 1
+    for day, sample in samples_by_day:
+        days.append(day)
+        accumulated_samples.append(sample + accumulated_samples[i - 1])
+        i += 1
+
     data = {
         'confusionMatrix': confusion_matrix,
         'accuracy': {
             'train': train_accuracy,
             'test': test_accuracy
         },
-        'validationHistory': validation_history
+        'validationHistory': {
+            'days': days,
+            'samples': accumulated_samples[1:]
+        }
     }
     return data

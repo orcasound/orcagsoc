@@ -84,9 +84,9 @@ const validationsOptions = {
     },
     colors: ['#FF6699'],
     series: [],
-    xaxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    },
+    // xaxis: {
+    //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    // },
 }
 const validationsChart = new ApexCharts(
     document.getElementById('validationsChart'),
