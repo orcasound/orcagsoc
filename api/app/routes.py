@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from app import app, db, models
 from app.models import LabeledFile
-from datetime import date
 import itertools
 import json
 
@@ -60,13 +59,10 @@ def get_statistics():
     samples_by_day = db.session.query(
         LabeledFile.date,
         db.func.count(LabeledFile.date)).group_by(LabeledFile.date).all()
-    days = []
-    accumulated_samples = [0]
-    i = 1
-    for day, sample in samples_by_day:
-        days.append(day)
-        accumulated_samples.append(sample + accumulated_samples[i - 1])
-        i += 1
+
+    samples_by_day = [list(elem) for elem in samples_by_day]
+    for i in range(1, len(samples_by_day)):
+        samples_by_day[i][1] += samples_by_day[i - 1][1]
 
     data = {
         'confusionMatrix': confusion_matrix,
@@ -74,9 +70,6 @@ def get_statistics():
             'train': train_accuracy,
             'test': test_accuracy
         },
-        'validationHistory': {
-            'days': days,
-            'samples': accumulated_samples[1:]
-        }
+        'validationHistory': samples_by_day
     }
     return data

@@ -62,12 +62,7 @@ ready(() => {
         validationsChart.updateSeries([
             {
                 name: 'sounds',
-                data: [
-                    {
-                        x: json.validationHistory.days,
-                        y: json.validationHistory.samples,
-                    },
-                ],
+                data: json.validationHistory,
             },
         ])
     }

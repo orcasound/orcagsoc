@@ -54,7 +54,7 @@ const confusionOptions = {
     chart: {
         type: 'heatmap',
         events: {
-            click: function (_0, _1, config) {
+            dataPointSelection: function (_0, _1, config) {
                 console.log(config.seriesIndex, config.dataPointIndex)
             },
         },
@@ -84,9 +84,9 @@ const validationsOptions = {
     },
     colors: ['#FF6699'],
     series: [],
-    // xaxis: {
-    //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-    // },
+    xaxis: {
+        type: 'datetime',
+    },
 }
 const validationsChart = new ApexCharts(
     document.getElementById('validationsChart'),
