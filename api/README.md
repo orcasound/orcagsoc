@@ -21,7 +21,7 @@ The service is running on https://orcagsoc.herokuapp.com
     | ---------- | ------ | -------------------------------------------------------------------------------- |
     | /filenames | GET    | Get the names of the next 5 audio files, where the ML model had most uncertainty |
 
-#### Succes Response
+#### Success Response
 
 **Code:** `200 OK`  
 **Example:**  
@@ -63,7 +63,7 @@ label = {
 }
 ```
 
-#### Succes Response
+#### Success Response
 
 **Code:** `201 CREATED`  
 **Condition:** If everything is OK  
@@ -105,7 +105,7 @@ headers: {
 | ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | /statistics | GET    | Get confusion matrix and list of accuracies of last training round of the ML model, as well as the total number of labeled files over time |
 
-#### Succes Response
+#### Success Response
 
 **Code:** `200 OK`  
 **Example:**
