@@ -47,10 +47,10 @@ The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com
 
 ```JSON
 {
-    headers: {
-        "Content-Type": "application/json" || "text/plain;charset=UTF-8",
+    "headers": {
+        "Content-Type": "['application/json' or 'text/plain;charset=UTF-8']",
     },
-    body: {
+    "body": {
         "labels": "[list of labels]",
         "expertiseLevel": "[can be an empty string][10 chars max]"
     }
@@ -58,7 +58,7 @@ The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com
 
 label = {
     "filename": "[unicode 50 chars max]",
-    "orca": true || false,
+    "orca": "[true or false]",
     "extraLabel":"[can be an empty string][10 chars max]"
 }
 ```
