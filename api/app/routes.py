@@ -39,9 +39,16 @@ def post_labeledfiles():
     else:
         return jsonify({'error': 'Unsupported Media Type'}), 415
 
+    if 'labels' not in data or 'expertiseLevel' not in data:
+        return {'success': False}, 400
+
     labels = data['labels']
     expertise_level = data['expertiseLevel']
+
     for label in labels:
+        if 'filename' not in label or 'orca' not in label or 'extraLabel' not in label:
+            return {'success': False}, 400
+
         filename = label['filename']
         orca = label['orca']
         extra_label = label['extraLabel']
@@ -50,7 +57,7 @@ def post_labeledfiles():
                                      expertise_level)
         db.session.add(newLabeledFile)
     db.session.commit()
-    return {'success': True}
+    return {'success': True}, 201
 
 
 # Get Confusion Matrix, Model Accuracy and Number of Labeled files over Time

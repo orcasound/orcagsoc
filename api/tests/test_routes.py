@@ -24,9 +24,10 @@ def test_post_labeledfiles(test_client, init_database):
                                         "orca": True,
                                         "extraLabel": "K"
                                     }],
-                                    "expertiseLevel": "Beginner"
+                                    "expertiseLevel":
+                                    "Beginner"
                                 })
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json['success']
 
 
