@@ -1,8 +1,8 @@
-"""empty message
+"""Add labeled file table
 
-Revision ID: ea75df23103b
-Revises: 851b6c71001d
-Create Date: 2020-06-26 12:10:33.499401
+Revision ID: 121d6b1194e0
+Revises: 
+Create Date: 2020-06-29 14:14:19.657692
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ea75df23103b'
-down_revision = '851b6c71001d'
+revision = '121d6b1194e0'
+down_revision = None
 branch_labels = None
 depends_on = None
 
