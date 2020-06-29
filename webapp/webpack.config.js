@@ -31,7 +31,7 @@ module.exports = (_, argv) => {
             new MiniCssExtractPlugin(),
             new webpack.EnvironmentPlugin({
                 API_URL: isProduction
-                    ? 'https://orcasound.github.io/orcagsoc'
+                    ? 'https://orcagsoc.herokuapp.com'
                     : 'http://localhost:5000',
             }),
             new WebpackCdnPlugin({
