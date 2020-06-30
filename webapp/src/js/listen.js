@@ -29,7 +29,6 @@ const ready = (callback) => {
 
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
-    const API_URL = process.env.API_URL || 'http://localhost:5000'
     let filenames = []
     let labels = []
     let currentFile = 0
@@ -41,7 +40,7 @@ ready(() => {
 
     const startSession = function () {
         // Get audio filenames from the backend using Fetch
-        fetch(`${API_URL}/filenames`)
+        fetch(`${process.env.API_URL}/filenames`)
             .then((response) => response.json())
             .then((json) => {
                 filenames = json
@@ -89,7 +88,7 @@ ready(() => {
         labels.push({
             filename: filenames[currentFile],
             orca: isOrca,
-            extra_label: extraLabel ? extraLabel : '',
+            extraLabel: extraLabel ? extraLabel : '',
         })
 
         // Load the next audio
@@ -126,10 +125,14 @@ ready(() => {
     document.querySelectorAll('.expandable').forEach((item) => {
         let lastTouched = ''
         item.addEventListener('touchstart', () => {
+            window.blockMenuHeaderScroll = true
             item.classList.add('hovered')
             item.querySelector('.expanded-box').style.display = 'flex'
         })
         item.addEventListener('touchmove', (e) => {
+            if (window.blockMenuHeaderScroll) {
+                e.preventDefault()
+            }
             let xPos = e.touches[0].pageX
             let yPos = e.touches[0].pageY
             const hoveredEl = document.elementFromPoint(xPos, yPos)
@@ -178,10 +181,10 @@ ready(() => {
         const checked = document.querySelector('input[name=labeled-by]:checked')
         const data = {
             labels: labels,
-            expertise_level: checked.value,
+            expertiseLevel: checked.value,
         }
 
-        fetch(`${API_URL}/labeledfiles`, {
+        fetch(`${process.env.API_URL}/labeledfiles`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -209,10 +212,10 @@ ready(() => {
             )
             const data = {
                 labels: labels,
-                expertise_level: checked.value,
+                expertiseLevel: checked.value,
             }
             navigator.sendBeacon(
-                `${API_URL}/labeledfiles`,
+                `${process.env.API_URL}/labeledfiles`,
                 JSON.stringify(data)
             )
         }

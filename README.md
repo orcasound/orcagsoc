@@ -18,12 +18,16 @@ It has been divided into different subprojects:
 -   A webapp
 -   An API
 -   The preprocessing of the data
+-   The Machine Learning models
 
 Visit each subproject to know more about it, and how to get started with it.
 
+**Flowchart of how the application works:**  
+![flowchart](api/assets/flowchart.jpg)
+
 # Questions?
 
-Ask GSoC-specific questions in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ). 
+Ask GSoC-specific questions in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ).
 
 Discuss more general software and hardware development questions within the [Orcasound dev email distribution list](http://lists.orcasound.net/listinfo.cgi/dev-orcasound.net).
 

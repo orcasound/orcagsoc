@@ -1,4 +1,5 @@
 from app import db
+from datetime import date
 
 
 class LabeledFile(db.Model):
@@ -11,6 +12,7 @@ class LabeledFile(db.Model):
     orca = db.Column(db.Boolean)
     extra_label = db.Column(db.String(10))
     expertise_level = db.Column(db.String(10))
+    date = db.Column(db.Date, index=True, default=date.today)
 
     def __init__(self, filename, orca, extra_label, expertise_level):
         self.filename = filename

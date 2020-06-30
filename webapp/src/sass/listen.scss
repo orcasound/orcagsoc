@@ -15,7 +15,7 @@ canvas {
 /* Go Back SVG */
 #back-btn {
     position: absolute;
-    left: 3rem;
+    left: 2rem;
     top: 2.5rem;
     fill: $textColor;
     width: 2.5rem;
@@ -53,6 +53,11 @@ canvas {
         background-color: $primaryColor;
         transition: width 0.3s linear;
     }
+}
+
+button {
+    -webkit-touch-callout: none; /* iOS Safari */
+    user-select: none;
 }
 
 /* Bottom Bar */

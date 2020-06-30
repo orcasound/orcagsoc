@@ -3,9 +3,10 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const Dotenv = require('dotenv-webpack')
+const webpack = require('webpack')
+const WebpackCdnPlugin = require('webpack-cdn-plugin')
 
-module.exports = (env, argv) => {
+module.exports = (_, argv) => {
     const isProduction = argv.mode === 'production'
     return {
         entry: { listen: './src/js/listen.js', index: './src/js/index.js' },
@@ -28,8 +29,22 @@ module.exports = (env, argv) => {
                 chunks: ['index'],
             }),
             new MiniCssExtractPlugin(),
-            isProduction && new Dotenv(),
-        ].filter(Boolean),
+            new webpack.EnvironmentPlugin({
+                API_URL: isProduction
+                    ? 'https://orcagsoc.herokuapp.com'
+                    : 'http://localhost:5000',
+            }),
+            new WebpackCdnPlugin({
+                modules: [
+                    {
+                        name: 'apexcharts',
+                        var: 'ApexCharts',
+                        path: 'dist/apexcharts.min.js',
+                    },
+                ],
+                prodUrl: '//cdn.jsdelivr.net/npm/:name@:version/:path',
+            }),
+        ],
         module: {
             rules: [
                 {
