@@ -22,3 +22,16 @@ class LabeledFile(db.Model):
 
     def __repr__(self):
         return '<LabeledFile {}>'.format(self.filename)
+
+
+class ModelAccuracy(db.Model):
+    '''ML Model Acccuracy after each training round.'''
+    id = db.Column(db.Integer, primary_key=True)
+    accuracy = db.Column(db.Float())
+    date = db.Column(db.Date, index=True, default=date.today)
+
+    def __init__(self, accuracy):
+        self.accuracy = accuracy
+
+    def __repr__(self):
+        return '<ModelAccuracy {}>'.format(self.accuracy)

@@ -1,4 +1,4 @@
-from app.models import LabeledFile
+from app.models import LabeledFile, ModelAccuracy
 
 
 def test_new_labeled_file():
@@ -13,3 +13,13 @@ def test_new_labeled_file():
     assert new_labeled_file.orca
     assert not new_labeled_file.extra_label
     assert new_labeled_file.expertise_level == 'Beginner'
+
+
+def test_new_accuracy():
+    """
+    GIVEN a ModelAccuracy model
+    WHEN a new accuracy is added
+    THEN check the accuracy is defined correctly
+    """
+    new_accuracy = ModelAccuracy(0.82)
+    assert new_accuracy.accuracy == 0.82

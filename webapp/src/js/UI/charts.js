@@ -35,7 +35,7 @@ const accuracyOptions = {
         type: 'line',
     },
     title: {
-        text: 'Accuracy',
+        text: 'ML Model Accuracy (last training round)',
     },
     colors: ['#5d99c6', '#C3fDFF'],
     series: [],
@@ -61,7 +61,7 @@ const confusionOptions = {
     },
     colors: ['#B704D6'],
     title: {
-        text: 'Confusion Matrix',
+        text: 'ML Model Confusion Matrix (last training round)',
     },
     series: [],
     xaxis: {
@@ -80,13 +80,32 @@ const validationsOptions = {
         type: 'line',
     },
     title: {
-        text: 'Sounds Validated',
+        text: 'How has the number of validated sounds affected the accuracy?',
     },
-    colors: ['#FF6699'],
+    colors: ['#FF6699', '#5d99c6'],
     series: [],
     xaxis: {
         type: 'datetime',
     },
+    yaxis: [
+        {
+            title: {
+                text: 'Sounds Validated',
+                style: {
+                    fontWeight: 'normal',
+                },
+            },
+        },
+        {
+            opposite: true,
+            title: {
+                text: 'ML Model Accuracy',
+                style: {
+                    fontWeight: 'normal',
+                },
+            },
+        },
+    ],
 }
 const validationsChart = new ApexCharts(
     document.getElementById('validationsChart'),

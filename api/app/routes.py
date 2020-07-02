@@ -1,8 +1,9 @@
 from flask import jsonify, request
 from app import app, db, models
-from app.models import LabeledFile
+from app.models import LabeledFile, ModelAccuracy
 import itertools
 import json
+import datetime
 
 # filenames = iter([
 #     'sound1.mp3', 'sound4.mp3', 'sound6.mp3', 'sound2.mp3', 'sound3.mp3',
@@ -19,7 +20,6 @@ filenames = [
 confusion_matrix = [[80, 46], [43, 100]]
 train_accuracy = [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
 test_accuracy = [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925]
-# validation_history = [2, 10, 33, 44, 50, 60, 65]
 
 
 # Get the next 5 files with most uncertainty
@@ -71,12 +71,16 @@ def get_statistics():
     for i in range(1, len(samples_by_day)):
         samples_by_day[i][1] += samples_by_day[i - 1][1]
 
+    model_accuracy = db.session.query(ModelAccuracy.date,
+                                      ModelAccuracy.accuracy).all()
+
     data = {
         'confusionMatrix': confusion_matrix,
         'accuracy': {
             'train': train_accuracy,
             'test': test_accuracy
         },
-        'validationHistory': samples_by_day
+        'validationHistory': samples_by_day,
+        'modelAccuracy': model_accuracy,
     }
     return data

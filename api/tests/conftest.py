@@ -1,6 +1,6 @@
 import pytest
 from app import app, db
-from app.models import LabeledFile
+from app.models import LabeledFile, ModelAccuracy
 
 
 @pytest.fixture(scope='module')
@@ -26,8 +26,12 @@ def init_database():
     # Insert user data
     labeled_file1 = LabeledFile('sound20.mp3', True, '', 'Beginner')
     labeled_file2 = LabeledFile('sound30.wav', False, 'Whale', '')
+    accuracy1 = ModelAccuracy(0.82)
+    accuracy2 = ModelAccuracy(0.9)
     db.session.add(labeled_file1)
     db.session.add(labeled_file2)
+    db.session.add(accuracy1)
+    db.session.add(accuracy2)
 
     # Commit the changes for the users
     db.session.commit()
