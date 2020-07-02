@@ -9,14 +9,6 @@ window.Apex = {
             show: false,
         },
     },
-    title: {
-        align: 'center',
-        style: {
-            fontSize: '16px',
-            fontWeight: 'normal',
-            fontFamily: 'roboto',
-        },
-    },
     noData: {
         text: 'Loading...',
     },
@@ -33,9 +25,6 @@ window.Apex = {
 const accuracyOptions = {
     chart: {
         type: 'line',
-    },
-    title: {
-        text: 'ML Model Accuracy (last training round)',
     },
     colors: ['#5d99c6', '#C3fDFF'],
     series: [],
@@ -60,9 +49,6 @@ const confusionOptions = {
         },
     },
     colors: ['#B704D6'],
-    title: {
-        text: 'ML Model Confusion Matrix (last training round)',
-    },
     series: [],
     xaxis: {
         position: 'top',
@@ -78,9 +64,6 @@ confusionMatrix.render()
 const validationsOptions = {
     chart: {
         type: 'line',
-    },
-    title: {
-        text: 'How has the number of validated sounds affected the accuracy?',
     },
     colors: ['#FF6699', '#5d99c6'],
     series: [],
