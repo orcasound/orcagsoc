@@ -157,8 +157,7 @@ ready(() => {
         })
     })
 
-    const supportsTouch = 'ontouchstart' in window
-    if (!supportsTouch) {
+    if (!window.isMobile) {
         document.querySelectorAll('.label-btn').forEach((item) =>
             item.addEventListener('click', () => {
                 let isOrca = false

@@ -9,14 +9,6 @@ window.Apex = {
             show: false,
         },
     },
-    title: {
-        align: 'center',
-        style: {
-            fontSize: '16px',
-            fontWeight: 'normal',
-            fontFamily: 'roboto',
-        },
-    },
     noData: {
         text: 'Loading...',
     },
@@ -33,9 +25,6 @@ window.Apex = {
 const accuracyOptions = {
     chart: {
         type: 'line',
-    },
-    title: {
-        text: 'Accuracy',
     },
     colors: ['#5d99c6', '#C3fDFF'],
     series: [],
@@ -60,9 +49,6 @@ const confusionOptions = {
         },
     },
     colors: ['#B704D6'],
-    title: {
-        text: 'Confusion Matrix',
-    },
     series: [],
     xaxis: {
         position: 'top',
@@ -79,14 +65,30 @@ const validationsOptions = {
     chart: {
         type: 'line',
     },
-    title: {
-        text: 'Sounds Validated',
-    },
-    colors: ['#FF6699'],
+    colors: ['#FF6699', '#5d99c6'],
     series: [],
     xaxis: {
         type: 'datetime',
     },
+    yaxis: [
+        {
+            title: {
+                text: 'Sounds Validated',
+                style: {
+                    fontWeight: 'normal',
+                },
+            },
+        },
+        {
+            opposite: true,
+            title: {
+                text: 'ML Model Accuracy',
+                style: {
+                    fontWeight: 'normal',
+                },
+            },
+        },
+    ],
 }
 const validationsChart = new ApexCharts(
     document.getElementById('validationsChart'),

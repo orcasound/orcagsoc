@@ -64,6 +64,10 @@ ready(() => {
                 name: 'sounds',
                 data: json.validationHistory,
             },
+            {
+                name: 'accuracy',
+                data: json.modelAccuracy,
+            },
         ])
     }
 

@@ -8,9 +8,12 @@
 
 ## Database models
 
+<img src="assets/models.jpg" width="500">
+
 **labeled_file** table:  
-<img src="assets/labeled_file_table.jpg" width="220">  
-Label for an audio file made by a human annotator. All the labeled files then conform the labeled dataset used by the ML model.
+Label for an audio file made by a human annotator. All the labeled files then conform the labeled dataset used by the ML model.  
+**model_accuracy** table:  
+Stores the accuracy of the model after every training round.
 
 ## Endpoints
 
@@ -101,9 +104,9 @@ headers: {
 
 -   ### Get Statistics
 
-| URL         | Method | Description                                                                                                                                |
-| ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| /statistics | GET    | Get confusion matrix and list of accuracies of last training round of the ML model, as well as the total number of labeled files over time |
+| URL         | Method | Description                                                                                                                                                                            |
+| ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| /statistics | GET    | Get confusion matrix and list of accuracies of last training round of the ML model, as well as the total number of labeled files over time with the accuracy of the ML model over time |
 
 #### Success Response
 
@@ -124,6 +127,11 @@ headers: {
     ["Wed, 24 Jun 2020 00:00:00 GMT", 2],
     ["Thu, 25 Jun 2020 00:00:00 GMT", 6],
     ["Fri, 26 Jun 2020 00:00:00 GMT", 8]
+  ],
+  "modelAccuracy": [
+    ["Wed, 24 Jun 2020 00:00:00 GMT", 0.8],
+    ["Thu, 25 Jun 2020 00:00:00 GMT", 0.85],
+    ["Fri, 26 Jun 2020 00:00:00 GMT", 0.9]
   ]
 }
 ```
