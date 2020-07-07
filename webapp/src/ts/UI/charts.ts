@@ -1,4 +1,4 @@
-import ApexCharts from 'apexcharts'
+import * as ApexCharts from 'apexcharts'
 
 window.Apex = {
     chart: {
@@ -27,7 +27,7 @@ const accuracyOptions = {
         type: 'line',
     },
     colors: ['#5d99c6', '#C3fDFF'],
-    series: [],
+    series: [] as ApexAxisChartSeries,
     xaxis: {
         categories: [0, 10, 20, 30, 40, 50, 60, 70, 80],
     },
@@ -43,13 +43,13 @@ const confusionOptions = {
     chart: {
         type: 'heatmap',
         events: {
-            dataPointSelection: function (_0, _1, config) {
+            dataPointSelection: function ({}, {}, config: any) {
                 console.log(config.seriesIndex, config.dataPointIndex)
             },
         },
     },
     colors: ['#B704D6'],
-    series: [],
+    series: [] as ApexAxisChartSeries,
     xaxis: {
         position: 'top',
     },
@@ -66,7 +66,7 @@ const validationsOptions = {
         type: 'line',
     },
     colors: ['#FF6699', '#5d99c6'],
-    series: [],
+    series: [] as ApexAxisChartSeries,
     xaxis: {
         type: 'datetime',
     },

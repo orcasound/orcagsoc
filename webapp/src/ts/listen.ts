@@ -1,36 +1,18 @@
-'use strict'
-window.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-)
-window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-window.isAndroid = /Android/.test(navigator.userAgent) && !window.MSStream
-
-window.requestAnimFrame = (function () {
-    return (
-        window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        function (callback) {
-            window.setTimeout(callback, 1000 / 60)
-        }
-    )
-})()
-
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 import '../sass/listen.scss'
 import '../media/empty.mp3'
 import sp from './UI/spectrogram'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
-const ready = (callback) => {
+const ready = (callback: () => void) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
 }
 
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
-    let filenames = []
-    let labels = []
+    let filenames: string[] = []
+    let labels: object[] = []
     let currentFile = 0
 
     window.parent.postMessage('ready', '*')
@@ -83,7 +65,7 @@ ready(() => {
     })
 
     // --------------------------------------------
-    const handleSelectedLabel = function (isOrca, extraLabel) {
+    const handleSelectedLabel = function (isOrca: boolean, extraLabel: string) {
         // Add the current label to the list
         labels.push({
             filename: filenames[currentFile],
@@ -111,7 +93,7 @@ ready(() => {
         )
     }
 
-    const changeHoverToLabelBtn = function (el, add) {
+    const changeHoverToLabelBtn = function (el: Element, add: boolean) {
         if (!el) return
         const label = el.querySelector('label')
         if (label) {
@@ -123,13 +105,14 @@ ready(() => {
     }
 
     document.querySelectorAll('.expandable').forEach((item) => {
-        let lastTouched = ''
+        let lastTouched = null as Element
         item.addEventListener('touchstart', () => {
             window.blockMenuHeaderScroll = true
             item.classList.add('hovered')
-            item.querySelector('.expanded-box').style.display = 'flex'
+            const eb = item.querySelector('.expanded-box') as HTMLElement
+            eb.style.display = 'flex'
         })
-        item.addEventListener('touchmove', (e) => {
+        item.addEventListener('touchmove', (e: TouchEvent) => {
             if (window.blockMenuHeaderScroll) {
                 e.preventDefault()
             }
@@ -151,9 +134,10 @@ ready(() => {
                 isOrca = true
             }
             handleSelectedLabel(isOrca, lastTouched.id)
-            item.querySelector('.expanded-box').style.display = 'none'
+            const eb = item.querySelector('.expanded-box') as HTMLElement
+            eb.style.display = 'none'
             item.classList.remove('hovered')
-            lastTouched = ''
+            lastTouched = null
         })
     })
 
@@ -177,7 +161,9 @@ ready(() => {
     // --------------------------------------------
     document.getElementById('submit-form').addEventListener('click', () => {
         // Send the labels and the expertise level to the server
-        const checked = document.querySelector('input[name=labeled-by]:checked')
+        const checked = document.querySelector(
+            'input[name=labeled-by]:checked'
+        ) as HTMLInputElement
         const data = {
             labels: labels,
             expertiseLevel: checked.value,
@@ -208,7 +194,7 @@ ready(() => {
         if (labels.length !== 0) {
             const checked = document.querySelector(
                 'input[name=labeled-by]:checked'
-            )
+            ) as HTMLInputElement
             const data = {
                 labels: labels,
                 expertiseLevel: checked.value,

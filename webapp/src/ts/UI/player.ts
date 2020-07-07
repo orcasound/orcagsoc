@@ -14,12 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *********************************************************/
 
-import { loadTrackSrc } from '../util/util.js'
+import { loadTrackSrc } from '../util/util'
 
 class Player {
+    context: AudioContext
+    mix: GainNode
+    filterGain: GainNode
+    analyser: AnalyserNode
+    buffer: AudioBuffer
+    input: MediaStreamAudioSourceNode
+    source: AudioBufferSourceNode
+    loop: boolean
+    osc: OscillatorNode
+    stream: MediaStream
+    playTimer: ReturnType<typeof setTimeout>
+    bandpass: BiquadFilterNode
     constructor() {
         // Create an audio graph.
-        window.AudioContext = window.AudioContext || window.webkitAudioContext
+        window.AudioContext = window.AudioContext
         var context = new AudioContext()
         var analyser = context.createAnalyser()
         //analyser.fftSize = 2048 * 2 * 2
@@ -48,7 +60,7 @@ class Player {
         loadTrackSrc(
             this.context,
             'empty.mp3',
-            function (buffer) {
+            function (buffer: AudioBuffer) {
                 var source = this.createSource_(buffer, true)
                 source.loop = true
                 source.start(0)
@@ -58,7 +70,7 @@ class Player {
         // this.startedAt = 0
         // this.pausedAt = 0
     }
-    loadSrc(src) {
+    loadSrc(src: string) {
         // Stop all of the mic stuff.
         this.filterGain.gain.value = 1
         if (this.input) {
@@ -69,7 +81,7 @@ class Player {
         loadTrackSrc(
             this.context,
             src,
-            function (buffer) {
+            function (buffer: AudioBuffer) {
                 this.buffer = buffer
             }.bind(this)
         )
@@ -129,12 +141,12 @@ class Player {
                     self.onStream_(stream)
                 })
                 .catch(function () {
-                    self.onStreamError(this)
+                    self.onStreamError_()
                 })
             this.filterGain.gain.value = 0
         }
     }
-    onStream_(stream) {
+    onStream_(stream: MediaStream) {
         var input = this.context.createMediaStreamSource(stream)
         input.connect(this.mix)
         this.input = input
@@ -143,10 +155,10 @@ class Player {
     onStreamError_() {
         // TODO: Error handling.
     }
-    setLoop(loop) {
+    setLoop(loop: boolean) {
         this.loop = loop
     }
-    createSource_(buffer, loop) {
+    createSource_(buffer: AudioBuffer, loop: boolean) {
         var source = this.context.createBufferSource()
         source.buffer = buffer
         source.loop = loop
@@ -174,7 +186,7 @@ class Player {
     getAnalyserNode() {
         return this.analyser
     }
-    setBandpassFrequency(freq) {
+    setBandpassFrequency(freq: number) {
         if (freq == null) {
             console.log('Removing bandpass filter')
             // Remove the effect of the bandpass filter completely, connecting the mix to the analyser directly.
@@ -190,7 +202,7 @@ class Player {
             this.filterGain.connect(this.analyser)
         }
     }
-    playTone(freq) {
+    playTone(freq: number) {
         if (!this.osc) {
             this.osc = this.context.createOscillator()
             this.osc.connect(this.mix)

@@ -20,7 +20,7 @@
  * Helper which convers GLSL names to JavaScript names.
  * @private
  */
-const glslNameToJs_ = function (name) {
+const glslNameToJs_ = function (name: string) {
     return name.replace(/_(.)/g, function (_, p1) {
         return p1.toUpperCase()
     })
@@ -36,7 +36,10 @@ const glslNameToJs_ = function (name) {
  */
 
 class Shader {
-    constructor(gl, vertex, fragment) {
+    program: WebGLProgram
+    gl: WebGLRenderingContext;
+    [key: string]: any
+    constructor(gl: WebGLRenderingContext, vertex: string, fragment: string) {
         this.program = gl.createProgram()
         this.gl = gl
         var vs = this.loadShader(this.gl.VERTEX_SHADER, vertex)
@@ -92,7 +95,7 @@ class Shader {
      * Helper for loading a shader.
      * @private
      */
-    loadShader(type, shaderSrc) {
+    loadShader(type: number, shaderSrc: string) {
         var shader = this.gl.createShader(type)
         if (shader == null) {
             return null
@@ -114,14 +117,14 @@ class Shader {
      * Helper for looking up an attribute's location.
      * @private
      */
-    getAttribute(name) {
+    getAttribute(name: string) {
         return this.gl.getAttribLocation(this.program, name)
     }
     /**
      * Helper for looking up an attribute's location.
      * @private
      */
-    getUniform(name) {
+    getUniform(name: string) {
         return this.gl.getUniformLocation(this.program, name)
     }
 }

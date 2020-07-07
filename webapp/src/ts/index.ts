@@ -1,10 +1,9 @@
-'use strict'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 import '../sass/index.scss'
 import { accuracyChart, confusionMatrix, validationsChart } from './UI/charts'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
-const ready = (callback) => {
+const ready = (callback: () => void) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
 }

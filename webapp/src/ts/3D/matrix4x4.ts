@@ -42,13 +42,13 @@
 // A simple 4x4 Matrix utility class
 //
 
-function Matrix4x4() {
-    this.elements = Array(16)
-    this.loadIdentity()
-}
-
-Matrix4x4.prototype = {
-    scale: function (sx, sy, sz) {
+class Matrix4x4 {
+    elements: number[]
+    constructor() {
+        this.elements = Array(16)
+        this.loadIdentity()
+    }
+    scale(sx: number, sy: number, sz: number) {
         this.elements[0 * 4 + 0] *= sx
         this.elements[0 * 4 + 1] *= sx
         this.elements[0 * 4 + 2] *= sx
@@ -65,9 +65,9 @@ Matrix4x4.prototype = {
         this.elements[2 * 4 + 3] *= sz
 
         return this
-    },
+    }
 
-    translate: function (tx, ty, tz) {
+    translate(tx: number, ty: number, tz: number) {
         this.elements[3 * 4 + 0] +=
             this.elements[0 * 4 + 0] * tx +
             this.elements[1 * 4 + 0] * ty +
@@ -86,9 +86,9 @@ Matrix4x4.prototype = {
             this.elements[2 * 4 + 3] * tz
 
         return this
-    },
+    }
 
-    rotate: function (angle, x, y, z) {
+    rotate(angle: number, x: number, y: number, z: number) {
         var mag = Math.sqrt(x * x + y * y + z * z)
         var sinAngle = Math.sin((angle * Math.PI) / 180.0)
         var cosAngle = Math.cos((angle * Math.PI) / 180.0)
@@ -140,9 +140,16 @@ Matrix4x4.prototype = {
         }
 
         return this
-    },
+    }
 
-    frustum: function (left, right, bottom, top, nearZ, farZ) {
+    frustum(
+        left: number,
+        right: number,
+        bottom: number,
+        top: number,
+        nearZ: number,
+        farZ: number
+    ) {
         var deltaX = right - left
         var deltaY = top - bottom
         var deltaZ = farZ - nearZ
@@ -183,9 +190,9 @@ Matrix4x4.prototype = {
         this.elements = frust.elements
 
         return this
-    },
+    }
 
-    perspective: function (fovy, aspect, nearZ, farZ) {
+    perspective(fovy: number, aspect: number, nearZ: number, farZ: number) {
         var frustumH = Math.tan((fovy / 360.0) * Math.PI) * nearZ
         var frustumW = frustumH * aspect
 
@@ -197,9 +204,16 @@ Matrix4x4.prototype = {
             nearZ,
             farZ
         )
-    },
+    }
 
-    ortho: function (left, right, bottom, top, nearZ, farZ) {
+    ortho(
+        left: number,
+        right: number,
+        bottom: number,
+        top: number,
+        nearZ: number,
+        farZ: number
+    ) {
         var deltaX = right - left
         var deltaY = top - bottom
         var deltaZ = farZ - nearZ
@@ -219,9 +233,9 @@ Matrix4x4.prototype = {
         this.elements = ortho.elements
 
         return this
-    },
+    }
 
-    multiply: function (right) {
+    multiply(right: Matrix4x4) {
         var tmp = new Matrix4x4()
 
         for (var i = 0; i < 4; i++) {
@@ -252,22 +266,21 @@ Matrix4x4.prototype = {
 
         this.elements = tmp.elements
         return this
-    },
+    }
 
-    copy: function () {
+    copy() {
         var tmp = new Matrix4x4()
         for (var i = 0; i < 16; i++) {
             tmp.elements[i] = this.elements[i]
         }
         return tmp
-    },
+    }
 
-    get: function (row, col) {
+    get(row: number, col: number) {
         return this.elements[4 * row + col]
-    },
+    }
 
-    // In-place inversion
-    invert: function () {
+    invert() {
         var tmp_0 = this.get(2, 2) * this.get(3, 3)
         var tmp_1 = this.get(3, 2) * this.get(2, 3)
         var tmp_2 = this.get(1, 2) * this.get(3, 3)
@@ -450,16 +463,14 @@ Matrix4x4.prototype = {
         this.elements[3 * 4 + 2] = out_32
         this.elements[3 * 4 + 3] = out_33
         return this
-    },
+    }
 
-    // Returns new matrix which is the inverse of this
-    inverse: function () {
+    inverse() {
         var tmp = this.copy()
         return tmp.invert()
-    },
+    }
 
-    // In-place transpose
-    transpose: function () {
+    transpose() {
         var tmp = this.elements[0 * 4 + 1]
         this.elements[0 * 4 + 1] = this.elements[1 * 4 + 0]
         this.elements[1 * 4 + 0] = tmp
@@ -485,16 +496,16 @@ Matrix4x4.prototype = {
         this.elements[3 * 4 + 2] = tmp
 
         return this
-    },
+    }
 
-    loadIdentity: function () {
+    loadIdentity() {
         for (var i = 0; i < 16; i++) this.elements[i] = 0
         this.elements[0 * 4 + 0] = 1.0
         this.elements[1 * 4 + 1] = 1.0
         this.elements[2 * 4 + 2] = 1.0
         this.elements[3 * 4 + 3] = 1.0
         return this
-    },
+    }
 }
 
 export default Matrix4x4

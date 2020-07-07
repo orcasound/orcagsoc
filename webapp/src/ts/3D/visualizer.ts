@@ -32,46 +32,71 @@ const ANALYSISTYPE_3D_SONOGRAM = 2
 const ANALYSISTYPE_WAVEFORM = 3
 
 // The "model" matrix is the "world" matrix in Standard Annotations and Semantics
-var model = 0
-var view = 0
-var projection = 0
+var model: Matrix4x4 = null
+var view: Matrix4x4 = null
+var projection: Matrix4x4 = null
 
 /**
  * Class AnalyserView
  */
 class AnalyserView {
-    constructor(canvas) {
+    analysisType: number
+    sonogram3DWidth: number
+    sonogram3DHeight: number
+    sonogram3DGeometrySize: number
+    freqByteData: Uint8Array
+    texture: WebGLTexture
+    TEXTURE_HEIGHT: number
+    yoffset: number
+    frequencyShader: Shader
+    waveformShader: Shader
+    sonogramShader: Shader
+    sonogram3DShader: Shader
+    backgroundColor: number[]
+    foregroundColor: number[]
+    canvas: HTMLCanvasElement
+    gl: WebGL2RenderingContext | WebGLRenderingContext
+    cameraController: CameraController
+    has3DVisualizer: any
+    vboTexCoordOffset: number
+    vbo: WebGLBuffer
+    vbo3DTexCoordOffset: number
+    sonogram3DVBO: WebGLBuffer
+    sonogram3DNumIndices: number
+    sonogram3DIBO: WebGLBuffer
+    analyser: AnalyserNode
+    constructor(canvas: HTMLCanvasElement) {
         // NOTE: the default value of this needs to match the selected radio button
         // This analysis type may be overriden later on if we discover we don't support the right shader features.
         this.analysisType = ANALYSISTYPE_3D_SONOGRAM
         this.sonogram3DWidth = 256
         this.sonogram3DHeight = 256
         this.sonogram3DGeometrySize = 9.5
-        this.freqByteData = 0
-        this.texture = 0
         this.TEXTURE_HEIGHT = 256
         this.yoffset = 0
-        this.frequencyShader = 0
-        this.waveformShader = 0
-        this.sonogramShader = 0
-        this.sonogram3DShader = 0
         // Background color
         this.backgroundColor = [0.08, 0.08, 0.08, 1]
         this.foregroundColor = [0, 0.7, 0, 1]
         this.canvas = canvas
         this.initGL()
     }
-    getAvailableContext(canvas, contextList) {
+    getAvailableContext(canvas: HTMLCanvasElement) {
         if (canvas.getContext) {
-            for (var i = 0; i < contextList.length; ++i) {
-                try {
-                    var context = canvas.getContext(contextList[i], {
-                        antialias: true,
-                    })
-                    if (context !== null) return context
-                } catch (ex) {
-                    console.log(ex.mesage)
-                }
+            try {
+                const webgl2 = canvas.getContext('webgl2', {
+                    antialias: true,
+                })
+                if (webgl2 !== null) return webgl2
+            } catch (ex) {
+                console.log(ex.mesage)
+            }
+            try {
+                const webgl = canvas.getContext('webgl', {
+                    antialias: true,
+                })
+                if (webgl !== null) return webgl
+            } catch (ex) {
+                console.log(ex.mesage)
             }
         }
         return null
@@ -88,7 +113,7 @@ class AnalyserView {
         // ________________________________________
         var canvas = this.canvas
         // ________________________________________
-        var gl = this.getAvailableContext(canvas, ['webgl2', 'webgl'])
+        var gl = this.getAvailableContext(canvas)
         this.gl = gl
         // If we're missing this shader feature, then we can't do the 3D visualization.
         this.has3DVisualizer =
@@ -284,7 +309,7 @@ class AnalyserView {
             )
         }
     }
-    setAnalysisType(type) {
+    setAnalysisType(type: number) {
         // Check for read textures in vertex shaders.
         if (!this.has3DVisualizer && type == ANALYSISTYPE_3D_SONOGRAM) return
         this.analysisType = type
@@ -444,7 +469,7 @@ class AnalyserView {
                 mvp.multiply(projection)
                 gl.uniformMatrix4fv(
                     sonogram3DShader.worldViewProjectionLoc,
-                    gl.FALSE,
+                    false,
                     mvp.elements
                 )
                 texCoordOffset = vbo3DTexCoordOffset
@@ -467,7 +492,7 @@ class AnalyserView {
             texCoordLoc,
             2,
             gl.FLOAT,
-            gl.FALSE,
+            false,
             0,
             texCoordOffset
         )
@@ -493,13 +518,12 @@ class AnalyserView {
         gl.disableVertexAttribArray(vertexLoc)
         gl.disableVertexAttribArray(texCoordLoc)
     }
-    setAnalyserNode(analyser) {
+    setAnalyserNode(analyser: AnalyserNode) {
         this.analyser = analyser
     }
-}
-
-AnalyserView.prototype.analysisType = function () {
-    return this.analysisType
+    getAnalysisType() {
+        return this.analysisType
+    }
 }
 
 export default AnalyserView

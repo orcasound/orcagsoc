@@ -42,8 +42,18 @@
 // more precise -- only opaque pixels will be considered as the start
 // of a drag action.
 class CameraController {
-    constructor(opt_canvas, opt_context) {
-        this.onchange = null
+    xRot: number
+    yRot: number
+    zRot: number
+    scaleFactor: number
+    dragging: boolean
+    curX: number
+    curY: number
+    xT: number
+    yT: number
+    zT: number
+    canvas_: HTMLCanvasElement
+    constructor(opt_canvas?: HTMLCanvasElement) {
         this.xRot = 0
         this.yRot = 0
         this.zRot = 0
@@ -52,7 +62,6 @@ class CameraController {
         this.curX = 0
         this.curY = 0
         if (opt_canvas) this.canvas_ = opt_canvas
-        if (opt_context) this.context_ = opt_context
         // TODO(smus): Remove this to re-introduce mouse panning.
         return
     }

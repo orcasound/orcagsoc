@@ -13,13 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 *********************************************************/
-
-'use strict'
-import Player from '../UI/player'
+import Player from './player'
 import AnalyserView from '../3D/visualizer'
 
-const spectrogram = document.querySelector('#spectrogram')
-const legend = document.querySelector('#legend')
+const spectrogram = document.querySelector('#spectrogram') as HTMLCanvasElement
+const legend = document.querySelector('#legend') as HTMLCanvasElement
 
 const A = 19.86218362749959
 const B = 0.0003457334974465534
@@ -27,21 +25,21 @@ const B = 0.0003457334974465534
 const spec3D = {
     cxRot: 90,
     prevX: 0,
-
+    isRendering: false,
+    player: null as Player,
+    analyserView: null as AnalyserView,
+    canvas: null as HTMLCanvasElement,
     attached: function () {
         spec3D.onResize_()
         spec3D.init_()
 
         window.addEventListener('resize', spec3D.onResize_.bind(spec3D))
     },
-    load: function (src) {
+    load: function (src: string) {
         spec3D.player.loadSrc(src)
     },
     stop: function () {
         spec3D.player.stop()
-    },
-    pause: function () {
-        spec3D.player.pause()
     },
 
     isPlaying: function () {
@@ -60,7 +58,7 @@ const spec3D = {
         spec3D.draw_()
     },
 
-    loopChanged: function (loop) {
+    loopChanged: function (loop: boolean) {
         spec3D.player.setLoop(loop)
     },
 
@@ -72,10 +70,6 @@ const spec3D = {
 
     live: function () {
         spec3D.player.live()
-    },
-
-    userAudio: function (src) {
-        spec3D.player.playUserAudio(src)
     },
 
     init_: function () {
@@ -138,7 +132,7 @@ const spec3D = {
     freqStart: 20,
     freqEnd: 20000,
     padding: 30,
-    yToFreq: function (y) {
+    yToFreq: function (y: number) {
         var padding = spec3D.padding
         var height = spectrogram.height
 
@@ -159,7 +153,7 @@ const spec3D = {
     },
 
     // Just an inverse of yToFreq.
-    freqToY: function (logFreq) {
+    freqToY: function (logFreq: number) {
         // Go from logarithmic frequency to linear.
         var freq = Math.log(logFreq / A) / B
         var height = spectrogram.height
@@ -170,19 +164,19 @@ const spec3D = {
         // Apply padding, etc.
         return spec3D.padding + percent * (height - 2 * padding)
     },
-    easeInOutCubic: function (t, b, c, d) {
+    easeInOutCubic: function (t: number, b: number, c: number, d: number) {
         if ((t /= d / 2) < 1) return (c / 2) * t * t * t + b
         return (c / 2) * ((t -= 2) * t * t + 2) + b
     },
-    easeInOutQuad: function (t, b, c, d) {
+    easeInOutQuad: function (t: number, b: number, c: number, d: number) {
         if ((t /= d / 2) < 1) return (c / 2) * t * t + b
         return (-c / 2) * (--t * (t - 2) - 1) + b
     },
-    easeInOutQuint: function (t, b, c, d) {
+    easeInOutQuint: function (t: number, b: number, c: number, d: number) {
         if ((t /= d / 2) < 1) return (c / 2) * t * t * t * t * t + b
         return (c / 2) * ((t -= 2) * t * t * t * t + 2) + b
     },
-    easeInOutExpo: function (t, b, c, d) {
+    easeInOutExpo: function (t: number, b: number, c: number, d: number) {
         if (t == 0) return b
         if (t == d) return b + c
         if ((t /= d / 2) < 1) return (c / 2) * Math.pow(2, 10 * (t - 1)) + b

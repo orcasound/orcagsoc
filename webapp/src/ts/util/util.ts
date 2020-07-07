@@ -15,10 +15,10 @@ limitations under the License.
 *********************************************************/
 
 export const loadTrackSrc = function (
-    context,
-    src,
-    callback,
-    opt_progressCallback
+    context: AudioContext,
+    src: string,
+    callback: (buffer: AudioBuffer) => void,
+    opt_progressCallback?: (percent: number) => void
 ) {
     const loadingEl = document.getElementById('loadingSound')
     var request = new XMLHttpRequest()
@@ -48,3 +48,30 @@ export const loadTrackSrc = function (
     request.send()
     loadingEl.style.display = 'block'
 }
+
+declare global {
+    interface Window {
+        isMobile: boolean
+        isIOS: boolean
+        isAndroid: boolean
+        requestAnimFrame: (callback: () => {}) => void
+        Apex: object
+        blockMenuHeaderScroll: boolean
+    }
+}
+
+window.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+)
+window.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+window.isAndroid = /Android/.test(navigator.userAgent) && !window.MSStream
+
+window.requestAnimFrame = (function () {
+    return (
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        function (callback: () => {}) {
+            window.setTimeout(callback, 1000 / 60)
+        }
+    )
+})()
