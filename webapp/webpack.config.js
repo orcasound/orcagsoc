@@ -14,6 +14,7 @@ module.exports = (_, argv) => {
             path: path.resolve(__dirname, 'dist'),
             publicPath: isProduction ? '/orcagsoc/' : '/',
         },
+        devtool: isProduction ? '' : 'eval-cheap-source-map',
         plugins: [
             new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
@@ -48,6 +49,11 @@ module.exports = (_, argv) => {
         module: {
             rules: [
                 {
+                    test: /\.ts$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+                {
                     test: /\.scss$/,
                     use: [
                         {
@@ -76,6 +82,9 @@ module.exports = (_, argv) => {
                     use: ['html-loader', 'markup-inline-loader'],
                 },
             ],
+        },
+        resolve: {
+            extensions: ['.ts', '.js'],
         },
         devServer: {
             open: true,
