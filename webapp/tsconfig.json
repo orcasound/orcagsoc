@@ -6,7 +6,6 @@
         "module": "es6",
         "target": "es6",
         "allowJs": true,
-        "types": ["apexcharts"],
-        "lib": ["es5", "DOM", "esnext"]
+        "types": ["apexcharts"]
     }
 }
