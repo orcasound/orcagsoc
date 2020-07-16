@@ -1,11 +1,11 @@
-"""Preprocess unlabeled data from s3 bucket.
+"""Preprocess unlabeled data from a directory.
 
-This module takes a directory containing ts audiofiles from an s3 bucket,
+This module takes a directory containing ts audiofiles,
 generates mp3 files of a specified duration. Then for each audio, its mel spectrogram is computed,
 and per-channel energy normalization and wavelet denoising are applied to the spectrograms.
 
 Example:
-    $ python preprocess_unlabeled.py 1542432734
+    $ python preprocess_unlabeled.py testdata
 
 """
 
@@ -17,22 +17,20 @@ from util import select_spec_case
 from shutil import rmtree
 
 
-def main(folder_name, trimmed_dur):
-    # Get ts files from s3
-    # subprocess.run([
-    #     'aws', 's3', 'sync',
-    #     's3://streaming-orcasound-net/rpi_orcasound_lab/hls/%s/' % folder_name,
-    #     'temp'
-    # ])
-
+def main(input_dir, trimmed_dur):
     # Write a file with the name of the ts files for ffmpeg
     ts_files = [
-        f for f in os.listdir('temp')
-        if os.path.isfile(os.path.join('temp', f))
+        f for f in os.listdir(input_dir)
+        if os.path.isfile(os.path.join(input_dir, f))
     ]
+
+    # Create temp folder to help with preprocessing
+    if not os.path.exists('temp'):
+        os.makedirs('temp')
+
     with open('temp/mylist.txt', 'w') as output:
         for f in ts_files:
-            output.write("file %s \n" % f)
+            output.write("file ../%s/%s \n" % (input_dir, f))
 
     # Concatenate them into a single file
     subprocess.run([
@@ -49,7 +47,7 @@ def main(folder_name, trimmed_dur):
 
     # Trim audio file to multiple files of duration timmed_dir
     # Store audios in directory unlabeled/[folder_name]_mp3
-    audios_dir = 'unlabeled/%s_mp3' % folder_name
+    audios_dir = 'unlabeled/mp3'
     input_dur = int(librosa.get_duration(filename='temp/output.mp3'))
 
     if not os.path.exists(audios_dir):
@@ -61,13 +59,13 @@ def main(folder_name, trimmed_dur):
             'ffmpeg', '-ss',
             '%d' % start_time, '-t',
             '%d' % trimmed_dur, '-i', 'temp/output.mp3',
-            '%s/%03d.mp3' % (audios_dir, file_num)
+            '%s/%04d.mp3' % (audios_dir, file_num)
         ])
         file_num += 1
 
     # Generate spectrograms from audio files
     # Store spectrogram in directory unlabeled/[folder_name]_spectrograms
-    specs_dir = 'unlabeled/%s_spectrograms' % folder_name
+    specs_dir = 'unlabeled/spectrograms'
     if not os.path.exists(specs_dir):
         os.makedirs(specs_dir)
 
@@ -86,9 +84,9 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument(
-        's3_dir',
+        'input_dir',
         help=
-        'Name of the directory inside an s3 bucket containing audios in transport stream (ts) format'
+        'Name of the directory inside containing audios in transport stream (ts) format'
     )
     parser.add_argument(
         '--duration',
@@ -99,4 +97,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args.s3_dir, args.duration)
+    main(args.duration)
