@@ -17,7 +17,7 @@ from util import select_spec_case
 from shutil import rmtree
 
 
-def main(input_dir, trimmed_dur):
+def main(input_dir, output_dir, trimmed_dur):
     # Write a file with the name of the ts files for ffmpeg
     ts_files = [
         f for f in os.listdir(input_dir)
@@ -46,8 +46,8 @@ def main(input_dir, trimmed_dur):
     subprocess.run(['ffmpeg', '-i', 'temp/output.mp4', 'temp/output.mp3'])
 
     # Trim audio file to multiple files of duration timmed_dir
-    # Store audios in directory unlabeled/[folder_name]_mp3
-    audios_dir = 'unlabeled/mp3'
+    # Store audios in directory [output_dir]/mp3
+    audios_dir = '%s/mp3' % output_dir
     input_dur = int(librosa.get_duration(filename='temp/output.mp3'))
 
     if not os.path.exists(audios_dir):
@@ -64,8 +64,8 @@ def main(input_dir, trimmed_dur):
         file_num += 1
 
     # Generate spectrograms from audio files
-    # Store spectrogram in directory unlabeled/[folder_name]_spectrograms
-    specs_dir = 'unlabeled/spectrograms'
+    # Store spectrogram in directory [output_dir]/spectrograms
+    specs_dir = '%s/spectrograms' % output_dir
     if not os.path.exists(specs_dir):
         os.makedirs(specs_dir)
 
@@ -89,6 +89,10 @@ if __name__ == '__main__':
         'Name of the directory inside containing audios in transport stream (ts) format'
     )
     parser.add_argument(
+        'output_dir',
+        help=
+        'Name of the directory where the mp3 and spectrograms will be stored')
+    parser.add_argument(
         '--duration',
         default=3,
         type=int,
@@ -97,4 +101,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args.duration)
+    main(args.input_dir, args.output_dir, args.duration)

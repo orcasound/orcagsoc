@@ -3,4 +3,4 @@ __pycache__
 venv/
 ts/
 temp/
-unlabeled/
+unlabeled*/
