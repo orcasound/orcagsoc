@@ -13,6 +13,7 @@ ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
     let filenames: string[] = []
     let labels: object[] = []
+    let unlabeled = new Set<string>()
     let currentFile = 0
 
     window.parent.postMessage('ready', '*')
@@ -26,9 +27,12 @@ ready(() => {
             .then((response) => response.json())
             .then((json) => {
                 filenames = json
+                unlabeled = new Set(filenames)
                 console.log('filenames:', filenames)
                 // Load first audio
-                sp.load(`https://jd-r-bucket.s3.amazonaws.com/${filenames[0]}`)
+                sp.load(
+                    `https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/${filenames[currentFile]}.mp3`
+                )
             })
             .catch((error) => console.error('Fetch Error!', error))
 
@@ -72,6 +76,7 @@ ready(() => {
             orca: isOrca,
             extraLabel: extraLabel ? extraLabel : '',
         })
+        unlabeled.delete(filenames[currentFile])
 
         // Load the next audio
         sp.stop()
@@ -89,7 +94,7 @@ ready(() => {
             return
         }
         sp.load(
-            `https://jd-r-bucket.s3.amazonaws.com/${filenames[currentFile]}`
+            `https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/${filenames[currentFile]}.mp3`
         )
     }
 
@@ -189,20 +194,18 @@ ready(() => {
 
     // --------------------------------------------
     window.onunload = () => {
-        // Before leaving the window
-        // Send the labels to the server if there are any
-        if (labels.length !== 0) {
-            const checked = document.querySelector(
-                'input[name=labeled-by]:checked'
-            ) as HTMLInputElement
-            const data = {
-                labels: labels,
-                expertiseLevel: checked.value,
-            }
-            navigator.sendBeacon(
-                `${process.env.API_URL}/labeledfiles`,
-                JSON.stringify(data)
-            )
+        // Send the labels to the server before leaving the window
+        const checked = document.querySelector(
+            'input[name=labeled-by]:checked'
+        ) as HTMLInputElement
+        const data = {
+            labels: labels,
+            expertiseLevel: checked.value,
+            unlabeled: [...unlabeled],
         }
+        navigator.sendBeacon(
+            `${process.env.API_URL}/labeledfiles`,
+            JSON.stringify(data)
+        )
     }
 })

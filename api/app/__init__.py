@@ -26,8 +26,12 @@ if app.config['LOG_TO_STDOUT']:
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+from .active_learning import update_predictions
 from app import routes, models
-from app.models import LabeledFile, ModelAccuracy
+from app.models import LabeledFile, ModelAccuracy, Prediction
+
+if db.session.query(Prediction).first() is None:
+    update_predictions()
 
 
 # Load the database instance and models to flask shell
@@ -36,5 +40,6 @@ def make_shell_context():
     return {
         'db': db,
         'LabeledFile': LabeledFile,
-        'ModelAccuracy': ModelAccuracy
+        'ModelAccuracy': ModelAccuracy,
+        'Prediction': Prediction
     }

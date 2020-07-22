@@ -16,6 +16,7 @@ pytest = "*"
 flask-migrate = "*"
 gunicorn = "*"
 psycopg2 = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
