@@ -8,7 +8,8 @@ def get_predictions_on_unlabeled():
 
     # Download data from s3 to `unlabeled` directory
     s3_unlabeled_path = 's3://orcagsoc/unlabeled_test/spectrograms/'
-    subprocess.run(['aws', 's3', 'sync', s3_unlabeled_path, 'unlabeled_test'])
+    subprocess.run(
+        ['aws', 's3', 'sync', s3_unlabeled_path, 'unlabeled_test', '--delete'])
 
     model = load_model(model_path)
 

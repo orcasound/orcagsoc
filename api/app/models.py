@@ -27,7 +27,7 @@ class LabeledFile(db.Model):
 class ModelAccuracy(db.Model):
     '''ML Model Acccuracy after each training round.'''
     id = db.Column(db.Integer, primary_key=True)
-    accuracy = db.Column(db.Float())
+    accuracy = db.Column(db.Float)
     date = db.Column(db.Date, index=True, default=date.today)
 
     def __init__(self, accuracy):
@@ -40,7 +40,7 @@ class ModelAccuracy(db.Model):
 class Prediction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     model = db.Column(db.String(50))
-    predicted_value = db.Column(db.Float())
+    predicted_value = db.Column(db.Float)
     filename = db.Column(db.String(50), index=True)
     labeling = db.Column(db.Boolean)
 
@@ -52,3 +52,27 @@ class Prediction(db.Model):
 
     def __repr__(self):
         return '<Prediction {}>'.format(self.filename)
+
+
+class ConfusionMatrix(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tn = db.Column(db.Integer)
+    fp = db.Column(db.Integer)
+    fn = db.Column(db.Integer)
+    tp = db.Column(db.Integer)
+
+    def __init__(self, tn, fp, fn, tp):
+        self.tn = tn
+        self.fp = fp
+        self.fn = fn
+        self.tp = tp
+
+
+class Accuracy(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    acc = db.Column(db.Float)
+    val_acc = db.Column(db.Float)
+
+    def __init__(self, acc, val_acc):
+        self.acc = acc
+        self.val_acc = val_acc

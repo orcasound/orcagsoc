@@ -13,10 +13,4 @@ def get_predictions():
 @app.route('/train')
 def train_model():
     acc, val_acc, cm = train()
-    return {
-        "accuracy": {
-            "train": acc,
-            "validation": val_acc
-        },
-        "confusionMatrix": cm
-    }
+    return {"acc": acc, "val_acc": val_acc, "cm": cm}

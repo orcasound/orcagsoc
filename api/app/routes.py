@@ -1,25 +1,10 @@
 from flask import jsonify, request
 from app import app, db, models
-from app.models import LabeledFile, ModelAccuracy, Prediction
+from app.models import LabeledFile, ModelAccuracy, Prediction, Accuracy, ConfusionMatrix
 import itertools
 import json
 import datetime
-
-# filenames = iter([
-#     'sound1.mp3', 'sound4.mp3', 'sound6.mp3', 'sound2.mp3', 'sound3.mp3',
-#     'sound5.mp3'
-# ])
-# filenames = [
-#     'mp3/sound1.mp3',
-#     'mp3/sound4.mp3',
-#     'mp3/sound6.mp3',
-#     'mp3/sound2.mp3',
-#     'mp3/sound3.mp3',
-# ]
-
-confusion_matrix = [[80, 46], [43, 100]]
-train_accuracy = [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
-test_accuracy = [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925]
+from .active_learning import update_s3_dir, train_and_predict, num_labels
 
 
 # Get the next 5 files with most uncertainty
@@ -46,27 +31,42 @@ def post_labeledfiles():
     else:
         return jsonify({'error': 'Unsupported Media Type'}), 415
 
-    labels = data['labels']
-    expertise_level = data['expertiseLevel']
-    unlabeled = data['unlabeled']
+    labels = []
+    if 'labels' in data:
+        labels = data['labels']
+
+    expertise_level = ''
+    if 'expertiseLevel' in data:
+        expertise_level = data['expertiseLevel']
+
+    unlabeled = []
+    if 'unlabeled' in data:
+        unlabeled = data['unlabeled']
+
     for filename in unlabeled:
         cur_f = db.session.query(Prediction).filter(
             Prediction.filename == filename).first()
-        cur_f.labeling = False
+        if cur_f is not None:
+            cur_f.labeling = False
 
-    for label in labels:
-        # if 'filename' not in label or 'orca' not in label or 'extraLabel' not in label:
-        #     return {'success': False}, 400
-
+    for i, label in enumerate(labels):
         filename = label['filename']
         orca = label['orca']
         extra_label = label['extraLabel']
+
+        validation = i == 4
+        update_s3_dir(filename, orca, validation)
 
         newLabeledFile = LabeledFile(filename, orca, extra_label,
                                      expertise_level)
         db.session.add(newLabeledFile)
 
     db.session.commit()
+    num_labels['cur'] += len(labels)
+    if num_labels['cur'] >= num_labels['goal']:
+        train_and_predict()
+        num_labels['cur'] = 0
+
     return {'success': True}, 201
 
 
@@ -84,11 +84,22 @@ def get_statistics():
     model_accuracy = db.session.query(ModelAccuracy.date,
                                       ModelAccuracy.accuracy).all()
 
+    accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc).all()
+    train = []
+    validation = []
+    for t in accuracy:
+        train.append(t[0])
+        validation.append(t[1])
+
+    [confusion_matrix
+     ] = db.session.query(ConfusionMatrix.tn, ConfusionMatrix.fp,
+                          ConfusionMatrix.fn, ConfusionMatrix.tp).all()
+
     data = {
         'confusionMatrix': confusion_matrix,
         'accuracy': {
-            'train': train_accuracy,
-            'test': test_accuracy
+            'train': train,
+            'validation': validation
         },
         'validationHistory': samples_by_day,
         'modelAccuracy': model_accuracy,

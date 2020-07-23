@@ -172,6 +172,7 @@ ready(() => {
         const data = {
             labels: labels,
             expertiseLevel: checked.value,
+            unlabeled: [...unlabeled],
         }
 
         fetch(`${process.env.API_URL}/labeledfiles`, {
@@ -194,13 +195,8 @@ ready(() => {
 
     // --------------------------------------------
     window.onunload = () => {
-        // Send the labels to the server before leaving the window
-        const checked = document.querySelector(
-            'input[name=labeled-by]:checked'
-        ) as HTMLInputElement
+        // Send the unlabeled files to the server before leaving the window
         const data = {
-            labels: labels,
-            expertiseLevel: checked.value,
             unlabeled: [...unlabeled],
         }
         navigator.sendBeacon(

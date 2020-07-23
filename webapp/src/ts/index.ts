@@ -16,7 +16,7 @@ ready(() => {
         const json = await response.json()
 
         // Update the charts
-        const [[TN, FP], [FN, TP]] = json.confusionMatrix
+        const [TN, FP, FN, TP] = json.confusionMatrix
 
         accuracyChart.updateSeries([
             {
@@ -24,25 +24,12 @@ ready(() => {
                 data: json.accuracy.train,
             },
             {
-                name: 'test',
-                data: json.accuracy.test,
+                name: 'validation',
+                data: json.accuracy.validation,
             },
         ])
 
         confusionMatrix.updateSeries([
-            {
-                name: 'Actual Yes',
-                data: [
-                    {
-                        x: 'Predicted No',
-                        y: FN,
-                    },
-                    {
-                        x: 'Predicted Yes',
-                        y: TP,
-                    },
-                ],
-            },
             {
                 name: 'Actual No',
                 data: [
@@ -53,6 +40,19 @@ ready(() => {
                     {
                         x: 'Predicted Yes',
                         y: FP,
+                    },
+                ],
+            },
+            {
+                name: 'Actual Yes',
+                data: [
+                    {
+                        x: 'Predicted No',
+                        y: FN,
+                    },
+                    {
+                        x: 'Predicted Yes',
+                        y: TP,
                     },
                 ],
             },

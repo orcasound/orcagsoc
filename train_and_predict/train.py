@@ -21,7 +21,7 @@ def train():
     validation_data_path = 'labeled_test//validation'
 
     # Change the batchsize according to your system RAM
-    batch_size = 64
+    batch_size = 32
 
     # Train the Detection model
     reduce_lr = ReduceLROnPlateau(monitor='val_loss',
@@ -60,7 +60,6 @@ def train():
     # Accuracy curves.
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
-    acc = val_acc = 0
 
     # Confusion Matrix
     predictions = model.predict(validation_generator)
@@ -70,7 +69,7 @@ def train():
 
     true_classes = validation_generator.classes
 
-    cm = confusion_matrix(true_classes, predictions).tolist()
+    cm = confusion_matrix(true_classes, predictions).ravel().tolist()
 
     return acc, val_acc, cm
 
