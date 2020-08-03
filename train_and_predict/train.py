@@ -24,6 +24,12 @@ def train():
     batch_size = 32
 
     # Train the Detection model
+    checkpoint = ModelCheckpoint(
+        filepath='srkw_cnn.h5',
+        monitor='val_loss',
+        verbose=0,
+        save_best_only=True)
+
     reduce_lr = ReduceLROnPlateau(monitor='val_loss',
                                   factor=0.1,
                                   patience=100,
@@ -53,13 +59,13 @@ def train():
     history = model.fit(train_generator,
                         epochs=epochs,
                         validation_data=validation_generator,
-                        callbacks=[reduce_lr])
+                        callbacks=[checkpoint, reduce_lr])
 
-    model.save('srkw_cnn.h5')
-
-    # Accuracy curves.
+    # Loss and Accuracy curves.
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
 
     # Confusion Matrix
     predictions = model.predict(validation_generator)
@@ -71,7 +77,7 @@ def train():
 
     cm = confusion_matrix(true_classes, predictions).ravel().tolist()
 
-    return acc, val_acc, cm
+    return acc, val_acc, loss, val_loss, cm
 
 
 if __name__ == '__main__':

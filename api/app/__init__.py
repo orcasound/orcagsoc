@@ -35,7 +35,7 @@ from app.models import LabeledFile, ModelAccuracy, Prediction, ConfusionMatrix, 
 # Start training if the tables are empty
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 if engine.dialect.has_table(
-        engine, 'Accuracy') and db.session.query(Accuracy).first() is None:
+        engine, 'accuracy') and db.session.query(Accuracy).first() is None:
     train_and_predict()
 
 

@@ -15,7 +15,7 @@ def get_predictions_on_unlabeled():
 
     img_width, img_height = 607, 617
 
-    image_generator = ImageDataGenerator()
+    image_generator = ImageDataGenerator(rescale=1. / 255)
     data_generator = image_generator.flow_from_directory(
         '.',
         # only read images from `unlabeled` directory
@@ -31,10 +31,10 @@ def get_predictions_on_unlabeled():
     predictions = model.predict(data_generator).tolist()
 
     clean_filenames = [
-        file.split('\\')[1].split('_')[0] for file in data_generator.filenames
+        file.split('/')[1].split('_')[0] for file in data_generator.filenames
     ]
 
-    return predictions, clean_filenames, model_path.split('.')[0]
+    return predictions, clean_filenames
 
 
 if __name__ == '__main__':

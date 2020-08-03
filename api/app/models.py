@@ -39,13 +39,11 @@ class ModelAccuracy(db.Model):
 
 class Prediction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    model = db.Column(db.String(50))
     predicted_value = db.Column(db.Float)
     filename = db.Column(db.String(50), index=True)
     labeling = db.Column(db.Boolean)
 
-    def __init__(self, model, predicted_value, filename):
-        self.model = model
+    def __init__(self, predicted_value, filename):
         self.predicted_value = predicted_value
         self.filename = filename
         self.labeling = False
@@ -72,7 +70,11 @@ class Accuracy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     acc = db.Column(db.Float)
     val_acc = db.Column(db.Float)
+    loss = db.Column(db.Float)
+    val_loss = db.Column(db.Float)
 
-    def __init__(self, acc, val_acc):
+    def __init__(self, acc, val_acc, loss, val_loss):
         self.acc = acc
         self.val_acc = val_acc
+        self.loss = loss
+        self.val_loss = val_loss

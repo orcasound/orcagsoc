@@ -26,7 +26,7 @@ ready(() => {
         fetch(`${process.env.API_URL}/filenames`)
             .then((response) => response.json())
             .then((json) => {
-                filenames = json
+                filenames = json.filenames
                 unlabeled = new Set(filenames)
                 console.log('filenames:', filenames)
                 // Load first audio

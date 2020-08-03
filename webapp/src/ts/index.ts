@@ -1,6 +1,6 @@
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 import '../sass/index.scss'
-import { accuracyChart, confusionMatrix, validationsChart } from './UI/charts'
+import { accuracyChart, confusionMatrix, validationsChart, lossChart } from './UI/charts'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
 const ready = (callback: () => void) => {
@@ -29,20 +29,18 @@ ready(() => {
             },
         ])
 
-        confusionMatrix.updateSeries([
+        lossChart.updateSeries([
             {
-                name: 'Actual No',
-                data: [
-                    {
-                        x: 'Predicted No',
-                        y: TN,
-                    },
-                    {
-                        x: 'Predicted Yes',
-                        y: FP,
-                    },
-                ],
+                name: 'train',
+                data: json.loss.train,
             },
+            {
+                name: 'validation',
+                data: json.loss.validation,
+            },
+        ])
+
+        confusionMatrix.updateSeries([
             {
                 name: 'Actual Yes',
                 data: [
@@ -53,6 +51,19 @@ ready(() => {
                     {
                         x: 'Predicted Yes',
                         y: TP,
+                    },
+                ],
+            },
+            {
+                name: 'Actual No',
+                data: [
+                    {
+                        x: 'Predicted No',
+                        y: TN,
+                    },
+                    {
+                        x: 'Predicted Yes',
+                        y: FP,
                     },
                 ],
             },

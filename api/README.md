@@ -16,6 +16,9 @@ Label for an audio file made by a human annotator. All the labeled files then co
 Stores the accuracy of the model after every training round.
 
 ## Endpoints
+- `GET` [/filenames](#get-filenames)
+- `POST`[/labeledfile](#add-labeled-files)
+- `GET` [/statistics](#get-statistics)
 
 The service is running on https://orcagsoc.herokuapp.com
 

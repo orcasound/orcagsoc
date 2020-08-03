@@ -19,6 +19,9 @@ window.Apex = {
         mode: 'dark',
         palette: 'palette10',
     },
+    yaxis: {
+        decimalsInFloat: 2,
+    }
 }
 
 // --------------------------------------------
@@ -28,15 +31,26 @@ const accuracyOptions = {
     },
     colors: ['#5d99c6', '#C3fDFF'],
     series: [] as ApexAxisChartSeries,
-    xaxis: {
-        categories: [0, 10, 20, 30, 40, 50, 60, 70, 80],
-    },
 }
 const accuracyChart = new ApexCharts(
     document.getElementById('accuracyChart'),
     accuracyOptions
 )
 accuracyChart.render()
+
+// --------------------------------------------
+const lossOptions = {
+    chart: {
+        type: 'line',
+    },
+    colors: ['#5d99c6', '#C3fDFF'],
+    series: [] as ApexAxisChartSeries,
+}
+const lossChart = new ApexCharts(
+    document.getElementById('lossChart'),
+    lossOptions
+)
+lossChart.render()
 
 // --------------------------------------------
 const confusionOptions = {
@@ -78,6 +92,7 @@ const validationsOptions = {
                     fontWeight: 'normal',
                 },
             },
+            decimalsInFloat: 2,
         },
         {
             opposite: true,
@@ -87,6 +102,7 @@ const validationsOptions = {
                     fontWeight: 'normal',
                 },
             },
+            decimalsInFloat: 2,
         },
     ],
 }
@@ -97,4 +113,4 @@ const validationsChart = new ApexCharts(
 validationsChart.render()
 
 // --------------------------------------------
-export { accuracyChart, confusionMatrix, validationsChart }
+export { accuracyChart, confusionMatrix, validationsChart, lossChart }

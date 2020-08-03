@@ -4,7 +4,7 @@ from app.models import LabeledFile, ModelAccuracy, Prediction, Accuracy, Confusi
 import itertools
 import json
 import datetime
-from .active_learning import update_s3_dir, train_and_predict, num_labels
+from .active_learning import update_s3_dir, train_and_predict, session
 
 
 # Get the next 5 files with most uncertainty
@@ -18,7 +18,9 @@ def get_filenames():
         p.labeling = True
     db.session.commit()
     filenames = [p.filename for p in predictions]
-    return jsonify(filenames)
+    predicted_values = [p.predicted_value for p in predictions]
+    data = {'filenames': filenames, 'predictions': predicted_values}
+    return data
 
 
 # Add new labeled files
@@ -62,10 +64,10 @@ def post_labeledfiles():
         db.session.add(newLabeledFile)
 
     db.session.commit()
-    num_labels['cur'] += len(labels)
-    if num_labels['cur'] >= num_labels['goal']:
+    session['cur_labels'] += len(labels)
+    if not session['training'] and session['cur_labels'] >= session['goal']:
         train_and_predict()
-        num_labels['cur'] = 0
+        session['cur_labels'] = 0
 
     return {'success': True}, 201
 
@@ -84,12 +86,16 @@ def get_statistics():
     model_accuracy = db.session.query(ModelAccuracy.date,
                                       ModelAccuracy.accuracy).all()
 
-    accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc).all()
+    accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc, Accuracy.loss, Accuracy.val_loss).all()
     train = []
     validation = []
+    train_l = []
+    validation_l = []
     for t in accuracy:
         train.append(t[0])
         validation.append(t[1])
+        train_l.append(t[2])
+        validation_l.append(t[3])
 
     [confusion_matrix
      ] = db.session.query(ConfusionMatrix.tn, ConfusionMatrix.fp,
@@ -100,6 +106,10 @@ def get_statistics():
         'accuracy': {
             'train': train,
             'validation': validation
+        },
+        'loss': {
+            'train': train_l,
+            'validation': validation_l
         },
         'validationHistory': samples_by_day,
         'modelAccuracy': model_accuracy,
