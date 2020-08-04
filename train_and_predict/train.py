@@ -24,11 +24,10 @@ def train():
     batch_size = 32
 
     # Train the Detection model
-    checkpoint = ModelCheckpoint(
-        filepath='srkw_cnn.h5',
-        monitor='val_loss',
-        verbose=0,
-        save_best_only=True)
+    checkpoint = ModelCheckpoint(filepath='srkw_cnn.h5',
+                                 monitor='val_loss',
+                                 verbose=0,
+                                 save_best_only=True)
 
     reduce_lr = ReduceLROnPlateau(monitor='val_loss',
                                   factor=0.1,
@@ -77,7 +76,7 @@ def train():
 
     cm = confusion_matrix(true_classes, predictions).ravel().tolist()
 
-    return acc, val_acc, loss, val_loss, cm
+    return acc, val_acc, loss, val_loss, cm, s3_labeled_path, train_generator.n
 
 
 if __name__ == '__main__':

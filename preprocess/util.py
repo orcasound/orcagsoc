@@ -77,8 +77,7 @@ def spec_plot_and_save(denoised_data, f_name, output_dir):
     ax.get_yaxis().set_visible(False)
     fig.set_size_inches(10, 10)
     # os.chdir(plotPath)
-    fig.savefig(os.path.join(output_dir,
-                             f"{f_name[:-4]}" + "_{:04d}.png".format(i)),
+    fig.savefig(os.path.join(output_dir, f"{f_name[:-4]}.png"),
                 dpi=80,
                 bbox_inches="tight",
                 quality=95,

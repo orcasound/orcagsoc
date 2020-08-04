@@ -1,6 +1,7 @@
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import subprocess
+from datetime import datetime
 
 
 def get_predictions_on_unlabeled():
@@ -30,11 +31,19 @@ def get_predictions_on_unlabeled():
 
     predictions = model.predict(data_generator).tolist()
 
-    clean_filenames = [
-        file.split('/')[1].split('_')[0] for file in data_generator.filenames
-    ]
+    s3_url = 'https://orcagsoc.s3.amazonaws.com/unlabeled_test'
+    predictions_list = []
+    for i in range(len(predictions)):
+        cur_prediction = {}
+        cur_prediction['predicted_value'] = predictions[i][0]
+        cur_file = (data_generator.filenames[i].split('/')[1]).split('.')[0]
+        cur_prediction['audio_url'] = f'{s3_url}/mp3/{cur_file}.mp3'
+        location, timestamp = cur_file.split('_')
+        cur_prediction['location'] = location
+        cur_prediction['timestamp'] = datetime.fromtimestamp(int(timestamp))
+        predictions_list.append(cur_prediction)
 
-    return predictions, clean_filenames
+    return predictions_list, s3_unlabeled_path
 
 
 if __name__ == '__main__':

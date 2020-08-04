@@ -1,6 +1,11 @@
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 import '../sass/index.scss'
-import { accuracyChart, confusionMatrix, validationsChart, lossChart } from './UI/charts'
+import {
+    accuracyChart,
+    confusionMatrix,
+    validationsChart,
+    lossChart,
+} from './UI/charts'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
 const ready = (callback: () => void) => {
@@ -14,6 +19,11 @@ ready(() => {
         // Get ML statistics and validation history from the backend using Fetch
         const response = await fetch(`${process.env.API_URL}/statistics`)
         const json = await response.json()
+
+        // Update the training progress
+        document.getElementById(
+            'retrain-progress'
+        ).textContent = `${json.retrain.progress}/${json.retrain.goal}`
 
         // Update the charts
         const [TN, FP, FN, TP] = json.confusionMatrix

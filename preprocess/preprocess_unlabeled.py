@@ -17,7 +17,7 @@ from util import select_spec_case
 from shutil import rmtree
 
 
-def main(input_dir, output_dir, trimmed_dur):
+def main(input_dir, output_dir, trimmed_dur, location, starting_timestamp):
     # Write a file with the name of the ts files for ffmpeg
     ts_files = [
         f for f in os.listdir(input_dir)
@@ -30,7 +30,8 @@ def main(input_dir, output_dir, trimmed_dur):
 
     with open('temp/mylist.txt', 'w') as output:
         for f in ts_files:
-            output.write("file ../%s/%s \n" % (input_dir, f))
+            if f[-2:] == 'ts':
+                output.write("file ../%s/%s \n" % (input_dir, f))
 
     # Concatenate them into a single file
     subprocess.run([
@@ -53,15 +54,14 @@ def main(input_dir, output_dir, trimmed_dur):
     if not os.path.exists(audios_dir):
         os.makedirs(audios_dir)
 
-    file_num = 0
     for start_time in range(0, input_dur, trimmed_dur):
         subprocess.run([
             'ffmpeg', '-ss',
             '%d' % start_time, '-t',
             '%d' % trimmed_dur, '-i', 'temp/output.mp3',
-            '%s/%04d.mp3' % (audios_dir, file_num)
+            '%s/%s_%d.mp3' %
+            (audios_dir, location, starting_timestamp + start_time)
         ])
-        file_num += 1
 
     # Generate spectrograms from audio files
     # Store spectrogram in directory [output_dir]/spectrograms
@@ -93,12 +93,29 @@ if __name__ == '__main__':
         help=
         'Name of the directory where the mp3 and spectrograms will be stored')
     parser.add_argument(
+        '-d'
         '--duration',
         default=3,
         type=int,
         help=
         'Duration in seconds of the output mp3 files (default: %(default)s)')
+    parser.add_argument(
+        '-l'
+        '--location',
+        default='',
+        type=str,
+        help=
+        'Place without spaces where the sounds where detected (default: "")')
+    parser.add_argument(
+        '-s'
+        '--starting_timestamp',
+        default=0,
+        type=int,
+        help=
+        'Unix Timestamp that will be the name of the first file (default: %(default)s)'
+    )
 
     args = parser.parse_args()
 
-    main(args.input_dir, args.output_dir, args.duration)
+    main(args.input_dir, args.output_dir, args.duration, args.location,
+         args.starting_timestamp)

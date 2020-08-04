@@ -44,14 +44,19 @@ nav {
         }
     }
 
-    span {
+    .text {
         color: #000;
         letter-spacing: 0.125rem;
-        width: 20rem;
+        width: 30rem;
         margin: 3rem;
     }
     .listen {
         font-size: 3rem;
+        text-align: right;
+        margin-bottom: 1rem;
+    }
+    .retrain {
+        font-size: 1.5rem;
         text-align: right;
     }
     .help-us {

@@ -7,20 +7,29 @@ import datetime
 from .active_learning import update_s3_dir, train_and_predict, session
 
 
-# Get the next 5 files with most uncertainty
-@app.route('/filenames', methods=['GET'])
-def get_filenames():
+# Get the next 5 predictions with most uncertainty
+@app.route('/uncertainties', methods=['GET'])
+def get_uncertainties():
     # return jsonify(list(itertools.islice(filenames, 5)))
     predictions = db.session.query(Prediction).order_by(
         db.func.abs(0.5 - Prediction.predicted_value)).filter(
             ~Prediction.labeling).limit(5).all()
+    response = []
     for p in predictions:
+        cur_p = {}
         p.labeling = True
+        cur_p['audioUrl'] = p.audio_url
+        cur_p['location'] = p.location
+        cur_p['timestamp'] = p.timestamp
+        if p.predicted_value < 0.5:
+            cur_p['confidence'] = 200 * p.predicted_value
+            cur_p['orca'] = False
+        else:
+            cur_p['confidence'] = -200 * p.predicted_value - 100
+            cur_p['orca'] = True
+        response.append(cur_p)
     db.session.commit()
-    filenames = [p.filename for p in predictions]
-    predicted_values = [p.predicted_value for p in predictions]
-    data = {'filenames': filenames, 'predictions': predicted_values}
-    return data
+    return jsonify(response)
 
 
 # Add new labeled files
@@ -75,18 +84,17 @@ def post_labeledfiles():
 # Get Confusion Matrix, Model Accuracy and Number of Labeled files over Time
 @app.route('/statistics', methods=['GET'])
 def get_statistics():
-    samples_by_day = db.session.query(
-        LabeledFile.date, db.func.count(LabeledFile.date)).group_by(
-            LabeledFile.date).order_by(LabeledFile.date).all()
+    model_accuracy_query = db.session.query(ModelAccuracy.accuracy,
+                                            ModelAccuracy.labeled_files,
+                                            ModelAccuracy.date).all()
+    model_accuracies, labeled_files, dates = [], [], []
+    for query in model_accuracy_query:
+        model_accuracies.append(query[0])
+        labeled_files.append(query[1])
+        dates.append(query[2])
 
-    samples_by_day = [list(elem) for elem in samples_by_day]
-    for i in range(1, len(samples_by_day)):
-        samples_by_day[i][1] += samples_by_day[i - 1][1]
-
-    model_accuracy = db.session.query(ModelAccuracy.date,
-                                      ModelAccuracy.accuracy).all()
-
-    accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc, Accuracy.loss, Accuracy.val_loss).all()
+    accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc, Accuracy.loss,
+                                Accuracy.val_loss).all()
     train = []
     validation = []
     train_l = []
@@ -102,6 +110,10 @@ def get_statistics():
                           ConfusionMatrix.fn, ConfusionMatrix.tp).all()
 
     data = {
+        'retrain': {
+            'progress': session['cur_labels'],
+            'goal': session['goal']
+        },
         'confusionMatrix': confusion_matrix,
         'accuracy': {
             'train': train,
@@ -111,7 +123,10 @@ def get_statistics():
             'train': train_l,
             'validation': validation_l
         },
-        'validationHistory': samples_by_day,
-        'modelAccuracy': model_accuracy,
+        'accuracyVLabels': {
+            'accuracies': model_accuracies,
+            'labels': labeled_files,
+            'dates': dates
+        }
     }
     return data
