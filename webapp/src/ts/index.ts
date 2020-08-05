@@ -78,17 +78,21 @@ ready(() => {
                 ],
             },
         ])
-
         validationsChart.updateSeries([
             {
                 name: 'sounds',
-                data: json.validationHistory,
+                data: json.accuracyVLabels.labels,
             },
             {
                 name: 'accuracy',
-                data: json.modelAccuracy,
+                data: json.accuracyVLabels.accuracies,
             },
         ])
+        validationsChart.updateOptions({
+            xaxis: {
+                categories: json.accuracyVLabels.dates,
+            },
+        })
     }
 
     getStatistics()

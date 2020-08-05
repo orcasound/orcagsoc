@@ -6,6 +6,7 @@ from datetime import datetime
 
 def get_predictions_on_unlabeled():
     model_path = 'srkw_cnn.h5'
+    parse_location = {'orcasoundlab': 'Haro Strait'}
 
     # Download data from s3 to `unlabeled` directory
     s3_unlabeled_path = 's3://orcagsoc/unlabeled_test/spectrograms/'
@@ -39,7 +40,7 @@ def get_predictions_on_unlabeled():
         cur_file = (data_generator.filenames[i].split('/')[1]).split('.')[0]
         cur_prediction['audio_url'] = f'{s3_url}/mp3/{cur_file}.mp3'
         location, timestamp = cur_file.split('_')
-        cur_prediction['location'] = location
+        cur_prediction['location'] = parse_location[location]
         cur_prediction['timestamp'] = datetime.fromtimestamp(int(timestamp))
         predictions_list.append(cur_prediction)
 

@@ -18,14 +18,15 @@ def get_uncertainties():
     for p in predictions:
         cur_p = {}
         p.labeling = True
+        cur_p['id'] = p.id
         cur_p['audioUrl'] = p.audio_url
         cur_p['location'] = p.location
         cur_p['timestamp'] = p.timestamp
-        if p.predicted_value < 0.5:
-            cur_p['confidence'] = 200 * p.predicted_value
+        if p.predicted_value >= 0.5:
+            cur_p['confidence'] = 200 * p.predicted_value - 100
             cur_p['orca'] = False
         else:
-            cur_p['confidence'] = -200 * p.predicted_value - 100
+            cur_p['confidence'] = -200 * p.predicted_value + 100
             cur_p['orca'] = True
         response.append(cur_p)
     db.session.commit()
@@ -54,11 +55,10 @@ def post_labeledfiles():
     if 'unlabeled' in data:
         unlabeled = data['unlabeled']
 
-    for filename in unlabeled:
-        cur_f = db.session.query(Prediction).filter(
-            Prediction.filename == filename).first()
-        if cur_f is not None:
-            cur_f.labeling = False
+    for cur_id in unlabeled:
+        prediction = Prediction.query.get(cur_id)
+        if prediction is not None:
+            prediction.labeling = False
 
     for i, label in enumerate(labels):
         filename = label['filename']

@@ -2,6 +2,7 @@ import requests
 from app import db
 from app.models import Prediction, ConfusionMatrix, Accuracy, ModelAccuracy
 import subprocess
+import os
 
 # Global
 session = {
@@ -11,7 +12,6 @@ session = {
     's3_labeled_path': '',
     's3_unlabeled_path': ''
 }
-model_uri = 'http://3bf93f26b64e.ngrok.io'
 
 
 def train_and_predict():
@@ -22,7 +22,7 @@ def train_and_predict():
     Accuracy.query.delete()
 
     # Train
-    r = requests.get(f'{model_uri}/train').json()
+    r = requests.get(f'{os.environ.get("ML_ENDPOINT_URL")}/train').json()
 
     acc = r['acc']
     val_acc = r['val_acc']
@@ -39,7 +39,7 @@ def train_and_predict():
     db.session.add(ModelAccuracy(val_acc[-1], r['labeled_files']))
 
     # Predict
-    r = requests.get(f'{model_uri}/predict').json()
+    r = requests.get(f'{os.environ.get("ML_ENDPOINT_URL")}/predict').json()
 
     predictions = r['predictions']
     session['s3_unlabeled_path'] = r['s3_unlabeled_path']

@@ -4,6 +4,15 @@ import '../media/empty.mp3'
 import sp from './UI/spectrogram'
 // -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
+interface IUncertainty {
+    id: number
+    audioUrl: string
+    location: string
+    timestamp: string
+    confidence: number
+    orca: boolean
+}
+
 const ready = (callback: () => void) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
@@ -11,33 +20,40 @@ const ready = (callback: () => void) => {
 
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
-    let filenames: string[] = []
+    let uncertainties: IUncertainty[] = []
     let labels: object[] = []
-    let unlabeled = new Set<string>()
-    let currentFile = 0
+    let unlabeled = new Set<number>()
+    let currentSample = 0
 
     window.parent.postMessage('ready', '*')
     sp.attached()
     sp.startRender()
     sp.loopChanged(true)
 
+    // --------------------------------------------
+    const loadNextAudio = function () {
+        sp.load(uncertainties[currentSample].audioUrl)
+        console.log('orca:', uncertainties[currentSample].orca)
+        console.log('confidence:', uncertainties[currentSample].confidence)
+        console.log('location:', uncertainties[currentSample].location)
+        console.log('timestamp:', uncertainties[currentSample].timestamp)
+    }
+
+    // --------------------------------------------
     const startSession = function () {
-        // Get audio filenames from the backend using Fetch
-        fetch(`${process.env.API_URL}/filenames`)
+        // Get uncertainties from the backend using Fetch
+        fetch(`${process.env.API_URL}/uncertainties`)
             .then((response) => response.json())
             .then((json) => {
-                filenames = json.filenames
-                unlabeled = new Set(filenames)
-                console.log('filenames:', filenames)
+                uncertainties = json
+                unlabeled = new Set(uncertainties.map((value) => value.id))
                 // Load first audio
-                sp.load(
-                    `https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/${filenames[currentFile]}.mp3`
-                )
+                loadNextAudio()
             })
             .catch((error) => console.error('Fetch Error!', error))
 
         // Initialize evertything to zero
-        currentFile = 0
+        currentSample = 0
         document.getElementById('progress-label').textContent = '0/5'
         document.getElementById('progress').style.width = '0%'
         labels = []
@@ -72,30 +88,30 @@ ready(() => {
     const handleSelectedLabel = function (isOrca: boolean, extraLabel: string) {
         // Add the current label to the list
         labels.push({
-            filename: filenames[currentFile],
+            filename: uncertainties[currentSample].audioUrl,
             orca: isOrca,
             extraLabel: extraLabel ? extraLabel : '',
         })
-        unlabeled.delete(filenames[currentFile])
+        unlabeled.delete(uncertainties[currentSample].id)
 
         // Load the next audio
         sp.stop()
-        currentFile += 1
+        currentSample += 1
         document.getElementById(
             'progress-label'
-        ).textContent = `${currentFile}/5`
-        document.getElementById('progress').style.width = `${currentFile * 20}%`
+        ).textContent = `${currentSample}/5`
+        document.getElementById('progress').style.width = `${
+            currentSample * 20
+        }%`
         playPauseBtn.classList.remove('playing')
-        if (currentFile === 5) {
+        if (currentSample === 5) {
             document.getElementById('blurred-background').style.display =
                 'block'
             document.getElementById('labeled-by-container').style.display =
                 'block'
             return
         }
-        sp.load(
-            `https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/${filenames[currentFile]}.mp3`
-        )
+        loadNextAudio()
     }
 
     const changeHoverToLabelBtn = function (el: Element, add: boolean) {
