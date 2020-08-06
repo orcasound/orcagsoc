@@ -2,6 +2,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import subprocess
 from datetime import datetime
+import os
 
 
 def get_predictions_on_unlabeled():
@@ -37,7 +38,7 @@ def get_predictions_on_unlabeled():
     for i in range(len(predictions)):
         cur_prediction = {}
         cur_prediction['predicted_value'] = predictions[i][0]
-        cur_file = (data_generator.filenames[i].split('/')[1]).split('.')[0]
+        cur_file = os.path.split(data_generator.filenames[i])[1].split('.')[0]
         cur_prediction['audio_url'] = f'{s3_url}/mp3/{cur_file}.mp3'
         location, timestamp = cur_file.split('_')
         cur_prediction['location'] = parse_location[location]

@@ -5,6 +5,7 @@ import itertools
 import json
 import datetime
 from .active_learning import update_s3_dir, train_and_predict, session
+import threading
 
 
 # Get the next 5 predictions with most uncertainty
@@ -78,7 +79,8 @@ def post_labeledfiles():
     db.session.commit()
     session['cur_labels'] += len(labels)
     if session['cur_labels'] >= session['goal']:
-        train_and_predict()
+        th = threading.Thread(target=train_and_predict)
+        th.start()
         session['cur_labels'] = 0
 
     return {'success': True}, 201

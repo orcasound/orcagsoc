@@ -17,7 +17,6 @@ flask-migrate = "*"
 gunicorn = "*"
 psycopg2 = "*"
 requests = "*"
-aiohttp = "*"
 
 [requires]
 python_version = "3.8"

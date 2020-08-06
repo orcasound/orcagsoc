@@ -15,7 +15,7 @@ def train():
     subprocess.run(['aws', 's3', 'sync', s3_labeled_path, 'labeled_test'])
 
     img_width, img_height = 607, 617
-    epochs = 5
+    epochs = 1
 
     train_data_path = 'labeled_test//train'
     validation_data_path = 'labeled_test//validation'
