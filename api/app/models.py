@@ -7,7 +7,6 @@ class LabeledFile(db.Model):
     All the labeled files then conform the labeled dataset used by the ML model
     '''
     id = db.Column(db.Integer, primary_key=True)
-    # filename = db.Column(db.String(50), unique=True)
     audio_url = db.Column(db.String(100))
     orca = db.Column(db.Boolean)
     extra_label = db.Column(db.String(10))
@@ -44,13 +43,16 @@ class Prediction(db.Model):
     predicted_value = db.Column(db.Float)
     audio_url = db.Column(db.String(100))
     location = db.Column(db.String(30))
+    duration = db.Column(db.Float)
     timestamp = db.Column(db.TIMESTAMP)
     labeling = db.Column(db.Boolean)
 
-    def __init__(self, predicted_value, audio_url, location, timestamp):
+    def __init__(self, predicted_value, audio_url, location, duration,
+                 timestamp):
         self.predicted_value = predicted_value
         self.audio_url = audio_url
         self.location = location
+        self.duration = duration
         self.timestamp = timestamp
         self.labeling = False
 

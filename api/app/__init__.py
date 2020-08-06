@@ -32,11 +32,13 @@ from .active_learning import train_and_predict
 from app import routes, models
 from app.models import LabeledFile, ModelAccuracy, Prediction, ConfusionMatrix, Accuracy
 
-# Start training if the tables are empty
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-if engine.dialect.has_table(
-        engine, 'accuracy') and db.session.query(Accuracy).first() is None:
-    train_and_predict()
+# # Start training if the tables are empty
+# engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+# if engine.dialect.has_table(
+#         engine, 'accuracy') and db.session.query(Accuracy).first() is None:
+#     train_and_predict()
+import asyncio
+asyncio.run(train_and_predict())
 
 
 # Load the database instance and models to flask shell

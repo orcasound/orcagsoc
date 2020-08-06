@@ -39,72 +39,113 @@
                 </svg>
             </div>
         </div>
-        <div id="buttons-box">
-            <div class="expandable" id="orca">
-                <button class="text-btn label-btn">
-                    ORCA
-                </button>
-                <div class="expanded-box expanded-box-left">
-                    <button class="label-btn" id="J">
-                        <label class="mylabel">J Pod</label>
-                        <div class="label-btn-content">J</div>
-                    </button>
-                    <button class="label-btn" id="K">
-                        <label>K Pod</label>
-                        <div class="label-btn-content">K</div>
-                    </button>
-                    <button class="label-btn" id="L">
-                        <label>L Pod</label>
-                        <div class="label-btn-content">L</div>
-                    </button>
-                    <button class="label-btn" id="Bigg">
-                        <label>Bigg's</label>
-                        <div class="label-btn-content">B</div>
-                    </button>
+        <div id="bottom-bar">
+            <div id="view-details">
+                <svg
+                    id="expand-more"
+                    markup-inline
+                    src="media/expandmore.svg"
+                ></svg>
+                <svg
+                    id="expand-less"
+                    markup-inline
+                    src="media/expandless.svg"
+                ></svg>
+                <span id="view-details-text">View Details</span>
+            </div>
+            <div id="details-container">
+                <div>
+                    <svg markup-inline src="media/calendar.svg"></svg>
+                    <span class="details" id="timestamp"
+                        >Tue, 07 Jul 2020 20:50:06 GMT</span
+                    >
+                </div>
+                <div>
+                    <svg markup-inline src="media/clock.svg"></svg>
+                    <span class="details" id="duration">3 seconds</span>
+                </div>
+
+                <div>
+                    <svg markup-inline src="media/orca.svg"></svg>
+                    <span class="details" id="predicted-orca"
+                        >No orcas detected</span
+                    >
+                </div>
+                <div>
+                    <svg markup-inline src="media/confidence.svg"></svg>
+                    <span class="details" id="confidence"
+                        >82.19% confidence</span
+                    >
+                </div>
+                <div>
+                    <svg markup-inline src="media/location.svg"></svg>
+                    <span class="details" id="location">Haro Strait</span>
                 </div>
             </div>
-            <button
-                id="play-pause"
-                data-src="https://jd-r-bucket.s3.amazonaws.com/Port-Townsend-2008-midnight.mp3"
-            >
-                <svg markup-inline id="play" src="media/play.svg"></svg>
-                <svg markup-inline id="pause" src="media/pause.svg"></svg>
-            </button>
-            <div class="expandable" id="not">
-                <button class="text-btn label-btn">NOT</button>
-                <div class="expanded-box expanded-box-right">
-                    <button class="label-btn" id="Bird">
-                        <label>Bird</label>
-                        <svg
-                            class="label-btn-content"
-                            markup-inline
-                            src="media/bird.svg"
-                        ></svg>
+            <div class="buttons-container">
+                <div class="expandable" id="orca">
+                    <button class="text-btn label-btn">
+                        ORCA
                     </button>
-                    <button class="label-btn" id="Ship">
-                        <label>Ship</label>
-                        <svg
-                            class="label-btn-content"
-                            markup-inline
-                            src="media/ship.svg"
-                        ></svg>
-                    </button>
-                    <button class="label-btn" id="Whale">
-                        <label>Whale</label>
-                        <svg
-                            class="label-btn-content"
-                            markup-inline
-                            src="media/whale.svg"
-                        ></svg>
-                    </button>
-                    <button class="label-btn" id="Waves">
-                        <label>Waves</label>
-                        <svg
-                            class="label-btn-content"
-                            markup-inline
-                            src="media/waves.svg"
-                        ></svg>
-                    </button>
+                    <div class="expanded-box expanded-box-left">
+                        <button class="label-btn" id="J">
+                            <label class="mylabel">J Pod</label>
+                            <div class="label-btn-content">J</div>
+                        </button>
+                        <button class="label-btn" id="K">
+                            <label>K Pod</label>
+                            <div class="label-btn-content">K</div>
+                        </button>
+                        <button class="label-btn" id="L">
+                            <label>L Pod</label>
+                            <div class="label-btn-content">L</div>
+                        </button>
+                        <button class="label-btn" id="Bigg">
+                            <label>Bigg's</label>
+                            <div class="label-btn-content">B</div>
+                        </button>
+                    </div>
+                </div>
+                <button id="play-pause">
+                    <svg markup-inline id="play" src="media/play.svg"></svg>
+                    <svg markup-inline id="pause" src="media/pause.svg"></svg>
+                </button>
+                <div class="expandable" id="not">
+                    <button class="text-btn label-btn">NOT</button>
+                    <div class="expanded-box expanded-box-right">
+                        <button class="label-btn" id="Bird">
+                            <label>Bird</label>
+                            <svg
+                                class="label-btn-content"
+                                markup-inline
+                                src="media/bird.svg"
+                            ></svg>
+                        </button>
+                        <button class="label-btn" id="Ship">
+                            <label>Ship</label>
+                            <svg
+                                class="label-btn-content"
+                                markup-inline
+                                src="media/ship.svg"
+                            ></svg>
+                        </button>
+                        <button class="label-btn" id="Whale">
+                            <label>Whale</label>
+                            <svg
+                                class="label-btn-content"
+                                markup-inline
+                                src="media/whale.svg"
+                            ></svg>
+                        </button>
+                        <button class="label-btn" id="Waves">
+                            <label>Waves</label>
+                            <svg
+                                class="label-btn-content"
+                                markup-inline
+                                src="media/waves.svg"
+                            ></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

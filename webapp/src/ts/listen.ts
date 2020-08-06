@@ -8,6 +8,7 @@ interface IUncertainty {
     id: number
     audioUrl: string
     location: string
+    duration: number
     timestamp: string
     confidence: number
     orca: boolean
@@ -33,10 +34,21 @@ ready(() => {
     // --------------------------------------------
     const loadNextAudio = function () {
         sp.load(uncertainties[currentSample].audioUrl)
-        console.log('orca:', uncertainties[currentSample].orca)
-        console.log('confidence:', uncertainties[currentSample].confidence)
-        console.log('location:', uncertainties[currentSample].location)
-        console.log('timestamp:', uncertainties[currentSample].timestamp)
+        document.getElementById('timestamp').innerText =
+            uncertainties[currentSample].timestamp
+        document.getElementById(
+            'duration'
+        ).innerText = `${uncertainties[currentSample].duration} seconds`
+        document.getElementById('predicted-orca').innerText = uncertainties[
+            currentSample
+        ].orca
+            ? 'One orca detected'
+            : 'No orcas detected'
+        document.getElementById('confidence').innerText = `${uncertainties[
+            currentSample
+        ].confidence.toFixed(2)}% confidence`
+        document.getElementById('location').innerText =
+            uncertainties[currentSample].location
     }
 
     // --------------------------------------------
@@ -85,9 +97,29 @@ ready(() => {
     })
 
     // --------------------------------------------
+    document.getElementById('view-details').addEventListener('click', () => {
+        const detailsContainer = document.getElementById('details-container')
+        const expandMoreIcon = document.getElementById('expand-more')
+        const expandLessIcon = document.getElementById('expand-less')
+        const viewDetailsText = document.getElementById('view-details-text')
+        if (detailsContainer.style.maxHeight == '') {
+            detailsContainer.style.maxHeight = '15rem'
+            expandMoreIcon.style.display = 'none'
+            expandLessIcon.style.display = 'block'
+            viewDetailsText.textContent = 'Hide Details'
+        } else {
+            detailsContainer.style.maxHeight = ''
+            expandMoreIcon.style.display = 'block'
+            expandLessIcon.style.display = 'none'
+            viewDetailsText.textContent = 'View Details'
+        }
+    })
+
+    // --------------------------------------------
     const handleSelectedLabel = function (isOrca: boolean, extraLabel: string) {
         // Add the current label to the list
         labels.push({
+            id: uncertainties[currentSample].id,
             filename: uncertainties[currentSample].audioUrl,
             orca: isOrca,
             extraLabel: extraLabel ? extraLabel : '',

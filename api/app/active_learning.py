@@ -1,4 +1,5 @@
-import requests
+import aiohttp
+import asyncio
 from app import db
 from app.models import Prediction, ConfusionMatrix, Accuracy, ModelAccuracy
 import subprocess
@@ -8,39 +9,38 @@ import os
 session = {
     'goal': 10,
     'cur_labels': 0,
-    'training': False,
     's3_labeled_path': '',
     's3_unlabeled_path': ''
 }
 
 
-def train_and_predict():
-    session['training'] = True
-    # Clear tables
-    Prediction.query.delete()
-    ConfusionMatrix.query.delete()
-    Accuracy.query.delete()
+async def fetch(url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            return await response.json()
 
-    # Train
-    r = requests.get(f'{os.environ.get("ML_ENDPOINT_URL")}/train').json()
 
+async def train():
+    print('Training...')
+    r = await fetch(f'{os.environ.get("ML_ENDPOINT_URL")}/train')
     acc = r['acc']
     val_acc = r['val_acc']
     loss = r['loss']
     val_loss = r['val_loss']
     tn, fp, fn, tp = r['cm']
     session['s3_labeled_path'] = r['s3_labeled_path']
-
     for i in range(len(acc)):
         db.session.add(Accuracy(acc[i], val_acc[i], loss[i], val_loss[i]))
 
     db.session.add(ConfusionMatrix(tn, fp, fn, tp))
 
     db.session.add(ModelAccuracy(val_acc[-1], r['labeled_files']))
+    print('Finished training')
 
-    # Predict
-    r = requests.get(f'{os.environ.get("ML_ENDPOINT_URL")}/predict').json()
 
+async def predict():
+    print('Predicting...')
+    r = await fetch(f'{os.environ.get("ML_ENDPOINT_URL")}/predict')
     predictions = r['predictions']
     session['s3_unlabeled_path'] = r['s3_unlabeled_path']
 
@@ -48,11 +48,22 @@ def train_and_predict():
         newPrediction = Prediction(prediction['predicted_value'],
                                    prediction['audio_url'],
                                    prediction['location'],
+                                   prediction['duration'],
                                    prediction['timestamp'])
         db.session.add(newPrediction)
 
     db.session.commit()
-    session['training'] = False
+    print('Finished predicting')
+
+
+async def train_and_predict():
+    # Clear tables
+    Prediction.query.delete()
+    ConfusionMatrix.query.delete()
+    Accuracy.query.delete()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(train())
+    loop.run_until_complete(predict())
 
 
 def update_s3_dir(filename, orca, validation):

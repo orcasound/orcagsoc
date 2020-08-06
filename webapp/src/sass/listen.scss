@@ -61,56 +61,113 @@ button {
 }
 
 /* Bottom Bar */
-#buttons-box {
+#bottom-bar {
     position: absolute;
     bottom: 0;
     background: $backgroundLight;
     width: 100%;
-    display: flex;
-    justify-content: center;
 
-    #play-pause {
-        background: $backgroundLighter;
-        width: 7rem;
-        height: 7rem;
-        border-radius: 30rem;
-        margin: 1rem;
+    #view-details {
+        display: flex;
+        align-items: center;
+        margin-left: 1rem;
 
-        &.playing {
-            #pause {
-                display: inline-block;
-            }
-            #play {
-                display: none;
-            }
-        }
-
-        &:hover {
-            background: $backgroundMuchLighter;
+        #view-details-text {
+            font-size: 2rem;
+            color: $textColorDark;
         }
 
         svg {
-            fill: $textColor;
             width: 4rem;
-            height: 4rem;
+            fill: $textColorDark;
         }
 
-        #play {
-            display: inline-block;
-        }
-
-        #pause {
+        #expand-less {
             display: none;
         }
     }
 
-    .text-btn {
-        background: none;
-        color: $textColor;
-        font-size: 2.2rem;
-        letter-spacing: 0.125rem;
-        width: 12rem;
-        height: 7rem;
-        border-radius: 30rem;
+    #details-container {
+        max-height: 0;
+        overflow: hidden;
+        padding-left: 2rem;
+
+        div {
+            margin: 0.5rem;
+        }
+
+        .details {
+            font-size: 1.5rem;
+            color: $textColorDark;
+        }
+
+        svg {
+            width: 2rem;
+            fill: $textColorDark;
+        }
+
+        transition: 0.5s;
+    }
+
+    @media (min-width: 30em) {
+        #view-details {
+            display: none;
+        }
+        #details-container {
+            display: flex;
+            max-height: 5rem;
+            justify-content: space-around;
+            padding: 0.5rem;
+        }
+    }
+
+    .buttons-container {
+        display: flex;
+        justify-content: center;
+
+        #play-pause {
+            background: $backgroundLighter;
+            width: 7rem;
+            height: 7rem;
+            border-radius: 30rem;
+            margin: 1rem;
+
+            &.playing {
+                #pause {
+                    display: inline-block;
+                }
+                #play {
+                    display: none;
+                }
+            }
+
+            &:hover {
+                background: $backgroundMuchLighter;
+            }
+
+            svg {
+                fill: $textColor;
+                width: 4rem;
+                height: 4rem;
+            }
+
+            #play {
+                display: inline-block;
+            }
+
+            #pause {
+                display: none;
+            }
+        }
+
+        .text-btn {
+            background: none;
+            color: $textColor;
+            font-size: 2.2rem;
+            letter-spacing: 0.125rem;
+            width: 12rem;
+            height: 7rem;
+            border-radius: 30rem;
+        }
     }
 }

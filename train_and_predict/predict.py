@@ -41,6 +41,7 @@ def get_predictions_on_unlabeled():
         cur_prediction['audio_url'] = f'{s3_url}/mp3/{cur_file}.mp3'
         location, timestamp = cur_file.split('_')
         cur_prediction['location'] = parse_location[location]
+        cur_prediction['duration'] = 3
         cur_prediction['timestamp'] = datetime.fromtimestamp(int(timestamp))
         predictions_list.append(cur_prediction)
 

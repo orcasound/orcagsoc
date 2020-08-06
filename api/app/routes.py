@@ -21,6 +21,7 @@ def get_uncertainties():
         cur_p['id'] = p.id
         cur_p['audioUrl'] = p.audio_url
         cur_p['location'] = p.location
+        cur_p['duration'] = p.duration
         cur_p['timestamp'] = p.timestamp
         if p.predicted_value >= 0.5:
             cur_p['confidence'] = 200 * p.predicted_value - 100
@@ -61,6 +62,8 @@ def post_labeledfiles():
             prediction.labeling = False
 
     for i, label in enumerate(labels):
+        db.session.query(Prediction).filter(
+            Prediction.id == label['id']).delete()
         filename = label['filename']
         orca = label['orca']
         extra_label = label['extraLabel']
@@ -74,7 +77,7 @@ def post_labeledfiles():
 
     db.session.commit()
     session['cur_labels'] += len(labels)
-    if not session['training'] and session['cur_labels'] >= session['goal']:
+    if session['cur_labels'] >= session['goal']:
         train_and_predict()
         session['cur_labels'] = 0
 
