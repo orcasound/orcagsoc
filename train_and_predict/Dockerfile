@@ -1,0 +1,19 @@
+FROM tensorflow/tensorflow:latest-gpu
+
+WORKDIR /orcagsoc
+
+COPY requirements.txt requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN pip install gunicorn
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN apt install unzip
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
+COPY app.py train.py predict.py srkw_cnn.h5 ./
+
+ENV FLASK_APP app.py
+
+EXPOSE 5000
+CMD gunicorn -b :5000 --access-logfile - --error-logfile - app:app --timeout 10000
