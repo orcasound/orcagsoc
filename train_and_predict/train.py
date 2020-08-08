@@ -1,24 +1,22 @@
 from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.models import load_model
 import os
 import subprocess
 from sklearn.metrics import confusion_matrix
+from app import model
+
+s3_labeled_path = os.environ.get('S3_LABELED_PATH')
+local_labeled_path = s3_labeled_path.split('/')[-2]
+img_width, img_height = os.environ.get('EPOCHS'), os.environ.get('EPOCHS')
+epochs = os.environ.get('EPOCHS')
 
 
 def train():
-    model_path = 'srkw_cnn.h5'
-    model = load_model(model_path)
-
     # Download data from s3 to `labeled` directory
-    s3_labeled_path = 's3://orcagsoc/labeled_test/'
-    subprocess.run(['aws', 's3', 'sync', s3_labeled_path, 'labeled_test'])
+    subprocess.run(['aws', 's3', 'sync', s3_labeled_path, local_labeled_path])
 
-    img_width, img_height = 607, 617
-    epochs = 1
-
-    train_data_path = 'labeled_test//train'
-    validation_data_path = 'labeled_test//validation'
+    train_data_path = os.path.join(local_labeled_path, 'train')
+    validation_data_path = os.path.join(local_labeled_path, 'validation')
 
     # Change the batchsize according to your system RAM
     batch_size = 32
@@ -76,7 +74,7 @@ def train():
 
     cm = confusion_matrix(true_classes, predictions).ravel().tolist()
 
-    return acc, val_acc, loss, val_loss, cm, s3_labeled_path, train_generator.n
+    return acc, val_acc, loss, val_loss, cm, train_generator.n
 
 
 if __name__ == '__main__':

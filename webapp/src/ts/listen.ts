@@ -58,6 +58,7 @@ ready(() => {
             .then((response) => response.json())
             .then((json) => {
                 uncertainties = json
+                console.log(uncertainties)
                 unlabeled = new Set(uncertainties.map((value) => value.id))
                 // Load first audio
                 loadNextAudio()
@@ -120,7 +121,7 @@ ready(() => {
         // Add the current label to the list
         labels.push({
             id: uncertainties[currentSample].id,
-            filename: uncertainties[currentSample].audioUrl,
+            audioUrl: uncertainties[currentSample].audioUrl,
             orca: isOrca,
             extraLabel: extraLabel ? extraLabel : '',
         })
@@ -245,6 +246,8 @@ ready(() => {
     window.onunload = () => {
         // Send the unlabeled files to the server before leaving the window
         const data = {
+            labels: [] as any,
+            expertiseLevel: '',
             unlabeled: [...unlabeled],
         }
         navigator.sendBeacon(

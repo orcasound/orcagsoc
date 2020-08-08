@@ -28,40 +28,53 @@ nav {
     background: $secondaryColor;
     background: linear-gradient(90deg, $secondaryColor 0%, $primaryColor 100%);
     padding-top: 8rem;
-
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
 
-    svg {
-        fill: #000;
-        width: 6rem;
-        height: 6rem;
-        cursor: pointer;
-        &:hover {
-            transform: scale(1.1);
-            transform-origin: center;
+    .nav-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+            fill: #000;
+            width: 6rem;
+            height: 6rem;
+            cursor: pointer;
+            &:hover {
+                transform: scale(1.1);
+                transform-origin: center;
+            }
+        }
+
+        .text {
+            color: #000;
+            letter-spacing: 0.125rem;
+            width: 30rem;
+            margin: 3rem;
+        }
+        .listen {
+            font-size: 3rem;
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+        .retrain {
+            font-size: 1.5rem;
+            text-align: right;
+        }
+        .help-us {
+            font-size: 2.2rem;
+            text-align: left;
         }
     }
 
-    .text {
-        color: #000;
-        letter-spacing: 0.125rem;
-        width: 30rem;
-        margin: 3rem;
-    }
-    .listen {
-        font-size: 3rem;
-        text-align: right;
-        margin-bottom: 1rem;
-    }
-    .retrain {
+    #training {
+        color: purple;
+        text-align: center;
+        margin-top: 2rem;
         font-size: 1.5rem;
-        text-align: right;
-    }
-    .help-us {
-        font-size: 2.2rem;
-        text-align: left;
+        display: none;
     }
 }
 

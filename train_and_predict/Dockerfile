@@ -11,9 +11,9 @@ RUN apt install unzip
 RUN unzip awscliv2.zip
 RUN ./aws/install
 
-COPY app.py train.py predict.py srkw_cnn.h5 ./
+COPY app.py train.py predict.py ./
 
 ENV FLASK_APP app.py
 
 EXPOSE 5000
-CMD gunicorn -b :5000 --access-logfile - --error-logfile - app:app --timeout 10000
+CMD gunicorn -b :5000 --access-logfile - --error-logfile - app:app --timeout 100000

@@ -12,14 +12,20 @@
                 Active Listening and Learning of Orca Sounds
             </header>
             <nav>
-                <div class="text">
-                    <div class="listen">Listen</div>
-                    <div class="retrain"><span id="retrain-progress">0/10</span> to retrain the ML model</div>
+                <div class="nav-info">
+                    <div class="text">
+                        <div class="listen">Listen</div>
+                        <div class="retrain">
+                            <span id="retrain-progress">0/10</span> to retrain
+                            the ML model
+                        </div>
+                    </div>
+                    <a href="listen">
+                        <svg markup-inline id="play" src="media/play.svg"></svg>
+                    </a>
+                    <div class="text help-us">Help us validate orca sounds</div>
                 </div>
-                <a href="listen">
-                    <svg markup-inline id="play" src="media/play.svg"></svg>
-                </a>
-                <div class="text help-us"> Help us validate orca sounds </div>
+                <div id="training">Retraining in progress</div>
             </nav>
         </div>
         <div class="statistics-box-container">

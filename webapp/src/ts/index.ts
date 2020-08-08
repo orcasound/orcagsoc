@@ -25,6 +25,15 @@ ready(() => {
             'retrain-progress'
         ).textContent = `${json.retrain.progress}/${json.retrain.goal}`
 
+        // If training then show training element
+        if (json.training) {
+            document.getElementById('training').style.display = 'block'
+            document.querySelector('nav').style.height = '28rem'
+        } else {
+            document.getElementById('training').style.display = 'none'
+            document.querySelector('nav').style.height = '24rem'
+        }
+
         // Update the charts
         const [TN, FP, FN, TP] = json.confusionMatrix
 

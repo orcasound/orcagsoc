@@ -45,40 +45,28 @@ def post_labeledfiles():
     else:
         return jsonify({'error': 'Unsupported Media Type'}), 415
 
-    labels = []
-    if 'labels' in data:
-        labels = data['labels']
+    session['cur_labels'] += len(data['labels'])
 
-    expertise_level = ''
-    if 'expertiseLevel' in data:
-        expertise_level = data['expertiseLevel']
-
-    unlabeled = []
-    if 'unlabeled' in data:
-        unlabeled = data['unlabeled']
-
-    for cur_id in unlabeled:
+    for cur_id in data['unlabeled']:
         prediction = Prediction.query.get(cur_id)
         if prediction is not None:
             prediction.labeling = False
 
-    for i, label in enumerate(labels):
+    for i, label in enumerate(data['labels']):
         db.session.query(Prediction).filter(
             Prediction.id == label['id']).delete()
-        filename = label['filename']
-        orca = label['orca']
-        extra_label = label['extraLabel']
 
         validation = i == 4
-        update_s3_dir(filename, orca, validation)
+        updated_url = update_s3_dir(label['audioUrl'], label['orca'],
+                                    validation)
 
-        newLabeledFile = LabeledFile(filename, orca, extra_label,
-                                     expertise_level)
+        newLabeledFile = LabeledFile(updated_url, label['orca'],
+                                     label['extraLabel'],
+                                     data['expertiseLevel'])
         db.session.add(newLabeledFile)
 
     db.session.commit()
-    session['cur_labels'] += len(labels)
-    if session['cur_labels'] >= session['goal']:
+    if not session['training'] and session['cur_labels'] >= session['goal']:
         th = threading.Thread(target=train_and_predict)
         th.start()
         session['cur_labels'] = 0
@@ -91,12 +79,12 @@ def post_labeledfiles():
 def get_statistics():
     model_accuracy_query = db.session.query(ModelAccuracy.accuracy,
                                             ModelAccuracy.labeled_files,
-                                            ModelAccuracy.date).all()
-    model_accuracies, labeled_files, dates = [], [], []
+                                            ModelAccuracy.timestamp).all()
+    model_accuracies, labeled_files, timestamps = [], [], []
     for query in model_accuracy_query:
         model_accuracies.append(query[0])
         labeled_files.append(query[1])
-        dates.append(query[2])
+        timestamps.append(query[2])
 
     accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc, Accuracy.loss,
                                 Accuracy.val_loss).all()
@@ -131,7 +119,8 @@ def get_statistics():
         'accuracyVLabels': {
             'accuracies': model_accuracies,
             'labels': labeled_files,
-            'dates': dates
-        }
+            'dates': timestamps
+        },
+        'training': session['training']
     }
     return data
