@@ -33,6 +33,24 @@ ready(() => {
 
     // --------------------------------------------
     const loadNextAudio = function () {
+        document.getElementById(
+            'progress-label'
+        ).textContent = `${currentSample}/5`
+        document.getElementById('progress').style.width = `${
+            currentSample * 20
+        }%`
+
+        sp.stop()
+        playPauseBtn.classList.remove('playing')
+
+        if (currentSample === 5) {
+            document.getElementById('blurred-background').style.display =
+                'block'
+            document.getElementById('labeled-by-container').style.display =
+                'block'
+            return
+        }
+
         sp.load(uncertainties[currentSample].audioUrl)
         document.getElementById('timestamp').innerText =
             uncertainties[currentSample].timestamp
@@ -67,8 +85,6 @@ ready(() => {
 
         // Initialize evertything to zero
         currentSample = 0
-        document.getElementById('progress-label').textContent = '0/5'
-        document.getElementById('progress').style.width = '0%'
         labels = []
     }
     startSession()
@@ -128,22 +144,7 @@ ready(() => {
         unlabeled.delete(uncertainties[currentSample].id)
 
         // Load the next audio
-        sp.stop()
         currentSample += 1
-        document.getElementById(
-            'progress-label'
-        ).textContent = `${currentSample}/5`
-        document.getElementById('progress').style.width = `${
-            currentSample * 20
-        }%`
-        playPauseBtn.classList.remove('playing')
-        if (currentSample === 5) {
-            document.getElementById('blurred-background').style.display =
-                'block'
-            document.getElementById('labeled-by-container').style.display =
-                'block'
-            return
-        }
         loadNextAudio()
     }
 
@@ -211,6 +212,11 @@ ready(() => {
             })
         )
     }
+    // --------------------------------------------
+    document.getElementById('next').addEventListener('click', () => {
+        currentSample += 1
+        loadNextAudio()
+    })
 
     // --------------------------------------------
     document.getElementById('submit-form').addEventListener('click', () => {

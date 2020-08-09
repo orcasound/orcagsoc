@@ -9,9 +9,6 @@
 
     <body>
         <canvas id="spectrogram"></canvas><canvas id="legend"></canvas>
-        <svg markup-inline id="back-btn" src="media/back.svg"></svg>
-        <div id="progress-label"></div>
-        <div id="progress-bar"><div id="progress"></div></div>
         <div class="music-box__modal" id="loadingSound">
             <div class="music-box__modal__message">
                 <div
@@ -39,6 +36,10 @@
                 </svg>
             </div>
         </div>
+        <svg markup-inline id="back-btn" src="media/back.svg"></svg>
+        <div id="progress-label">0/5</div>
+        <div id="progress-bar"><div id="progress"></div></div>
+
         <div id="bottom-bar">
             <div id="view-details">
                 <svg
@@ -83,6 +84,7 @@
                 </div>
             </div>
             <div class="buttons-container">
+                <div class="invisible"></div>
                 <div class="expandable" id="orca">
                     <button class="text-btn label-btn">
                         ORCA
@@ -147,6 +149,9 @@
                         </button>
                     </div>
                 </div>
+                <button id="next">
+                    <svg markup-inline src="media/next.svg"></svg>
+                </button>
             </div>
         </div>
         <div id="blurred-background"></div>

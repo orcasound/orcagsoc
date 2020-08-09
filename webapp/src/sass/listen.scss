@@ -124,13 +124,15 @@ button {
     .buttons-container {
         display: flex;
         justify-content: center;
+        align-items: center;
 
         #play-pause {
             background: $backgroundLighter;
-            width: 7rem;
-            height: 7rem;
+            width: 5.5rem;
+            height: 5.5rem;
             border-radius: 30rem;
-            margin: 1rem;
+            margin: 0.5rem;
+            margin-bottom: 1rem;
 
             &.playing {
                 #pause {
@@ -148,7 +150,6 @@ button {
             svg {
                 fill: $textColor;
                 width: 4rem;
-                height: 4rem;
             }
 
             #play {
@@ -163,11 +164,55 @@ button {
         .text-btn {
             background: none;
             color: $textColor;
-            font-size: 2.2rem;
+            font-size: 1.7rem;
             letter-spacing: 0.125rem;
-            width: 12rem;
-            height: 7rem;
+            width: 8.5rem;
+            height: 5.5rem;
             border-radius: 30rem;
+        }
+
+        #next {
+            background: none;
+            width: 2rem;
+            svg {
+                fill: $textColor;
+                width: 3.5rem;
+            }
+        }
+
+        .invisible {
+            width: 2rem;
+        }
+
+        @media (min-width: 22em) {
+            #play-pause {
+                margin: 1rem;
+            }
+        }
+
+        @media (min-width: 30em) {
+            #play-pause {
+                width: 7rem;
+                height: 7rem;
+            }
+            .text-btn {
+                font-size: 2.2rem;
+                width: 12rem;
+                height: 7rem;
+            }
+
+            #next {
+                width: 4rem;
+                margin-left: 4rem;
+                svg {
+                    width: 4rem;
+                }
+            }
+
+            .invisible {
+                width: 4rem;
+                margin-right: 4rem;
+            }
         }
     }
 }
