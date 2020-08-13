@@ -15,5 +15,5 @@ COPY app.py train.py predict.py ./
 
 ENV FLASK_APP app.py
 
-EXPOSE 5000
-CMD gunicorn -b :5000 --access-logfile - --error-logfile - app:app --timeout 100000
+EXPOSE 5001
+CMD gunicorn -b :5001 --access-logfile - --error-logfile - app:app --timeout 100000

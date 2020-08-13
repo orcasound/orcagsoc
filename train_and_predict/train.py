@@ -1,17 +1,21 @@
-from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
+from tensorflow.keras.callbacks import ReduceLROnPlateau, ModelCheckpoint, TensorBoard
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import load_model
 import os
 import subprocess
 from sklearn.metrics import confusion_matrix
-from app import model
+from app import model, s3_model_path
+from time import time
 
 s3_labeled_path = os.environ.get('S3_LABELED_PATH')
 local_labeled_path = s3_labeled_path.split('/')[-2]
-img_width, img_height = os.environ.get('EPOCHS'), os.environ.get('EPOCHS')
-epochs = os.environ.get('EPOCHS')
+img_width, img_height = int(os.environ.get('IMG_WIDTH')), int(
+    os.environ.get('IMG_HEIGHT'))
+epochs = int(os.environ.get('EPOCHS'))
 
 
 def train():
+    global model
     # Download data from s3 to `labeled` directory
     subprocess.run(['aws', 's3', 'sync', s3_labeled_path, local_labeled_path])
 
@@ -22,7 +26,7 @@ def train():
     batch_size = 32
 
     # Train the Detection model
-    checkpoint = ModelCheckpoint(filepath='srkw_cnn.h5',
+    checkpoint = ModelCheckpoint(filepath='best_model.h5',
                                  monitor='val_loss',
                                  verbose=0,
                                  save_best_only=True)
@@ -31,6 +35,10 @@ def train():
                                   factor=0.1,
                                   patience=100,
                                   min_lr=1e-8)
+
+    # tensorboard = TensorBoard(log_dir='log_dir',
+    #                           histogram_freq=1,
+    #                           embeddings_freq=1)
 
     train_datagen = ImageDataGenerator(rescale=1. / 255,
                                        shear_range=0.2,
@@ -74,7 +82,14 @@ def train():
 
     cm = confusion_matrix(true_classes, predictions).ravel().tolist()
 
-    return acc, val_acc, loss, val_loss, cm, train_generator.n
+    # Load best model
+    model = load_model('best_model.h5')
+    model_loss, model_acc = model.evaluate(validation_generator)
+
+    new_model_name = f'{os.path.dirname(s3_model_path)}/ckpt_loss{model_loss:.2f}_acc{model_acc:.2f}.h5'
+    subprocess.run(['aws', 's3', 'cp', 'best_model.h5', new_model_name])
+
+    return acc, val_acc, loss, val_loss, cm, train_generator.n, model_acc
 
 
 if __name__ == '__main__':

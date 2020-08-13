@@ -11,7 +11,7 @@ class LabeledFile(db.Model):
     orca = db.Column(db.Boolean)
     extra_label = db.Column(db.String(10))
     expertise_level = db.Column(db.String(10))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, audio_url, orca, extra_label, expertise_level):
         self.audio_url = audio_url
@@ -27,7 +27,7 @@ class ModelAccuracy(db.Model):
     '''ML Model Acccuracy after each training round.'''
     id = db.Column(db.Integer, primary_key=True)
     accuracy = db.Column(db.Float)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     labeled_files = db.Column(db.Integer)
 
     def __init__(self, accuracy, labeled_files):

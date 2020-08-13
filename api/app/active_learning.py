@@ -32,7 +32,7 @@ def train_and_predict():
     ConfusionMatrix.query.delete()
     db.session.add(ConfusionMatrix(tn, fp, fn, tp))
 
-    db.session.add(ModelAccuracy(val_acc[-1], r['labeled_files']))
+    db.session.add(ModelAccuracy(r['model_acc'], r['labeled_files']))
 
     db.session.commit()
     session['training'] = False
@@ -40,8 +40,8 @@ def train_and_predict():
 
     # Predict
     print('Predicting...')
-    r = requests.get(f'{os.environ.get("ML_ENDPOINT_URL")}/predict').json()
-    predictions = r['predictions']
+    predictions = requests.get(
+        f'{os.environ.get("ML_ENDPOINT_URL")}/predict').json()
 
     Prediction.query.delete()
     db.session.add_all([

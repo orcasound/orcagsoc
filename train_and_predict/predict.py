@@ -8,8 +8,8 @@ from app import model
 s3_unlabeled_path = os.environ.get('S3_UNLABELED_PATH')
 local_unlabeled_path = s3_unlabeled_path.split('/')[-2]
 s3_url = f'https://{s3_unlabeled_path.split("/")[2]}.s3.amazonaws.com/{local_unlabeled_path}'
-img_width, img_height = os.environ.get('IMG_WIDTH'), os.environ.get(
-    'IMG_HEIGHT')
+img_width, img_height = int(os.environ.get('IMG_WIDTH')), int(
+    os.environ.get('IMG_HEIGHT'))
 locations = {'orcasoundlab': 'Haro Strait'}
 
 

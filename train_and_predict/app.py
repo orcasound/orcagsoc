@@ -22,12 +22,13 @@ def get_predictions():
 
 @app.route('/train')
 def train_model():
-    acc, val_acc, loss, val_loss, cm, labeled_files = train()
+    acc, val_acc, loss, val_loss, cm, labeled_files, model_acc = train()
     return {
         "acc": acc,
         "val_acc": val_acc,
         "loss": loss,
         "val_loss": val_loss,
         "cm": cm,
-        'labeled_files': labeled_files
+        'labeled_files': labeled_files,
+        'model_acc': model_acc
     }
