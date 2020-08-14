@@ -220,14 +220,24 @@ This API requires a database and a ML endpoint to run, the easiest way to do tha
 ### Quick Method
 
 -   Make sure [Docker](https://www.docker.com/) is installed
--   `docker run --rm --name activelearning_api -d -p 5000:5000 -e AWS_ACCESS_KEY_ID=AKIAZN2WCXIF3ILPLCXY -e AWS_SECRET_ACCESS_KEY=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 -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:postgres@dbserver/orcagsoc -e ML_ENDPOINT_URL=http://host.docker.internal:5001 jdiegors/activelearning_api:latest`
+-   `docker run --rm --name activelearning_api -d -p 5000:5000 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:postgres@dbserver/orcagsoc -e ML_ENDPOINT_URL=http://host.docker.internal:5001 jdiegors/activelearning_api:latest`
 
 ### Flexible Method
 
 -   Install [pipenv](https://pypi.org/project/pipenv/)
 -   Run `pipenv shell` to start a virtual environment
 -   Run `pipenv install` to install the required dependencies
--   You also need a local database, so use the `flask db upgrade` command to create one
+-   Create a `.env` file with the following parameters:
+
+    ```
+    DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/orcagsoc
+    ML_ENDPOINT_URL=http://127.0.0.1:5001
+    S3_LABELED_PATH=s3://orcagsoc/labeled_test/
+    S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/
+    RETRAIN_TARGET=20
+    ```
+
+-   Run `flask db upgrade` to update the tables of the database
 -   `flask run` starts a development server in http://localhost:5000
 -   If you plan to contribute, please configure your text editor / IDE to use Flake8 to lint and YAPF to format Python code
 
