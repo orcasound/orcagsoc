@@ -2,7 +2,7 @@
 
 **Active Listening and Learning of Orca Sounds** is an active learning tool that has the objective of labeling orca sounds with the help of humans and machines.
 
-**This API** serves as an interface between the machine learning model(s) and the webapp.
+**This API** serves as an interface between the machine learning model(s) and the webapp. To use it, a postgres db and an ML endpoint are needed.
 
 # Docs
 
@@ -28,62 +28,23 @@ Stores the predicted value of an unlabeled file, alongside with more information
 -   `GET` [/statistics](#get-statistics)
 
 -   ### Get Uncertainties
-    | URL            | Method | Description                                                         |
-    | -------------- | ------ | ------------------------------------------------------------------- |
-    | /uncertainties | GET    | Get the next 5 audio files, where the ML model had most uncertainty |
+    | URL        | Method | Description                                                         |
+    | ---------- | ------ | ------------------------------------------------------------------- |
+    | /filenames | GET    | Get the next 5 audio files, where the ML model had most uncertainty |
 
 #### Success Response
 
 **Code:** `200 OK`  
-**Example:**
+**Example:**  
+The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com/), and the audio could be fetched using Ajax.
 
 ```JSON
 [
-    {
-        "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154250.mp3",
-        "confidence": 73.10559153556824,
-        "duration": 3.0,
-        "id": 601,
-        "location": "Haro Strait",
-        "orca": true,
-        "timestamp": "Tue, 07 Jul 2020 20:37:30 GMT"
-    },
-    {
-        "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154862.mp3",
-        "confidence": 74.55249428749084,
-        "duration": 3.0,
-        "id": 794,
-        "location": "Haro Strait",
-        "orca": true,
-        "timestamp": "Tue, 07 Jul 2020 20:47:42 GMT"
-    },
-    {
-        "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154934.mp3",
-        "confidence": 75.39503574371338,
-        "duration": 3.0,
-        "id": 818,
-        "location": "Haro Strait",
-        "orca": true,
-        "timestamp": "Tue, 07 Jul 2020 20:48:54 GMT"
-    },
-    {
-        "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154556.mp3",
-        "confidence": 75.6567895412445,
-        "duration": 3.0,
-        "id": 699,
-        "location": "Haro Strait",
-        "orca": true,
-        "timestamp": "Tue, 07 Jul 2020 20:42:36 GMT"
-    },
-    {
-        "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154832.mp3",
-        "confidence": 75.72913765907288,
-        "duration": 3.0,
-        "id": 784,
-        "location": "Haro Strait",
-        "orca": true,
-        "timestamp": "Tue, 07 Jul 2020 20:47:12 GMT"
-    }
+  "mp3/sound1.mp3",
+  "mp3/sound4.mp3",
+  "mp3/sound6.mp3",
+  "mp3/sound2.mp3",
+  "mp3/sound3.mp3"
 ]
 ```
 
@@ -122,14 +83,13 @@ label = {
 ```JSON
 {
     "labels": [{"filename": "5", "orca": true, "extraLabel":"K"}],
-    "unlabeled": []
     "expertiseLevel": "Beginner"
 }
 ```
 
 #### Error Responses
 
-**Code:** `500 SERVER ERROR`  
+**Code:** `400 BAD REQUEST`  
 **Condition:** If fields are missing  
 **Example:**
 
@@ -152,9 +112,9 @@ headers: {
 
 -   ### Get Statistics
 
-| URL         | Method | Description                                                                                                              |
-| ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------ |
-| /statistics | GET    | Get statistics about the last training round of the ML model, as well as about the performance of the ML model over time |
+| URL         | Method | Description                                                                                                                                                                            |
+| ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| /statistics | GET    | Get confusion matrix and list of accuracies of last training round of the ML model, as well as the total number of labeled files over time with the accuracy of the ML model over time |
 
 #### Success Response
 
@@ -163,53 +123,24 @@ headers: {
 
 ```JSON
 {
-    "accuracy": {
-        "train": [
-            0.7096773982048035
-        ],
-        "validation": [
-            0.6222222447395325
-        ]
-    },
-    "accuracyVLabels": {
-        "accuracies": [
-            0.6222222447395325,
-            0.6222222447395325,
-            0.6666666865348816,
-            0.6222222447395325
-        ],
-        "dates": [
-            "Wed, 12 Aug 2020 18:13:11 GMT",
-            "Wed, 12 Aug 2020 18:19:08 GMT",
-            "Wed, 12 Aug 2020 18:20:49 GMT",
-            "Wed, 12 Aug 2020 18:28:28 GMT"
-        ],
-        "labels": [
-            124,
-            124,
-            124,
-            124
-        ]
-    },
-    "confusionMatrix": [
-        10,
-        10,
-        7,
-        18
-    ],
-    "loss": {
-        "train": [
-            0.7021337747573853
-        ],
-        "validation": [
-            0.7545308470726013
-        ]
-    },
-    "retrain": {
-        "goal": "20",
-        "progress": 0
-    },
-    "training": false
+  "accuracy": {
+    "test": [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925],
+    "train": [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
+  },
+  "confusionMatrix": [
+    [80, 46],
+    [43, 100]
+  ],
+  "validationHistory": [
+    ["Wed, 24 Jun 2020 00:00:00 GMT", 2],
+    ["Thu, 25 Jun 2020 00:00:00 GMT", 6],
+    ["Fri, 26 Jun 2020 00:00:00 GMT", 8]
+  ],
+  "modelAccuracy": [
+    ["Wed, 24 Jun 2020 00:00:00 GMT", 0.8],
+    ["Thu, 25 Jun 2020 00:00:00 GMT", 0.85],
+    ["Fri, 26 Jun 2020 00:00:00 GMT", 0.9]
+  ]
 }
 ```
 
@@ -247,5 +178,6 @@ This API requires a database and a ML endpoint to run, the easiest way to do tha
 
 ### Deployment
 
-Follow the quick start method on your server of choice.  
-Otherwise, to push to a different docker container registry, create an account on https://hub.docker.com, login from the command line `docker login`, build the image with `docker build -t activelearning_api .` from within the project directory, rename it to `docker tag activelearning_api:latest <your-docker-registry-account>/activelearning_api:latest`, push it to the Docker registry `docker push <your-docker-registry-account>/activelearning_api:latest`.. Now you can follow the quick start method.
+-   Once the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) is installed, login to your Heroku account with `heroku login`
+-   Then add a remote to your local repository with the `heroku git:remote -a orcagsoc` command
+-   To deploy the app use the `git push heroku master` command from your local repository's master branch
