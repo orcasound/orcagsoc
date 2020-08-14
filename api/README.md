@@ -2,30 +2,35 @@
 
 **Active Listening and Learning of Orca Sounds** is an active learning tool that has the objective of labeling orca sounds with the help of humans and machines.
 
-**This API** serves as an interface between the machine learning model(s) and the webapp.
+**This API** serves as an interface between the machine learning model(s) and the webapp. To use it, a postgres db and an ML endpoint are needed.
 
 # Docs
 
 ## Database models
 
-<img src="assets/models.jpg" width="500">
+<img src="assets/models.jpg">
 
 **labeled_file** table:  
 Label for an audio file made by a human annotator. All the labeled files then conform the labeled dataset used by the ML model.  
 **model_accuracy** table:  
-Stores the accuracy of the model after every training round.
+Stores the accuracy of the model after every training round and the number of files used for training.  
+**confusion_matrix** table:  
+Stores the confusion matrix generated after a retraining using the validation dataset.  
+**accuracy** table:  
+Stores a list of loss and accuracies after every epoch.  
+**prediction** table:  
+Stores the predicted value of an unlabeled file, alongside with more information about that file.
 
 ## Endpoints
-- `GET` [/filenames](#get-filenames)
-- `POST`[/labeledfile](#add-labeled-files)
-- `GET` [/statistics](#get-statistics)
 
-The service is running on https://orcagsoc.herokuapp.com
+-   `GET` [/uncertainties](#get-uncertainties)
+-   `POST`[/labeledfile](#add-labeled-files)
+-   `GET` [/statistics](#get-statistics)
 
--   ### Get Filenames
-    | URL        | Method | Description                                                                      |
-    | ---------- | ------ | -------------------------------------------------------------------------------- |
-    | /filenames | GET    | Get the names of the next 5 audio files, where the ML model had most uncertainty |
+-   ### Get Uncertainties
+    | URL        | Method | Description                                                         |
+    | ---------- | ------ | ------------------------------------------------------------------- |
+    | /filenames | GET    | Get the next 5 audio files, where the ML model had most uncertainty |
 
 #### Success Response
 
