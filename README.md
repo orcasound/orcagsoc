@@ -15,15 +15,18 @@ After you [sign up as a GSoC student](https://summerofcode.withgoogle.com/get-st
 Active Listening and Learning of Orca Sounds is an active learning tool that has the objective of labeling orca sounds with the help of humans and machines.  
 It has been divided into different subprojects:
 
--   A webapp
 -   An API
 -   The preprocessing of the data
--   The Machine Learning models
+-   Training and predicting with a Machine Learning model
+-   A webapp
 
 Visit each subproject to know more about it, and how to get started with it.
 
 **Flowchart of how the application works:**  
 ![flowchart](api/assets/flowchart.jpg)
+
+**Architecture of the application**
+![architecture](api/assets/architecture.png)
 
 # Questions?
 

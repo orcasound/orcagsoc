@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
 from flask_migrate import Migrate
 import os
 import logging
+import threading
 basedir = os.path.abspath(os.path.dirname(__name__))
 
 # Init app
@@ -26,8 +28,17 @@ if app.config['LOG_TO_STDOUT']:
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# Handle circular imports
+from .active_learning import train_and_predict
 from app import routes, models
-from app.models import LabeledFile, ModelAccuracy
+from app.models import LabeledFile, ModelAccuracy, Prediction, ConfusionMatrix, Accuracy
+
+# Start training if the tables are empty
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+if engine.dialect.has_table(
+        engine, 'accuracy') and db.session.query(Accuracy).first() is None:
+    th = threading.Thread(target=train_and_predict)
+    th.start()
 
 
 # Load the database instance and models to flask shell
@@ -36,5 +47,8 @@ def make_shell_context():
     return {
         'db': db,
         'LabeledFile': LabeledFile,
-        'ModelAccuracy': ModelAccuracy
+        'ModelAccuracy': ModelAccuracy,
+        'Prediction': Prediction,
+        'ConfusionMatrix': ConfusionMatrix,
+        'Accuracy': Accuracy
     }

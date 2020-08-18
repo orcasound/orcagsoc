@@ -12,11 +12,20 @@
                 Active Listening and Learning of Orca Sounds
             </header>
             <nav>
-                <span class="listen">Listen</span>
-                <a href="listen">
-                    <svg markup-inline id="play" src="media/play.svg"></svg>
-                </a>
-                <span class="help-us"> Help us reach today's goal </span>
+                <div class="nav-info">
+                    <div class="text">
+                        <div class="listen">Listen</div>
+                        <div class="retrain">
+                            <span id="retrain-progress">0/10</span> to retrain
+                            the ML model
+                        </div>
+                    </div>
+                    <a href="listen">
+                        <svg markup-inline id="play" src="media/play.svg"></svg>
+                    </a>
+                    <div class="text help-us">Help us validate orca sounds</div>
+                </div>
+                <div id="training">Retraining in progress</div>
             </nav>
         </div>
         <div class="statistics-box-container">
@@ -29,15 +38,21 @@
             </div>
             <div class="statistics-box">
                 <div class="chart-title">
-                    ML Model Confusion Matrix (last training round)
+                    Confusion Matrix (last training round)
                 </div>
                 <div id="confusionMatrix"></div>
             </div>
             <div class="statistics-box">
                 <div class="chart-title">
-                    ML Model Accuracy (last training round)
+                    Training and Validation Accuracy (last training round)
                 </div>
                 <div id="accuracyChart"></div>
+            </div>
+            <div class="statistics-box">
+                <div class="chart-title">
+                    Training and Validation Loss (last training round)
+                </div>
+                <div id="lossChart"></div>
             </div>
         </div>
     </body>

@@ -2,27 +2,35 @@
 
 **Active Listening and Learning of Orca Sounds** is an active learning tool that has the objective of labeling orca sounds with the help of humans and machines.
 
-**This API** serves as an interface between the machine learning model(s) and the webapp.
+**This API** serves as an interface between the machine learning model(s) and the webapp. To use it, a postgres db and an ML endpoint are needed.
 
 # Docs
 
 ## Database models
 
-<img src="assets/models.jpg" width="500">
+<img src="assets/models.jpg">
 
 **labeled_file** table:  
 Label for an audio file made by a human annotator. All the labeled files then conform the labeled dataset used by the ML model.  
 **model_accuracy** table:  
-Stores the accuracy of the model after every training round.
+Stores the accuracy of the model after every training round and the number of files used for training.  
+**confusion_matrix** table:  
+Stores the confusion matrix generated after a retraining using the validation dataset.  
+**accuracy** table:  
+Stores a list of loss and accuracies after every epoch.  
+**prediction** table:  
+Stores the predicted value of an unlabeled file, alongside with more information about that file.
 
 ## Endpoints
 
-The service is running on https://orcagsoc.herokuapp.com
+-   `GET` [/uncertainties](#get-uncertainties)
+-   `POST`[/labeledfile](#add-labeled-files)
+-   `GET` [/statistics](#get-statistics)
 
--   ### Get Filenames
-    | URL        | Method | Description                                                                      |
-    | ---------- | ------ | -------------------------------------------------------------------------------- |
-    | /filenames | GET    | Get the names of the next 5 audio files, where the ML model had most uncertainty |
+-   ### Get Uncertainties
+    | URL        | Method | Description                                                         |
+    | ---------- | ------ | ------------------------------------------------------------------- |
+    | /filenames | GET    | Get the next 5 audio files, where the ML model had most uncertainty |
 
 #### Success Response
 
@@ -138,10 +146,30 @@ headers: {
 
 # Getting Started
 
+This API requires a database and a ML endpoint to run, the easiest way to do that would be run the ML endpoint's docker container by following the [train_and_predict quick method](../train_and_predict/README.md#quick-method), and to start a docker postgres database with the following command: `docker run --name postgres -p 5432:5432 -e POSTGRES_DB=orcagsoc -e POSTGRES_PASSWORD=postgres -d postgres`.
+
+### Quick Method
+
+-   Make sure [Docker](https://www.docker.com/) is installed
+-   Run the following command with your AWS access keys:  
+    `docker run --rm --name activelearning_api -d -p 5000:5000 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:postgres@dbserver/orcagsoc -e ML_ENDPOINT_URL=http://host.docker.internal:5001 jdiegors/activelearning_api:latest`
+
+### Flexible Method
+
 -   Install [pipenv](https://pypi.org/project/pipenv/)
 -   Run `pipenv shell` to start a virtual environment
 -   Run `pipenv install` to install the required dependencies
--   You also need a local sqlite database, so use the `flask db upgrade` command to create one
+-   Create a `.env` file with the following parameters:
+
+    ```
+    DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/orcagsoc
+    ML_ENDPOINT_URL=http://127.0.0.1:5001
+    S3_LABELED_PATH=s3://orcagsoc/labeled_test/
+    S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/
+    RETRAIN_TARGET=20
+    ```
+
+-   Run `flask db upgrade` to update the tables of the database
 -   `flask run` starts a development server in http://localhost:5000
 -   If you plan to contribute, please configure your text editor / IDE to use Flake8 to lint and YAPF to format Python code
 

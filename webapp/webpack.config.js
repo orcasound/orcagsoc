@@ -9,11 +9,12 @@ const WebpackCdnPlugin = require('webpack-cdn-plugin')
 module.exports = (_, argv) => {
     const isProduction = argv.mode === 'production'
     return {
-        entry: { listen: './src/js/listen.js', index: './src/js/index.js' },
+        entry: { listen: './src/ts/listen.ts', index: './src/ts/index.ts' },
         output: {
             path: path.resolve(__dirname, 'dist'),
             publicPath: isProduction ? '/orcagsoc/' : '/',
         },
+        devtool: isProduction ? '' : 'eval-cheap-source-map',
         plugins: [
             new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({
@@ -48,6 +49,11 @@ module.exports = (_, argv) => {
         module: {
             rules: [
                 {
+                    test: /\.ts$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+                {
                     test: /\.scss$/,
                     use: [
                         {
@@ -76,6 +82,9 @@ module.exports = (_, argv) => {
                     use: ['html-loader', 'markup-inline-loader'],
                 },
             ],
+        },
+        resolve: {
+            extensions: ['.ts', '.js'],
         },
         devServer: {
             open: true,

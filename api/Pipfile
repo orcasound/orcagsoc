@@ -9,13 +9,12 @@ verify_ssl = true
 flask = "*"
 flask-sqlalchemy = "*"
 flask-cors = "*"
-flake8 = "*"
-yapf = "*"
 python-dotenv = "*"
 pytest = "*"
 flask-migrate = "*"
 gunicorn = "*"
 psycopg2 = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"

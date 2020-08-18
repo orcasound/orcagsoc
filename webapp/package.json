@@ -4,16 +4,19 @@
     "description": "",
     "keywords": [],
     "scripts": {
-        "start": "webpack-dev-server --mode development --devtool eval-cheap-source-map",
+        "start": "webpack-dev-server --mode development",
         "build": "webpack --mode production",
-        "deploy": "gh-pages -d dist"
+        "deploy": "gh-pages -d dist",
+        "test": "cypress open"
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@types/html-webpack-plugin": "^3.2.3",
         "apexcharts": "^3.19.2",
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^3.5.3",
+        "cypress": "^4.10.0",
         "eslint": "^7.1.0",
         "file-loader": "^6.0.0",
         "gh-pages": "^3.0.0",
@@ -25,6 +28,8 @@
         "node-sass": "^4.14.1",
         "prettier": "^2.0.5",
         "sass-loader": "^8.0.2",
+        "ts-loader": "^7.0.5",
+        "typescript": "^3.9.6",
         "webpack": "^4.43.0",
         "webpack-cdn-plugin": "^3.3.1",
         "webpack-cli": "^3.3.11",

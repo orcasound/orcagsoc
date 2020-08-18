@@ -1,32 +1,38 @@
 from flask import jsonify, request
 from app import app, db, models
-from app.models import LabeledFile, ModelAccuracy
+from app.models import LabeledFile, ModelAccuracy, Prediction, Accuracy, ConfusionMatrix
 import itertools
 import json
 import datetime
-
-# filenames = iter([
-#     'sound1.mp3', 'sound4.mp3', 'sound6.mp3', 'sound2.mp3', 'sound3.mp3',
-#     'sound5.mp3'
-# ])
-filenames = [
-    'mp3/sound1.mp3',
-    'mp3/sound4.mp3',
-    'mp3/sound6.mp3',
-    'mp3/sound2.mp3',
-    'mp3/sound3.mp3',
-]
-
-confusion_matrix = [[80, 46], [43, 100]]
-train_accuracy = [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
-test_accuracy = [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925]
+from .active_learning import update_s3_dir, train_and_predict, session
+import threading
 
 
-# Get the next 5 files with most uncertainty
-@app.route('/filenames', methods=['GET'])
-def get_filenames():
+# Get the next 5 predictions with most uncertainty
+@app.route('/uncertainties', methods=['GET'])
+def get_uncertainties():
     # return jsonify(list(itertools.islice(filenames, 5)))
-    return jsonify(filenames[:5])
+    predictions = db.session.query(Prediction).order_by(
+        db.func.abs(0.5 - Prediction.predicted_value)).filter(
+            ~Prediction.labeling).limit(5).all()
+    response = []
+    for p in predictions:
+        cur_p = {}
+        p.labeling = True
+        cur_p['id'] = p.id
+        cur_p['audioUrl'] = p.audio_url
+        cur_p['location'] = p.location
+        cur_p['duration'] = p.duration
+        cur_p['timestamp'] = p.timestamp
+        if p.predicted_value >= 0.5:
+            cur_p['confidence'] = 200 * p.predicted_value - 100
+            cur_p['orca'] = False
+        else:
+            cur_p['confidence'] = -200 * p.predicted_value + 100
+            cur_p['orca'] = True
+        response.append(cur_p)
+    db.session.commit()
+    return jsonify(response)
 
 
 # Add new labeled files
@@ -39,48 +45,82 @@ def post_labeledfiles():
     else:
         return jsonify({'error': 'Unsupported Media Type'}), 415
 
-    if 'labels' not in data or 'expertiseLevel' not in data:
-        return {'success': False}, 400
+    session['cur_labels'] += len(data['labels'])
 
-    labels = data['labels']
-    expertise_level = data['expertiseLevel']
+    for cur_id in data['unlabeled']:
+        prediction = Prediction.query.get(cur_id)
+        if prediction is not None:
+            prediction.labeling = False
 
-    for label in labels:
-        if 'filename' not in label or 'orca' not in label or 'extraLabel' not in label:
-            return {'success': False}, 400
+    for i, label in enumerate(data['labels']):
+        db.session.query(Prediction).filter(
+            Prediction.id == label['id']).delete()
 
-        filename = label['filename']
-        orca = label['orca']
-        extra_label = label['extraLabel']
+        validation = i == 4
+        updated_url = update_s3_dir(label['audioUrl'], label['orca'],
+                                    validation)
 
-        newLabeledFile = LabeledFile(filename, orca, extra_label,
-                                     expertise_level)
+        newLabeledFile = LabeledFile(updated_url, label['orca'],
+                                     label['extraLabel'],
+                                     data['expertiseLevel'])
         db.session.add(newLabeledFile)
+
     db.session.commit()
+    if not session['training'] and session['cur_labels'] >= session['goal']:
+        th = threading.Thread(target=train_and_predict)
+        th.start()
+        session['cur_labels'] = 0
+
     return {'success': True}, 201
 
 
 # Get Confusion Matrix, Model Accuracy and Number of Labeled files over Time
 @app.route('/statistics', methods=['GET'])
 def get_statistics():
-    samples_by_day = db.session.query(
-        LabeledFile.date, db.func.count(LabeledFile.date)).group_by(
-            LabeledFile.date).order_by(LabeledFile.date).all()
+    model_accuracy_query = db.session.query(ModelAccuracy.accuracy,
+                                            ModelAccuracy.labeled_files,
+                                            ModelAccuracy.timestamp).all()
+    model_accuracies, labeled_files, timestamps = [], [], []
+    for query in model_accuracy_query:
+        model_accuracies.append(query[0])
+        labeled_files.append(query[1])
+        timestamps.append(query[2])
 
-    samples_by_day = [list(elem) for elem in samples_by_day]
-    for i in range(1, len(samples_by_day)):
-        samples_by_day[i][1] += samples_by_day[i - 1][1]
+    accuracy = db.session.query(Accuracy.acc, Accuracy.val_acc, Accuracy.loss,
+                                Accuracy.val_loss).all()
+    train = []
+    validation = []
+    train_l = []
+    validation_l = []
+    for t in accuracy:
+        train.append(t[0])
+        validation.append(t[1])
+        train_l.append(t[2])
+        validation_l.append(t[3])
 
-    model_accuracy = db.session.query(ModelAccuracy.date,
-                                      ModelAccuracy.accuracy).all()
+    [confusion_matrix
+     ] = db.session.query(ConfusionMatrix.tn, ConfusionMatrix.fp,
+                          ConfusionMatrix.fn, ConfusionMatrix.tp).all()
 
     data = {
+        'retrain': {
+            'progress': session['cur_labels'],
+            'goal': session['goal']
+        },
         'confusionMatrix': confusion_matrix,
         'accuracy': {
-            'train': train_accuracy,
-            'test': test_accuracy
+            'train': train,
+            'validation': validation
         },
-        'validationHistory': samples_by_day,
-        'modelAccuracy': model_accuracy,
+        'loss': {
+            'train': train_l,
+            'validation': validation_l
+        },
+        'accuracyVLabels': {
+            'accuracies': model_accuracies,
+            'labels': labeled_files,
+            'dates': timestamps
+        },
+        'training': session['training']
     }
     return data
