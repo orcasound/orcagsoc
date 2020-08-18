@@ -14,6 +14,11 @@ from predict import get_predictions_on_unlabeled
 from train import train
 
 
+@app.route('/')
+def home():
+    return 'ML enpoint is running!'
+
+
 @app.route('/predict')
 def get_predictions():
     predictions = get_predictions_on_unlabeled()

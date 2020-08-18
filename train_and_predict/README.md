@@ -25,7 +25,8 @@ All the paramaters are taken from a `.env` file.
 ### Quick Method
 
 -   Make sure [Docker](https://www.docker.com/) is installed
--   `docker run --rm --name activelearning_ml -d -p 5001:5001 -e S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn.h5 -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e IMG_WIDTH=607 -e IMG_HEIGHT=617 -e EPOCHS=1 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] jdiegors/activelearning_ml:latest`
+-   Run the following command with your AWS access keys:  
+    `docker run --rm --name activelearning_ml -d -p 5001:5001 -e S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn.h5 -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e IMG_WIDTH=607 -e IMG_HEIGHT=617 -e EPOCHS=1 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] jdiegors/activelearning_ml:latest`
 
 ### Flexible Method
 
