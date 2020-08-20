@@ -23,22 +23,31 @@ class LabeledFile(db.Model):
         return '<LabeledFile {}>'.format(self.audio_url)
 
 
-class ModelAccuracy(db.Model):
-    '''ML Model Acccuracy after each training round.'''
+class Model(db.Model):
+    '''ML Model saved after each training round.'''
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    version = db.Column(db.Integer)
+    url = db.Column(db.String(100))
     accuracy = db.Column(db.Float)
+    loss = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     labeled_files = db.Column(db.Integer)
 
-    def __init__(self, accuracy, labeled_files):
+    def __init__(self, name, version, url, accuracy, loss, labeled_files):
+        self.name = name
+        self.version = version
+        self.url = url
         self.accuracy = accuracy
+        self.loss = loss
         self.labeled_files = labeled_files
 
     def __repr__(self):
-        return '<ModelAccuracy {}>'.format(self.accuracy)
+        return '<Model {}>'.format(self.name)
 
 
 class Prediction(db.Model):
+    '''Unlabeled file predicted by an ML model'''
     id = db.Column(db.Integer, primary_key=True)
     predicted_value = db.Column(db.Float)
     audio_url = db.Column(db.String(100))
@@ -61,6 +70,7 @@ class Prediction(db.Model):
 
 
 class ConfusionMatrix(db.Model):
+    '''Last training round's confusion matrix'''
     id = db.Column(db.Integer, primary_key=True)
     tn = db.Column(db.Integer)
     fp = db.Column(db.Integer)
@@ -75,6 +85,7 @@ class ConfusionMatrix(db.Model):
 
 
 class Accuracy(db.Model):
+    '''Last training round's losses and accuracies'''
     id = db.Column(db.Integer, primary_key=True)
     acc = db.Column(db.Float)
     val_acc = db.Column(db.Float)

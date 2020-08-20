@@ -31,9 +31,9 @@ migrate = Migrate(app, db)
 # Handle circular imports
 from .active_learning import train_and_predict
 from app import routes, models
-from app.models import LabeledFile, ModelAccuracy, Prediction, ConfusionMatrix, Accuracy
+from app.models import LabeledFile, Model, Prediction, ConfusionMatrix, Accuracy
 
-# Start training if the tables are empty
+# Start training if the tables generated after each training round are empty
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 if engine.dialect.has_table(
         engine, 'accuracy') and db.session.query(Accuracy).first() is None:
@@ -47,7 +47,7 @@ def make_shell_context():
     return {
         'db': db,
         'LabeledFile': LabeledFile,
-        'ModelAccuracy': ModelAccuracy,
+        'Model': Model,
         'Prediction': Prediction,
         'ConfusionMatrix': ConfusionMatrix,
         'Accuracy': Accuracy

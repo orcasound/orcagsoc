@@ -4,4 +4,4 @@ venv/
 labeled*/
 unlabeled*/
 .env
-best_model.h5
+*.h5
