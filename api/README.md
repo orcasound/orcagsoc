@@ -108,7 +108,7 @@ Stores the predicted value of an unlabeled file, alongside with more information
 }
 
 label = {
-    "id": [int],
+    "id": "[int]",
     "audioUrl": "[unicode 100 chars max]",
     "orca": "[bool]",
     "extraLabel":"[can be an empty string][10 chars max]"
