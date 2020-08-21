@@ -24,7 +24,7 @@ Stores the predicted value of an unlabeled file, alongside with more information
 ## Endpoints
 
 -   `GET` [/uncertainties](#get-uncertainties)
--   `POST`[/labeledfile](#add-labeled-files)
+-   `POST`[/labeledfiles](#add-labeled-files)
 -   `GET` [/statistics](#get-statistics)
 
 -   ### Get Uncertainties
@@ -35,24 +35,63 @@ Stores the predicted value of an unlabeled file, alongside with more information
 #### Success Response
 
 **Code:** `200 OK`  
-**Example:**  
-The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com/), and the audio could be fetched using Ajax.
+**Example:**
 
 ```JSON
 [
-  "mp3/sound1.mp3",
-  "mp3/sound4.mp3",
-  "mp3/sound6.mp3",
-  "mp3/sound2.mp3",
-  "mp3/sound3.mp3"
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154178.mp3",
+    "confidence": 44.9466347694397,
+    "duration": 3.0,
+    "id": 1413,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:36:18 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154799.mp3",
+    "confidence": 52.78398394584656,
+    "duration": 3.0,
+    "id": 1577,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:46:39 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154187.mp3",
+    "confidence": 53.031569719314575,
+    "duration": 3.0,
+    "id": 1414,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:36:27 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154469.mp3",
+    "confidence": 53.46974730491638,
+    "duration": 3.0,
+    "id": 1492,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:41:09 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154163.mp3",
+    "confidence": 57.64526724815369,
+    "duration": 3.0,
+    "id": 1409,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:36:03 GMT"
+  }
 ]
 ```
 
 -   ### Add Labeled Files
 
-| URL          | Method | Description                           |
-| ------------ | ------ | ------------------------------------- |
-| /labeledfile | POST   | Add new labeled files to the database |
+| URL           | Method | Description                           |
+| ------------- | ------ | ------------------------------------- |
+| /labeledfiles | POST   | Add new labeled files to the database |
 
 #### Data Constrains
 
@@ -63,13 +102,15 @@ The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com
     },
     "body": {
         "labels": "[list of labels]",
-        "expertiseLevel": "[can be an empty string][10 chars max]"
+        "expertiseLevel": "[can be an empty string][10 chars max]",
+        "uncertainties": "[list of ids of the audio files]",
     }
 }
 
 label = {
-    "filename": "[unicode 50 chars max]",
-    "orca": "[true or false]",
+    "id": [int],
+    "audioUrl": "[unicode 100 chars max]",
+    "orca": "[bool]",
     "extraLabel":"[can be an empty string][10 chars max]"
 }
 ```
@@ -82,10 +123,11 @@ label = {
 
 ```JSON
 {
-    "labels": [{"filename": "5", "orca": true, "extraLabel":"K"}],
+    "labels": [{"id": 1409, "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154163.mp3", "orca": true, "extraLabel":"K"}],
     "expertiseLevel": "Beginner",
-    "unlabeled": []
+    "unlabeled": [1492, 1414, 1577, 1413]
 }
+{"success": true}
 ```
 
 #### Error Responses
@@ -96,10 +138,11 @@ label = {
 
 ```JSON
 {
-    "labels": [{"filename": "5", "orca": true}],
+    "labels": [{"id": 1409, "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154163.mp3", "orca": true}],
     "expertiseLevel": "",
     "unlabeled": []
 }
+KeyError: 'extraLabel'
 ```
 
 **Code:** `415 UNSUPPORTED MEDIA TYPE`  
@@ -110,6 +153,7 @@ label = {
 headers: {
     "Content-Type": "application/pdf"
 }
+{"error": "Unsupported Media Type"}
 ```
 
 -   ### Get Statistics
@@ -126,23 +170,46 @@ headers: {
 ```JSON
 {
   "accuracy": {
-    "test": [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925],
-    "train": [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
+    "train": [
+      0.5986394286155701
+    ],
+    "validation": [
+      0.6326530575752258
+    ]
+  },
+  "accuracyVLabels": {
+    "accuracies": [
+      0.644444465637207,
+      0.6326530575752258
+    ],
+    "dates": [
+      "Tue, 18 Aug 2020 22:34:32 GMT",
+      "Tue, 18 Aug 2020 22:50:40 GMT"
+    ],
+    "labels": [
+      126,
+      147
+    ]
   },
   "confusionMatrix": [
-    [80, 46],
-    [43, 100]
+    9,
+    11,
+    7,
+    22
   ],
-  "validationHistory": [
-    ["Wed, 24 Jun 2020 00:00:00 GMT", 2],
-    ["Thu, 25 Jun 2020 00:00:00 GMT", 6],
-    ["Fri, 26 Jun 2020 00:00:00 GMT", 8]
-  ],
-  "modelAccuracy": [
-    ["Wed, 24 Jun 2020 00:00:00 GMT", 0.8],
-    ["Thu, 25 Jun 2020 00:00:00 GMT", 0.85],
-    ["Fri, 26 Jun 2020 00:00:00 GMT", 0.9]
-  ]
+  "loss": {
+    "train": [
+      0.8761522173881531
+    ],
+    "validation": [
+      0.7891138195991516
+    ]
+  },
+  "retrain": {
+    "goal": 20,
+    "progress": 0
+  },
+  "training": false
 }
 ```
 
