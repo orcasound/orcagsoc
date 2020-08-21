@@ -136,11 +136,12 @@ OSError: SavedModel file does not exist at: no_model_0.h5/{saved_model.pbtxt|sav
 
 -   Make sure [Docker](https://www.docker.com/) is installed
 -   Run:  
-    `docker run --rm --name activelearning_ml -d -p 5001:5001 jdiegors/activelearning_ml:latest`
+    `docker run --name activelearning_ml -d -p 5001:5001 -e AWS_ACCESS_KEY_ID=<access-key-id> -e AWS_SECRET_ACCESS_KEY=<secret-access-key> --rm jdiegors/activelearning_ml:latest`
 
 ### Flexible Method
 
 -   Make sure [Python](https://www.python.org/) and [AWS CLI](https://aws.amazon.com/cli/) are installed
+-   Configure AWS CLI by entering your access keys after `aws configure`
 -   Clone the repo and `cd` into the project directory
 -   Create a virtual environment: `python -m venv venv`
 -   Activate the virtual environment: `source venv/bin/activate` or `venv\Scripts\activate` for windows
