@@ -6,8 +6,6 @@
 
 # Available Endpoints
 
-All the paramaters are taken from a `.env` file.
-
 ### Train
 
 | URL                                   | Method | Description                                                                                                                                                |
@@ -25,8 +23,8 @@ All the paramaters are taken from a `.env` file.
 ### Quick Method
 
 -   Make sure [Docker](https://www.docker.com/) is installed
--   Run the following command with your AWS access keys:  
-    `docker run --rm --name activelearning_ml -d -p 5001:5001 -e S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn.h5 -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e IMG_WIDTH=607 -e IMG_HEIGHT=617 -e EPOCHS=1 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] jdiegors/activelearning_ml:latest`
+-   Run:  
+    `docker run --rm --name activelearning_ml -d -p 5001:5001 jdiegors/activelearning_ml:latest`
 
 ### Flexible Method
 
@@ -35,22 +33,9 @@ All the paramaters are taken from a `.env` file.
 -   Create a virtual environment: `python -m venv venv`
 -   Activate the virtual environment: `source venv/bin/activate` or `venv\Scripts\activate` for windows
 -   Install the dependencies: `pip install -r requirements.txt`
--   Create a `.env` file with the following parameters:
-
-    ```
-    S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn.h5
-    S3_LABELED_PATH=s3://orcagsoc/labeled_test/
-    S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/
-    IMG_WIDTH=607
-    IMG_HEIGHT=617
-    EPOCHS=1
-    AWS_ACCESS_KEY_ID=[access key]
-    AWS_SECRET_ACCESS_KEY=[secret access key]
-    ```
-
 -   Run `flask run` to start a development server in [http://localhost:5001](http://localhost:5001)
 
 ### Deployment
 
 Follow the quick start method on your server of choice.  
-Otherwise, to push to a different docker container registry, create an account on https://hub.docker.com, login from the command line `docker login`, build the image with `docker build -t activelearning_ml .` from within the project directory, rename it to `docker tag activelearning_ml:latest <your-docker-registry-account>/activelearning_ml:latest`, push it to the Docker registry `docker push <your-docker-registry-account>/activelearning_ml:latest`.. Now you can follow the quick start method.
+Otherwise, to push to a different docker container registry, create an account on https://hub.docker.com, login from the command line `docker login`, build the image with `docker build -t activelearning_ml .` from within the project directory, rename it to `docker tag activelearning_ml:latest <your-docker-registry-account>/activelearning_ml:latest`, push it to the Docker registry `docker push <your-docker-registry-account>/activelearning_ml:latest`. Now you can follow the quick start method.

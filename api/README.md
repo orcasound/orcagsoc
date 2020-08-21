@@ -12,8 +12,8 @@
 
 **labeled_file** table:  
 Label for an audio file made by a human annotator. All the labeled files then conform the labeled dataset used by the ML model.  
-**model_accuracy** table:  
-Stores the accuracy of the model after every training round and the number of files used for training.  
+**model** table:  
+Stores data about a model after every training round, as well as the number of files that were used to train it.  
 **confusion_matrix** table:  
 Stores the confusion matrix generated after a retraining using the validation dataset.  
 **accuracy** table:  
@@ -28,9 +28,9 @@ Stores the predicted value of an unlabeled file, alongside with more information
 -   `GET` [/statistics](#get-statistics)
 
 -   ### Get Uncertainties
-    | URL        | Method | Description                                                         |
-    | ---------- | ------ | ------------------------------------------------------------------- |
-    | /filenames | GET    | Get the next 5 audio files, where the ML model had most uncertainty |
+    | URL            | Method | Description                                                            |
+    | -------------- | ------ | ---------------------------------------------------------------------- |
+    | /uncertainties | GET    | Get the next 5 audio files, in which the ML model had most uncertainty |
 
 #### Success Response
 
@@ -83,20 +83,22 @@ label = {
 ```JSON
 {
     "labels": [{"filename": "5", "orca": true, "extraLabel":"K"}],
-    "expertiseLevel": "Beginner"
+    "expertiseLevel": "Beginner",
+    "unlabeled": []
 }
 ```
 
 #### Error Responses
 
-**Code:** `400 BAD REQUEST`  
+**Code:** `500 SERVER ERROR`  
 **Condition:** If fields are missing  
 **Example:**
 
 ```JSON
 {
     "labels": [{"filename": "5", "orca": true}],
-    "expertiseLevel": ""
+    "expertiseLevel": "",
+    "unlabeled": []
 }
 ```
 
@@ -112,9 +114,9 @@ headers: {
 
 -   ### Get Statistics
 
-| URL         | Method | Description                                                                                                                                                                            |
-| ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| /statistics | GET    | Get confusion matrix and list of accuracies of last training round of the ML model, as well as the total number of labeled files over time with the accuracy of the ML model over time |
+| URL         | Method | Description                                                                                                                                                                                 |
+| ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| /statistics | GET    | Get confusion matrix, and list of losses and accuracies of last training round of the ML model, as well as the accuracies of the ML model vs the number of files used to train it over time |
 
 #### Success Response
 
@@ -146,13 +148,13 @@ headers: {
 
 # Getting Started
 
-This API requires a database and a ML endpoint to run, the easiest way to do that would be run the ML endpoint's docker container by following the [train_and_predict quick method](../train_and_predict/README.md#quick-method), and to start a docker postgres database with the following command: `docker run --name postgres -p 5432:5432 -e POSTGRES_DB=orcagsoc -e POSTGRES_PASSWORD=postgres -d postgres`.
+This API requires a database and a ML endpoint to run, the easiest way to do that would be run the ML endpoint's docker container by following the [train_and_predict quick method](../train_and_predict/README.md#quick-method), and to start a docker postgres database with the following command: `docker run --name postgres -p 5432:5432 -e POSTGRES_DB=orcagsoc -e POSTGRES_PASSWORD=<database-password> -d postgres`.
 
 ### Quick Method
 
 -   Make sure [Docker](https://www.docker.com/) is installed
 -   Run the following command with your AWS access keys:  
-    `docker run --rm --name activelearning_api -d -p 5000:5000 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:postgres@dbserver/orcagsoc -e ML_ENDPOINT_URL=http://host.docker.internal:5001 jdiegors/activelearning_api:latest`
+    `docker run --rm --name activelearning_api -d -p 5000:5000 -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 -e S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn_0.h5 -e IMG_WIDTH=607 -e IMG_HEIGHT=617 -e EPOCHS=1 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:<database-password>@dbserver/orcagsoc -e ML_ENDPOINT_URL=http://host.docker.internal:5001 jdiegors/activelearning_api:latest`
 
 ### Flexible Method
 
@@ -162,11 +164,15 @@ This API requires a database and a ML endpoint to run, the easiest way to do tha
 -   Create a `.env` file with the following parameters:
 
     ```
-    DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/orcagsoc
+    DATABASE_URL=postgresql+psycopg2://postgres:<database-password>@localhost:5432/orcagsoc
     ML_ENDPOINT_URL=http://127.0.0.1:5001
     S3_LABELED_PATH=s3://orcagsoc/labeled_test/
     S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/
+    S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn_0.h5
     RETRAIN_TARGET=20
+    IMG_WIDTH=607
+    IMG_HEIGHT=617
+    EPOCHS=1
     ```
 
 -   Run `flask db upgrade` to update the tables of the database
@@ -179,6 +185,5 @@ This API requires a database and a ML endpoint to run, the easiest way to do tha
 
 ### Deployment
 
--   Once the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) is installed, login to your Heroku account with `heroku login`
--   Then add a remote to your local repository with the `heroku git:remote -a orcagsoc` command
--   To deploy the app use the `git push heroku master` command from your local repository's master branch
+Follow the quick start method on your server of choice.  
+Otherwise, to push to a different docker container registry, create an account on https://hub.docker.com, login from the command line `docker login`, build the image with `docker build -t activelearning_api .` from within the project directory, rename it to `docker tag activelearning_api:latest <your-docker-registry-account>/activelearning_api:latest`, push it to the Docker registry `docker push <your-docker-registry-account>/activelearning_api:latest`. Now you can follow the quick start method.

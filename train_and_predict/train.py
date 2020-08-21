@@ -21,7 +21,7 @@ def train(s3_model_path, s3_labeled_path, img_width, img_height, epochs):
 
     model = load_model(local_model_path)
     # Download data from s3 to `labeled` directory
-    subprocess.run(['aws', 's3', 'sync', s3_labeled_path, local_labeled_path])
+    subprocess.run(['aws', '--no-sign-request', 's3', 'sync', s3_labeled_path, local_labeled_path])
 
     train_data_path = os.path.join(local_labeled_path, 'train')
     validation_data_path = os.path.join(local_labeled_path, 'validation')
@@ -91,6 +91,6 @@ def train(s3_model_path, s3_labeled_path, img_width, img_height, epochs):
     model_loss, model_acc = model.evaluate(validation_generator)
 
     new_s3_model_path = f'{os.path.dirname(s3_model_path)}/{new_model_name}'
-    subprocess.run(['aws', 's3', 'cp', new_model_name, new_s3_model_path])
+    subprocess.run(['aws', '--no-sign-request', 's3', 'cp', new_model_name, new_s3_model_path])
 
     return acc, val_acc, loss, val_loss, cm, train_generator.n, model_acc, model_loss, new_s3_model_path

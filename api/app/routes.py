@@ -8,6 +8,11 @@ from .active_learning import update_s3_dir, train_and_predict, session
 import threading
 
 
+@app.route('/')
+def home():
+    return 'Active Learning API is running!'
+
+
 # Get the next 5 predictions with most uncertainty
 @app.route('/uncertainties', methods=['GET'])
 def get_uncertainties():
