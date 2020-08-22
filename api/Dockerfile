@@ -16,4 +16,4 @@ COPY boot.sh ./
 ENV FLASK_APP app
 
 EXPOSE 5000
-ENTRYPOINT ["sh", "./boot.sh"]
+ENTRYPOINT ["./boot.sh"]
