@@ -32,7 +32,7 @@ module.exports = (_, argv) => {
             new MiniCssExtractPlugin(),
             new webpack.EnvironmentPlugin({
                 API_URL: isProduction
-                    ? 'https://orcagsoc.herokuapp.com'
+                    ? 'https://d14pgy6pzqfa4g.cloudfront.net'
                     : 'http://localhost:5000',
             }),
             new WebpackCdnPlugin({
