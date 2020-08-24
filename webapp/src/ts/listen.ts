@@ -14,6 +14,13 @@ interface IUncertainty {
     orca: boolean
 }
 
+interface ILabel {
+    id: number
+    audioUrl: string
+    orca: boolean
+    extraLabel: string
+}
+
 const ready = (callback: () => void) => {
     if (document.readyState != 'loading') callback()
     else document.addEventListener('DOMContentLoaded', callback)
@@ -22,7 +29,7 @@ const ready = (callback: () => void) => {
 ready(() => {
     const playPauseBtn = document.getElementById('play-pause')
     let uncertainties: IUncertainty[] = []
-    let labels: object[] = []
+    let labels: ILabel[] = []
     let unlabeled = new Set<number>()
     let currentSample = 0
 

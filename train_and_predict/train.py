@@ -4,18 +4,22 @@ from tensorflow.keras.models import load_model
 import os
 import subprocess
 from sklearn.metrics import confusion_matrix
-from app import model, s3_model_path
 from time import time
 
-s3_labeled_path = os.environ.get('S3_LABELED_PATH')
-local_labeled_path = s3_labeled_path.split('/')[-2]
-img_width, img_height = int(os.environ.get('IMG_WIDTH')), int(
-    os.environ.get('IMG_HEIGHT'))
-epochs = int(os.environ.get('EPOCHS'))
 
+def train(s3_model_path, s3_labeled_path, img_width, img_height, epochs):
+    local_labeled_path = s3_labeled_path.split('/')[-2]
 
-def train():
-    global model
+    local_model_path = os.path.basename(s3_model_path)
+    model_version = local_model_path.split('_')[-1].split('.')[0]
+    new_model_version = str(int(model_version) + 1)
+    new_model_name = '_'.join(
+        local_model_path.split('_')[:-1] + [new_model_version])
+    new_model_name = f'{new_model_name}.h5'
+    if not os.path.isfile(local_model_path):
+        subprocess.run(['aws', 's3', 'cp', s3_model_path, '.'])
+
+    model = load_model(local_model_path)
     # Download data from s3 to `labeled` directory
     subprocess.run(['aws', 's3', 'sync', s3_labeled_path, local_labeled_path])
 
@@ -26,7 +30,7 @@ def train():
     batch_size = 32
 
     # Train the Detection model
-    checkpoint = ModelCheckpoint(filepath='best_model.h5',
+    checkpoint = ModelCheckpoint(filepath=new_model_name,
                                  monitor='val_loss',
                                  verbose=0,
                                  save_best_only=True)
@@ -83,14 +87,10 @@ def train():
     cm = confusion_matrix(true_classes, predictions).ravel().tolist()
 
     # Load best model
-    model = load_model('best_model.h5')
+    model = load_model(new_model_name)
     model_loss, model_acc = model.evaluate(validation_generator)
 
-    new_model_name = f'{os.path.dirname(s3_model_path)}/ckpt_loss{model_loss:.2f}_acc{model_acc:.2f}.h5'
-    subprocess.run(['aws', 's3', 'cp', 'best_model.h5', new_model_name])
+    new_s3_model_path = f'{os.path.dirname(s3_model_path)}/{new_model_name}'
+    subprocess.run(['aws', 's3', 'cp', new_model_name, new_s3_model_path])
 
-    return acc, val_acc, loss, val_loss, cm, train_generator.n, model_acc
-
-
-if __name__ == '__main__':
-    print(train())
+    return acc, val_acc, loss, val_loss, cm, train_generator.n, model_acc, model_loss, new_s3_model_path

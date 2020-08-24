@@ -3,17 +3,20 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import subprocess
 from datetime import datetime
 import os
-from app import model
 
-s3_unlabeled_path = os.environ.get('S3_UNLABELED_PATH')
-local_unlabeled_path = s3_unlabeled_path.split('/')[-2]
-s3_url = f'https://{s3_unlabeled_path.split("/")[2]}.s3.amazonaws.com/{local_unlabeled_path}'
-img_width, img_height = int(os.environ.get('IMG_WIDTH')), int(
-    os.environ.get('IMG_HEIGHT'))
 locations = {'orcasoundlab': 'Haro Strait'}
 
 
-def get_predictions_on_unlabeled():
+def get_predictions_on_unlabeled(s3_model_path, s3_unlabeled_path, img_width,
+                                 img_height):
+    local_unlabeled_path = s3_unlabeled_path.split('/')[-2]
+    s3_url = f'https://{s3_unlabeled_path.split("/")[2]}.s3.amazonaws.com/{local_unlabeled_path}'
+
+    local_model_path = os.path.basename(s3_model_path)
+    if not os.path.isfile(local_model_path):
+        subprocess.run(['aws', 's3', 'cp', s3_model_path, '.'])
+    model = load_model(local_model_path)
+
     # Download data from s3 to `unlabeled` directory
     subprocess.run([
         'aws', 's3', 'sync', f'{s3_unlabeled_path}spectrograms/',
@@ -48,7 +51,3 @@ def get_predictions_on_unlabeled():
         predictions_list.append(cur_prediction)
 
     return predictions_list
-
-
-if __name__ == '__main__':
-    print(get_predictions_on_unlabeled())

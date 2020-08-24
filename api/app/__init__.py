@@ -31,14 +31,16 @@ migrate = Migrate(app, db)
 # Handle circular imports
 from .active_learning import train_and_predict
 from app import routes, models
-from app.models import LabeledFile, ModelAccuracy, Prediction, ConfusionMatrix, Accuracy
+from app.models import LabeledFile, Model, Prediction, ConfusionMatrix, Accuracy
 
-# Start training if the tables are empty
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-if engine.dialect.has_table(
-        engine, 'accuracy') and db.session.query(Accuracy).first() is None:
-    th = threading.Thread(target=train_and_predict)
-    th.start()
+if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    # The app is not in debug mode or we are in the reloaded process
+    # Start training if the tables generated after each training round are empty
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    if engine.dialect.has_table(
+            engine, 'accuracy') and db.session.query(Accuracy).first() is None:
+        th = threading.Thread(target=train_and_predict)
+        th.start()
 
 
 # Load the database instance and models to flask shell
@@ -47,7 +49,7 @@ def make_shell_context():
     return {
         'db': db,
         'LabeledFile': LabeledFile,
-        'ModelAccuracy': ModelAccuracy,
+        'Model': Model,
         'Prediction': Prediction,
         'ConfusionMatrix': ConfusionMatrix,
         'Accuracy': Accuracy

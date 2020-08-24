@@ -12,8 +12,8 @@
 
 **labeled_file** table:  
 Label for an audio file made by a human annotator. All the labeled files then conform the labeled dataset used by the ML model.  
-**model_accuracy** table:  
-Stores the accuracy of the model after every training round and the number of files used for training.  
+**model** table:  
+Stores data about a model after every training round, as well as the number of files that were used to train it.  
 **confusion_matrix** table:  
 Stores the confusion matrix generated after a retraining using the validation dataset.  
 **accuracy** table:  
@@ -24,35 +24,74 @@ Stores the predicted value of an unlabeled file, alongside with more information
 ## Endpoints
 
 -   `GET` [/uncertainties](#get-uncertainties)
--   `POST`[/labeledfile](#add-labeled-files)
+-   `POST`[/labeledfiles](#add-labeled-files)
 -   `GET` [/statistics](#get-statistics)
 
 -   ### Get Uncertainties
-    | URL        | Method | Description                                                         |
-    | ---------- | ------ | ------------------------------------------------------------------- |
-    | /filenames | GET    | Get the next 5 audio files, where the ML model had most uncertainty |
+    | URL            | Method | Description                                                            |
+    | -------------- | ------ | ---------------------------------------------------------------------- |
+    | /uncertainties | GET    | Get the next 5 audio files, in which the ML model had most uncertainty |
 
 #### Success Response
 
 **Code:** `200 OK`  
-**Example:**  
-The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com/), and the audio could be fetched using Ajax.
+**Example:**
 
 ```JSON
 [
-  "mp3/sound1.mp3",
-  "mp3/sound4.mp3",
-  "mp3/sound6.mp3",
-  "mp3/sound2.mp3",
-  "mp3/sound3.mp3"
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154178.mp3",
+    "confidence": 44.9466347694397,
+    "duration": 3.0,
+    "id": 1413,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:36:18 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154799.mp3",
+    "confidence": 52.78398394584656,
+    "duration": 3.0,
+    "id": 1577,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:46:39 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154187.mp3",
+    "confidence": 53.031569719314575,
+    "duration": 3.0,
+    "id": 1414,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:36:27 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154469.mp3",
+    "confidence": 53.46974730491638,
+    "duration": 3.0,
+    "id": 1492,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:41:09 GMT"
+  },
+  {
+    "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154163.mp3",
+    "confidence": 57.64526724815369,
+    "duration": 3.0,
+    "id": 1409,
+    "location": "Haro Strait",
+    "orca": true,
+    "timestamp": "Tue, 07 Jul 2020 15:36:03 GMT"
+  }
 ]
 ```
 
 -   ### Add Labeled Files
 
-| URL          | Method | Description                           |
-| ------------ | ------ | ------------------------------------- |
-| /labeledfile | POST   | Add new labeled files to the database |
+| URL           | Method | Description                           |
+| ------------- | ------ | ------------------------------------- |
+| /labeledfiles | POST   | Add new labeled files to the database |
 
 #### Data Constrains
 
@@ -63,13 +102,15 @@ The filenames are appended to an s3 bucket url (https://example.s3.amazonaws.com
     },
     "body": {
         "labels": "[list of labels]",
-        "expertiseLevel": "[can be an empty string][10 chars max]"
+        "expertiseLevel": "[can be an empty string][10 chars max]",
+        "uncertainties": "[list of ids of the audio files]",
     }
 }
 
 label = {
-    "filename": "[unicode 50 chars max]",
-    "orca": "[true or false]",
+    "id": "[int]",
+    "audioUrl": "[unicode 100 chars max]",
+    "orca": "[bool]",
     "extraLabel":"[can be an empty string][10 chars max]"
 }
 ```
@@ -82,22 +123,26 @@ label = {
 
 ```JSON
 {
-    "labels": [{"filename": "5", "orca": true, "extraLabel":"K"}],
-    "expertiseLevel": "Beginner"
+    "labels": [{"id": 1409, "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154163.mp3", "orca": true, "extraLabel":"K"}],
+    "expertiseLevel": "Beginner",
+    "unlabeled": [1492, 1414, 1577, 1413]
 }
+{"success": true}
 ```
 
 #### Error Responses
 
-**Code:** `400 BAD REQUEST`  
+**Code:** `500 SERVER ERROR`  
 **Condition:** If fields are missing  
 **Example:**
 
 ```JSON
 {
-    "labels": [{"filename": "5", "orca": true}],
-    "expertiseLevel": ""
+    "labels": [{"id": 1409, "audioUrl": "https://orcagsoc.s3.amazonaws.com/unlabeled_test/mp3/orcasoundlab_1594154163.mp3", "orca": true}],
+    "expertiseLevel": "",
+    "unlabeled": []
 }
+KeyError: 'extraLabel'
 ```
 
 **Code:** `415 UNSUPPORTED MEDIA TYPE`  
@@ -108,13 +153,14 @@ label = {
 headers: {
     "Content-Type": "application/pdf"
 }
+{"error": "Unsupported Media Type"}
 ```
 
 -   ### Get Statistics
 
-| URL         | Method | Description                                                                                                                                                                            |
-| ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| /statistics | GET    | Get confusion matrix and list of accuracies of last training round of the ML model, as well as the total number of labeled files over time with the accuracy of the ML model over time |
+| URL         | Method | Description                                                                                                                                                                                 |
+| ----------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| /statistics | GET    | Get confusion matrix, and list of losses and accuracies of last training round of the ML model, as well as the accuracies of the ML model vs the number of files used to train it over time |
 
 #### Success Response
 
@@ -124,49 +170,77 @@ headers: {
 ```JSON
 {
   "accuracy": {
-    "test": [0.12, 0.45, 0.67, 0.78, 0.82, 0.89, 0.9, 0.92, 0.925],
-    "train": [0.2, 0.5, 0.7, 0.8, 0.85, 0.9, 0.92, 0.925, 0.93]
+    "train": [
+      0.5986394286155701
+    ],
+    "validation": [
+      0.6326530575752258
+    ]
+  },
+  "accuracyVLabels": {
+    "accuracies": [
+      0.644444465637207,
+      0.6326530575752258
+    ],
+    "dates": [
+      "Tue, 18 Aug 2020 22:34:32 GMT",
+      "Tue, 18 Aug 2020 22:50:40 GMT"
+    ],
+    "labels": [
+      126,
+      147
+    ]
   },
   "confusionMatrix": [
-    [80, 46],
-    [43, 100]
+    9,
+    11,
+    7,
+    22
   ],
-  "validationHistory": [
-    ["Wed, 24 Jun 2020 00:00:00 GMT", 2],
-    ["Thu, 25 Jun 2020 00:00:00 GMT", 6],
-    ["Fri, 26 Jun 2020 00:00:00 GMT", 8]
-  ],
-  "modelAccuracy": [
-    ["Wed, 24 Jun 2020 00:00:00 GMT", 0.8],
-    ["Thu, 25 Jun 2020 00:00:00 GMT", 0.85],
-    ["Fri, 26 Jun 2020 00:00:00 GMT", 0.9]
-  ]
+  "loss": {
+    "train": [
+      0.8761522173881531
+    ],
+    "validation": [
+      0.7891138195991516
+    ]
+  },
+  "retrain": {
+    "goal": 20,
+    "progress": 0
+  },
+  "training": false
 }
 ```
 
 # Getting Started
 
-This API requires a database and a ML endpoint to run, the easiest way to do that would be run the ML endpoint's docker container by following the [train_and_predict quick method](../train_and_predict/README.md#quick-method), and to start a docker postgres database with the following command: `docker run --name postgres -p 5432:5432 -e POSTGRES_DB=orcagsoc -e POSTGRES_PASSWORD=postgres -d postgres`.
+This API requires a database and a ML endpoint to run, the easiest way to do that would be run the ML endpoint's docker container by following the [train_and_predict quick method](../train_and_predict/README.md#quick-method), and to start a docker postgres database with the following command: `docker run --name postgres -p 5432:5432 -e POSTGRES_DB=orcagsoc -e POSTGRES_PASSWORD=<database-password> -d postgres`.
 
 ### Quick Method
 
 -   Make sure [Docker](https://www.docker.com/) is installed
 -   Run the following command with your AWS access keys:  
-    `docker run --rm --name activelearning_api -d -p 5000:5000 -e AWS_ACCESS_KEY_ID=[access key] -e AWS_SECRET_ACCESS_KEY=[secret access key] -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:postgres@dbserver/orcagsoc -e ML_ENDPOINT_URL=http://host.docker.internal:5001 jdiegors/activelearning_api:latest`
+    `docker run --name activelearning_api -d -p 5000:5000 -e S3_LABELED_PATH=s3://orcagsoc/labeled_test/ -e S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/ -e RETRAIN_TARGET=20 -e S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn_0.h5 -e IMG_WIDTH=607 -e IMG_HEIGHT=617 -e EPOCHS=1 --link postgres:dbserver -e DATABASE_URL=postgresql+psycopg2://postgres:<database-password>@dbserver/orcagsoc --link activelearning_ml:ml -e ML_ENDPOINT_URL=http://ml:5001 -e AWS_ACCESS_KEY_ID=<access-key-id> -e AWS_SECRET_ACCESS_KEY=<secret-access-key> --rm jdiegors/activelearning_api:latest`
 
 ### Flexible Method
 
--   Install [pipenv](https://pypi.org/project/pipenv/)
+-   Install [pipenv](https://pypi.org/project/pipenv/) and [AWS CLI](https://aws.amazon.com/cli/)
+-   Configure AWS CLI by entering your access keys after `aws configure`
 -   Run `pipenv shell` to start a virtual environment
 -   Run `pipenv install` to install the required dependencies
 -   Create a `.env` file with the following parameters:
 
     ```
-    DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/orcagsoc
+    DATABASE_URL=postgresql+psycopg2://postgres:<database-password>@localhost:5432/orcagsoc
     ML_ENDPOINT_URL=http://127.0.0.1:5001
     S3_LABELED_PATH=s3://orcagsoc/labeled_test/
     S3_UNLABELED_PATH=s3://orcagsoc/unlabeled_test/
+    S3_MODEL_PATH=s3://orcagsoc/models/srkw_cnn_0.h5
     RETRAIN_TARGET=20
+    IMG_WIDTH=607
+    IMG_HEIGHT=617
+    EPOCHS=1
     ```
 
 -   Run `flask db upgrade` to update the tables of the database
@@ -179,6 +253,5 @@ This API requires a database and a ML endpoint to run, the easiest way to do tha
 
 ### Deployment
 
--   Once the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) is installed, login to your Heroku account with `heroku login`
--   Then add a remote to your local repository with the `heroku git:remote -a orcagsoc` command
--   To deploy the app use the `git push heroku master` command from your local repository's master branch
+Follow the quick start method on your server of choice.  
+Otherwise, to push to a different docker container registry, create an account on https://hub.docker.com, login from the command line `docker login`, build the image with `docker build -t activelearning_api .` from within the project directory, rename it to `docker tag activelearning_api:latest <your-docker-registry-account>/activelearning_api:latest`, push it to the Docker registry `docker push <your-docker-registry-account>/activelearning_api:latest`. Now you can follow the quick start method.

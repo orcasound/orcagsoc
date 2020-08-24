@@ -28,10 +28,10 @@ ready(() => {
         // If training then show training element
         if (json.training) {
             document.getElementById('training').style.display = 'block'
-            document.querySelector('nav').style.height = '28rem'
+            document.querySelector('nav').style.height = '30rem'
         } else {
             document.getElementById('training').style.display = 'none'
-            document.querySelector('nav').style.height = '24rem'
+            document.querySelector('nav').style.height = '26rem'
         }
 
         // Update the charts

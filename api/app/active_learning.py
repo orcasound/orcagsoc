@@ -1,22 +1,47 @@
 import requests
 from app import db
-from app.models import Prediction, ConfusionMatrix, Accuracy, ModelAccuracy
+from app.models import Prediction, ConfusionMatrix, Accuracy, Model
 import subprocess
 import os
 
 # Global
 session = {
-    'goal': os.environ.get("RETRAIN_TARGET"),
+    'goal': int(os.environ.get("RETRAIN_TARGET")),
     'cur_labels': 0,
     'training': False
 }
+
+ml_endpoint_url = os.environ.get("ML_ENDPOINT_URL")
+s3_model_path = os.environ.get("S3_MODEL_PATH")
+s3_unlabeled_path = os.environ.get('S3_UNLABELED_PATH')
+s3_labeled_path = os.environ.get('S3_LABELED_PATH')
+img_width = os.environ.get('IMG_WIDTH')
+img_height = os.environ.get('IMG_HEIGHT')
+epochs = os.environ.get('EPOCHS')
+
+labeled_path = s3_labeled_path.split('/')[-2]
+s3_url = f'https://{s3_labeled_path.split("/")[2]}.s3.amazonaws.com/{labeled_path}'
+
+model_name = os.path.basename(s3_model_path)
+model_name = '_'.join(model_name.split('_')[:-1])
 
 
 def train_and_predict():
     # Train
     print('Training...')
     session['training'] = True
-    r = requests.get(f'{os.environ.get("ML_ENDPOINT_URL")}/train').json()
+    # Get latest model
+    latest_model = db.session.query(Model).filter(
+        Model.name == model_name).order_by(Model.version.desc()).first()
+    if latest_model is None:
+        latest_model = Model(model_name, 0, s3_model_path, 0, 0, 0)
+
+    url = (
+        f'{ml_endpoint_url}/train?model_url={latest_model.url}'
+        f'&labeled_url={s3_labeled_path}&img_width={img_width}&img_height={img_height}&epochs={epochs}'
+    )
+
+    r = requests.get(url).json()
     acc = r['acc']
     val_acc = r['val_acc']
     loss = r['loss']
@@ -32,7 +57,9 @@ def train_and_predict():
     ConfusionMatrix.query.delete()
     db.session.add(ConfusionMatrix(tn, fp, fn, tp))
 
-    db.session.add(ModelAccuracy(r['model_acc'], r['labeled_files']))
+    db.session.add(
+        Model(latest_model.name, latest_model.version + 1, r['model_url'],
+              r['model_acc'], r['model_loss'], r['labeled_files']))
 
     db.session.commit()
     session['training'] = False
@@ -40,8 +67,12 @@ def train_and_predict():
 
     # Predict
     print('Predicting...')
-    predictions = requests.get(
-        f'{os.environ.get("ML_ENDPOINT_URL")}/predict').json()
+    url = (
+        f'{ml_endpoint_url}/predict?model_url={latest_model.url}'
+        f'&unlabeled_url={s3_unlabeled_path}&img_width={img_width}&img_height={img_height}'
+    )
+
+    predictions = requests.get(url).json()
 
     Prediction.query.delete()
     db.session.add_all([
@@ -52,12 +83,6 @@ def train_and_predict():
 
     db.session.commit()
     print('Finished predicting')
-
-
-s3_unlabeled_path = os.environ.get('S3_UNLABELED_PATH')
-s3_labeled_path = os.environ.get('S3_LABELED_PATH')
-labeled_path = s3_labeled_path.split('/')[-2]
-s3_url = f'https://{s3_labeled_path.split("/")[2]}.s3.amazonaws.com/{labeled_path}'
 
 
 def update_s3_dir(audio_url, orca, validation):

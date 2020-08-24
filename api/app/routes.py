@@ -1,11 +1,16 @@
 from flask import jsonify, request
 from app import app, db, models
-from app.models import LabeledFile, ModelAccuracy, Prediction, Accuracy, ConfusionMatrix
+from app.models import LabeledFile, Model, Prediction, Accuracy, ConfusionMatrix
 import itertools
 import json
 import datetime
 from .active_learning import update_s3_dir, train_and_predict, session
 import threading
+
+
+@app.route('/')
+def home():
+    return 'Active Learning API is running!'
 
 
 # Get the next 5 predictions with most uncertainty
@@ -77,9 +82,9 @@ def post_labeledfiles():
 # Get Confusion Matrix, Model Accuracy and Number of Labeled files over Time
 @app.route('/statistics', methods=['GET'])
 def get_statistics():
-    model_accuracy_query = db.session.query(ModelAccuracy.accuracy,
-                                            ModelAccuracy.labeled_files,
-                                            ModelAccuracy.timestamp).all()
+    model_accuracy_query = db.session.query(Model.accuracy,
+                                            Model.labeled_files,
+                                            Model.timestamp).all()
     model_accuracies, labeled_files, timestamps = [], [], []
     for query in model_accuracy_query:
         model_accuracies.append(query[0])

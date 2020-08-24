@@ -25,7 +25,7 @@ Visit each subproject to know more about it, and how to get started with it.
 **Flowchart of how the application works:**  
 ![flowchart](api/assets/flowchart.jpg)
 
-**Architecture of the application**
+**Architecture of the application:**
 ![architecture](api/assets/architecture.png)
 
 # Questions?
