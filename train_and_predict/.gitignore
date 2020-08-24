@@ -1,7 +1,0 @@
-.vscode/
-__pycache__/
-venv/
-labeled*/
-unlabeled*/
-.env
-*.h5

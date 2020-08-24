@@ -10,24 +10,6 @@ In the [Issues](https://github.com/orcasound/orcagsoc/issues) section of this re
 
 After you [sign up as a GSoC student](https://summerofcode.withgoogle.com/get-started/) please refer to the [Orcasound Contribution Guide](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-contribution-guide.md) and the [Orcasound Proposal Template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md) as you draft your proposal.
 
-# AL&L of Orca Sounds
-
-Active Listening and Learning of Orca Sounds is an active learning tool that has the objective of labeling orca sounds with the help of humans and machines.  
-It has been divided into different subprojects:
-
--   An API
--   The preprocessing of the data
--   Training and predicting with a Machine Learning model
--   A webapp
-
-Visit each subproject to know more about it, and how to get started with it.
-
-**Flowchart of how the application works:**  
-![flowchart](api/assets/flowchart.jpg)
-
-**Architecture of the application:**
-![architecture](api/assets/architecture.png)
-
 # Questions?
 
 Ask GSoC-specific questions in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ).

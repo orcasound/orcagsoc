@@ -1,5 +1,0 @@
-__pycache__/
-.vscode/
-app.db
-test.db
-.env*
