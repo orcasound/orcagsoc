@@ -42,7 +42,7 @@ When we evaluate an application we use the following point system to get a basel
 - 5pts Project title, abstract, and detailed description
 - 5pts Include all requested technical details (see template)
 - 5pts Include a preliminary project schedule in your proposal (ideally addressing how you will spend your time before, during, after GSOC)
-- 5pts Evidence that you have time for GSOC. This is a paid job with an expectation of 30-40 hrs/week! State how many hours per week you plan to work in your proposal and list other time commitments.
+- 5pts Evidence that you have time for GSOC. State the period during which you will be available to work on your proposal, how many hours per week, and list other time commitments.
 - 5pts Document your development and other experience relevant to the project(s)
 - 5pts Explain why you are interested in the project and are a good fit
 - 5pts Submit a pull request to the existing code, or discover and/or discuss issues with the current code.
