@@ -16,9 +16,11 @@ Here it is also important to document previous conversations with your prospecti
 
 ### Contributions So Far
 Write a subsection which lists your contributions so far to Orcasound or the project. This may include:
+
 * Issues, PRs
 * Resources Review
 * Preliminary Attempts
+
 Provide links whenever possible.
 
 ## Schedule of Deliverables
