@@ -6,7 +6,7 @@
 
 Orcasound aims to recruit talented GSoC students to help us advance the field of bioacoustics with open-source software (and hardware). All code contributed by GSoC students will be shared under open-source licenses and any data products derived from Orcasound data will be shared under [Orcasound's Creative Commons license (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-In the [Issues](https://github.com/orcasound/orcagsoc/issues) section of this repository, we list project ideas from mentors. Orcasound also encourages you -- as a GSoC student -- to propose your own original project ideas (as new issues).
+In the [Issues](https://github.com/orcasound/orcagsoc/issues) section of this repository, we list project ideas from mentors. Orcasound also encourages you -- as a GSoC student -- to propose your own original project ideas (as new issues). If you'd like more details about previous projects and products, you'll find technical details and links to additional information in the [orcagsoc wiki](https://github.com/orcasound/orcagsoc/wiki).
 
 After you [sign up as a GSoC student](https://summerofcode.withgoogle.com/get-started/) please refer to the [Orcasound Contribution Guide](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-contribution-guide.md) and the [Orcasound Proposal Template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md) as you draft your proposal.
 
