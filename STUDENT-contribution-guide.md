@@ -55,8 +55,9 @@ When we evaluate an application we use the following point system to get a basel
 
 **Communication**
 
-- Write a short report for us every two weeks in the [Orcasound blog](http://www.orcasound.net/blog/), discuss it with your mentor(s), and be sure to include personal goals for the next 2-week period. These will be shared on Orcasound's social media channels.
-- Commit early and commit often! Push to a public repository (e.g. github) so
+- Follow the contribution guidance for the repo that interests you. 
+- Discuss issues and feature ideas on Github or Slack before submitting a related PR.
+- Commit early and commit often! Push to a public repository (e.g. Github) so
   that we can see and review your work.
 - Actively work on our project timeline and communicate with us during the
   community bonding period.
@@ -73,8 +74,8 @@ When we evaluate an application we use the following point system to get a basel
 
 **Blog**
 
-- keep a regular journal of your experience as a student and feel free to blog more often than once
-  every 2 weeks.
+- Write a short report for us every few weeks in the [Orcasound blog](http://www.orcasound.net/blog/), discuss it with your mentor(s) and peers, and be sure to include personal goals for the next phase of GSoC. These posts will be shared with Orcasound's open source community and on our social media channels.
+- Feel free to blog more often than the required amount!
 
 ## Proposal Instructions
 
@@ -104,7 +105,7 @@ your time estimates you should also consider that you can do less during exams o
 ### Final Proposal
 
 Your final proposal must be submitted to [GSoC](summerofcode.withgoogle.com) as a PDF file, using [this template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md). Your proposal should be named *[IssueNumber\_YourName\_ProjectName]* to make identification easier for the mentors. To convert a draft that you have written
-before into PDF you can use [Pandoc][Pandoc].
+before into PDF you can use [Pandoc](http://pandoc.org/).
 
 ~~~
 $ pandoc -f markdown -t pdf YYYY/proposals/your-project-name.md
