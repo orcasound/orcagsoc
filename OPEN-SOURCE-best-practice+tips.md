@@ -27,36 +27,34 @@ At Orcasound, we follow a user-centered design philosphy. For each project, we t
 * **Write tests early.** You can even add them before working on the functional bits.
 * **Document your code and APIs from the start.** Documentation is critical, especially since everything we're building for conserving orcas we hope will prove useful to others working to conserve soniferous species, or to re-purpose Orcasound code for other applications.
 
+## Tips for Git/hub+ from past students
+
 Knowledge of Git and Github are also important when collaborating with Orcasound on open source code. Here are related resources that past students and other contributors have found useful:
 
-## Dhananjay's tips:
+### Dhananjay's tips:
 
 * [Glossary of Git commands](https://www.atlassian.com/git/glossary)
 * [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)
 * [How to keep your Git history clean with interactive rebase](https://about.gitlab.com/blog/2020/11/23/keep-git-history-clean-with-interactive-rebase/)
 
-## Dmitry's tips:
+### Dmitry's tips:
 
 * Set up linting and testing in your [continuous integration](https://docs.github.com/en/actions/guides/about-continuous-integration). Every developer likes green checks on PRs!
 * Knowing [git(hub) basics](https://guides.github.com/activities/hello-world/) is a must, but you might want to learn some new tricks like [rebase](https://docs.github.com/en/get-started/using-git/about-git-rebase) or [bisect](https://git-scm.com/docs/git-bisect).
 * Some other helpful tricks: [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) (and particularly [pre-commit tool](https://pre-commit.com/)) and [conventional commits](https://www.conventionalcommits.org/).
 
-## Isabella's tips:
+### Isabella's tips:
 
 * [The anatomy of a perfect pull request](https://hugooodias.medium.com/the-anatomy-of-a-perfect-pull-request-567382bb6067)
 * [How to contribute to open source projects](https://www.freecodecamp.org/news/how-to-contribute-to-open-source-projects-beginners-guide/)
 * If you have a Mac I encourage you to get [GitUp](http://gitup.co/) which lets you visualize the changes you have made to your code.
 
-## Jose's tips:
+### Jose's tips:
 
 * For open source projects invovling audio, become familiar with [ffmpeg](https://github.com/FFmpeg/FFmpeg). It is a really efficient transcoder of media formats, but also has a ton of utilities for handling audio and performing complex filtering. 
 * [An ffmpgeg pipteline tutorial](https://hhsprings.bitbucket.io/docs/programming/examples/ffmpeg/index.html) that I found very useful.
 
 
+## Tips and tricks from Orcasound mentors
 
-
-
-
-
-
-## Advice from 
+*Coming soon...*
