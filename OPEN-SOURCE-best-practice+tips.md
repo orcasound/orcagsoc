@@ -23,9 +23,9 @@ At Orcasound, we follow a user-centered design philosphy. For each project, we t
 2. **Get early feedback on your ideas and approach.** It may help you find a much more efficient path to a solution, and it averts PRs that require extensive reviews.
 3. **Work in the open.** Don’t keep your changes locally for a week and then push 50 commits to the repo. Early feedback from others will help you be more efficient and it’s easier to discuss issues/changes if your peers can see the code.
 4. **Try to solve problems by yourself, but also ask for help!** You should spend a few hours or even a day trying to solve a problem by yourself or with help from on-line resources. However, you shouldn't struggle for more than a few days or a week without asking an Orcasound community member for help.
-5. ** Split your changes into separate pull requests.** Try to deliver just one incremental change or new feature in each PR. For bigger projects this will benefit you because review and merging of your changes will be faster.
-* **Write tests early.** You can even add them before working on the functional bits.
-* **Document your code and APIs from the start.** Documentation is critical, especially since everything we're building for conserving orcas we hope will prove useful to others working to conserve soniferous species, or to re-purpose Orcasound code for other applications.
+5. **Split your changes into separate pull requests.** Try to deliver just one incremental change or new feature in each PR. For bigger projects this will benefit you because review and merging of your changes will be faster.
+6. **Write tests early.** You can even add them before working on the functional bits.
+7. **Document your code and APIs from the start.** Documentation is critical, especially since everything we're building for conserving orcas we hope will prove useful to others working to conserve soniferous species, or to re-purpose Orcasound code for other applications.
 
 ## Tips for Git/hub+ from past students
 
