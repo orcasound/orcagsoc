@@ -1,5 +1,5 @@
-# Contributing Guide for Students
-[LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/STUDENT-proposal-template.md): thank you ESIP!)
+# Contributing Guide for GSOC Applicants
+[LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/GSOC-contributor-proposal-template.md): thank you ESIP!)
 
 ## Getting Started Early
 
@@ -11,7 +11,7 @@ good introduction how to start contributing to open source projects.
 
 The answer is generally: **Yes**. We value creativity, intelligence and
 enthusiasm above specific knowledge of the libraries or algorithms we use. We
-think that an interested and motivated student who is willing to learn is more
+think that an interested and motivated contributor who is willing to learn is more
 valuable than anything else. The range of available projects should suit people
 with different backgrounds. At the same time, if you have experience using your
 project of choice or one of its dependencies (e.g. language) make sure to let
@@ -19,24 +19,24 @@ us know about that as well.
 [The "Am I Good Enough" FLOSS manual](http://write.flossmanuals.net/gsocstudentguide/am-i-good-enough/)
 gives a good overview of this part for GSoC.
 
-## Our Expectations From Students
+## Our Expectations From Contributors
 
 ### During the application phase
 
 *The tips listed here can help your application. They are not required*
 
-Organizations usually favor students that show a regular communication with
+Organizations usually favor contributors that show a regular communication with
 possible mentors and organizations until Google announces the accepted projects.
 
-Establishing a regular communication is good for 2 reasons. It shows that you are a reliable student and that you have good communication skills. Good communication skills are an important part of GSoC since a student and mentor can rarely meet in person. Please, communicate through the Slack #gsoc channel, or on github. Please, do not send private messages to mentors and organizers; if you have a question, it is highly probable another person has the same question, and they can benefit from the open discussion.
+Establishing a regular communication is good for 2 reasons. It shows that you are a reliable contributor and that you have good communication skills. Good communication skills are an important part of GSoC since a new contributor and mentor can rarely meet in person. Please, communicate through the Slack #gsoc channel, or on github. Please, do not send private messages to mentors and organizers; if you have a question, it is highly probable another person has the same question, and they can benefit from the open discussion.
 
 You can get started by exploring the references in the project descriptions, getting familiar with the Orcasound repositories and data, attempting some of the suggested steps and trying out listed tools, reading through the wiki and contributing missing details, resolving issues, reviewing PRs, improving code documentation and style, and adding tests.  Before submitting a big code change, make sure you open an issue to discuss with other contributors. 
 
-When we evaluate an application we use the following point system to get a baseline comparison of students. We are providing this rubric to help you successfully apply and not miss any key components of the application process. You don't have to tick off all of these, and you can always do more, but these are our basic expecations. We will be fair, we promise, but will rate your effort from 1-5 (1 is failure to complete; 3 is completion, but with average effort; 5 is full completion with effort in the top 10% of your peers).
+When we evaluate an application we use the following point system to get a baseline comparison of applicants. We are providing this rubric to help you successfully apply and not miss any key components of the application process. You don't have to tick off all of these, and you can always do more, but these are our basic expecations. We will be fair, we promise, but will rate your effort from 1-5 (1 is failure to complete; 3 is completion, but with average effort; 5 is full completion with effort in the top 10% of your peers).
 
 - 5pts Communicate with organization's mentors
 - 5pts Communicate with the community
-- 5pts Follow instructions and format of the [Orcasound GSoC proposal template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md)
+- 5pts Follow instructions and format of the [Orcasound GSoC proposal template](https://github.com/orcasound/orcagsoc/blob/master/GSOC-contributor-proposal-template.md)
 - 5pts Properly cite the work of others in your proposal and code, including links to repos or provided code
 - 5pts Provide all requested contact information (i.e. email & slack name, & github if available)
 - 5pts Project title, abstract, and detailed description
@@ -46,12 +46,12 @@ When we evaluate an application we use the following point system to get a basel
 - 5pts Document your development and other experience relevant to the project(s)
 - 5pts Explain why you are interested in the project and are a good fit
 - 5pts Submit a pull request to the existing code, or discover and/or discuss issues with the current code.
-- 5pts Continue communication through date upon which accepted students are determined.
+- 5pts Continue communication through date upon which accepted applicants are determined.
 - 0pts Be honest! Only universal Karma points. 🙂 We are happy to see you grow in your learning process, but we also need to understand your technical skills and make sure that we have mentors that can support you in the process. Also, if we discover you were dishonest in your application, we will fail you and move on to collaborating with others.
 
 ### During the summer
 
-*The items here are a requirement for students during the summer*
+*The items here are a requirement for contributors during the summer*
 
 **Communication**
 
@@ -104,7 +104,7 @@ your time estimates you should also consider that you can do less during exams o
 
 ### Final Proposal
 
-Your final proposal must be submitted to [GSoC](summerofcode.withgoogle.com) as a PDF file, using [this template](https://github.com/orcasound/orcagsoc/blob/master/STUDENT-proposal-template.md). Your proposal should be named *[IssueNumber\_YourName\_ProjectName]* to make identification easier for the mentors. To convert a draft that you have written
+Your final proposal must be submitted to [GSoC](summerofcode.withgoogle.com) as a PDF file, using [this template](https://github.com/orcasound/orcagsoc/blob/master/GSOC-contributor-proposal-template.md). Your proposal should be named *[IssueNumber\_YourName\_ProjectName]* to make identification easier for the mentors. To convert a draft that you have written
 before into PDF you can use [Pandoc](http://pandoc.org/).
 
 ~~~
