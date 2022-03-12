@@ -1,4 +1,4 @@
-# Contributing Guide for GSOC Applicants
+# Contributing Guide for GSoC Applicants
 [LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/GSOC-contributor-proposal-template.md): thank you ESIP!)
 
 ## Getting Started Early
@@ -36,13 +36,13 @@ When we evaluate an application we use the following point system to get a basel
 
 - 5pts Communicate with organization's mentors
 - 5pts Communicate with the community
-- 5pts Follow instructions and format of the [Orcasound GSoC proposal template](https://github.com/orcasound/orcagsoc/blob/master/GSOC-contributor-proposal-template.md)
+- 5pts Follow instructions and format of the [Orcasound GSoC proposal template](https://github.com/orcasound/orcagsoc/blob/master/GSoC-contributor-proposal-template.md)
 - 5pts Properly cite the work of others in your proposal and code, including links to repos or provided code
 - 5pts Provide all requested contact information (i.e. email & slack name, & github if available)
 - 5pts Project title, abstract, and detailed description
 - 5pts Include all requested technical details (see template)
-- 5pts Include a preliminary project schedule in your proposal (ideally addressing how you will spend your time before, during, after GSOC)
-- 5pts Evidence that you have time for GSOC. State the period during which you will be available to work on your proposal, how many hours per week, and list other time commitments.
+- 5pts Include a preliminary project schedule in your proposal (ideally addressing how you will spend your time before, during, after GSoC)
+- 5pts Evidence that you have time for GSoC. State the period during which you will be available to work on your proposal, how many hours per week, and list other time commitments.
 - 5pts Document your development and other experience relevant to the project(s)
 - 5pts Explain why you are interested in the project and are a good fit
 - 5pts Submit a pull request to the existing code, or discover and/or discuss issues with the current code.
