@@ -1,4 +1,4 @@
-[LICENSE](https://github.com/orcasound/orcagsoc/blob/instructions/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/STUDENT-proposal-template.md): thank you ESIP!)
+[LICENSE](https://github.com/orcasound/orcagsoc/blob/instructions/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/STUDENT-contribution-guide.md): thank you ESIP!)
 
 #  Title 
 
