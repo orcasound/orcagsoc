@@ -58,3 +58,7 @@ Did you do other code-related projects or university courses?
 
 
 ## Why this project?
+
+## Summer Availability
+
+How many hours will be able to contribute during the summer? If possible, disclose any major time commitments: such as exams, classes, another job/project, travel.
