@@ -1,5 +1,5 @@
 # Contributing Guide for GSoC Applicants
-[LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md) (This template was adapted from [ESIP](https://www.esipfed.org/)'s organization [template](https://github.com/ESIPFed/gsoc/blob/master/GSOC-contributor-proposal-template.md): thank you ESIP!)
+[LICENSE](https://github.com/orcasound/orcagsoc/blob/master/GUIDE_LICENSE.md) (This guide was adapted from [ESIP](https://www.esipfed.org/)'s organization [guide](https://github.com/ESIPFed/gsoc/blob/master/STUDENT-contribution-guide.md): thank you ESIP!)
 
 ## Getting Started Early
 
