@@ -12,7 +12,7 @@ After you [sign up as a GSoC participant](https://summerofcode.withgoogle.com/ge
 
 # Questions?
 
-Ask GSoC-specific questions in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-bd1jk2q9-FjeWr3OzocDBwDgS0g1FdQ). Please, do not send direct messages to the mentors on Slack. You will get a response quicker in the #GSoC channel, plus by conversing there the community will benefit not only from your good questions, but also any advice and knowledge you are offered.
+Ask GSoC-specific questions in the #GSoC channel of the [Orcasound Slack workspace](https://join.slack.com/t/orcasound/shared_invite/zt-1jr7te193-ObLYcTxx4s7SO7EA9kmcaw). Please do not begin by sending direct messages to the mentors on Slack. You will get a response quicker in the #GSoC channel, plus by conversing there the community will benefit not only from your good questions, but also any advice and knowledge you are offered.
 
 Once on-boarded, you may also discuss general open source software and hardware development questions within the [Orcasound dev email distribution list](http://lists.orcasound.net/listinfo.cgi/dev-orcasound.net). However, if you are on Slack you will get faster responses in the #dev-general channel. Specific coding or architecture questions should be posed within the relevant Github issue.
 
